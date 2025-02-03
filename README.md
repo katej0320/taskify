@@ -62,7 +62,7 @@ taskify
 1. Clone the repository
 
 ```bash
-git clone https://github.com/codeit-fe2-2/taskify.git
+git clone https://github.com/codeit-Taskify-12-1/taskify.git
 ```
 
 2. Install dependencies
