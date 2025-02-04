@@ -7,10 +7,10 @@ export default function LandingHeader() {
     <div className={style.header}>
       <Link href="/">
         <Image
-          src="/icons/logo.svg"
+          src="/icons/landinglogo.svg"
           width={110}
           height={34}
-          alt="logo.svg"
+          alt="landinglogo.svg"
           priority
         />
       </Link>
