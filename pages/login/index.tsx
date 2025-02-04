@@ -7,6 +7,7 @@ import loginlogo from '@/public/icons/loginlogo.png';
 import Image from "next/image";
 import style from './index.module.scss';
 
+
 export default function LoginPage(){
     const [values, setValues] = useState({
         email: '',
@@ -83,8 +84,9 @@ export default function LoginPage(){
                 <p
                  className={style.tag}>비밀번호</p>
                 <input 
+                 className={style.passwordinput}
                  placeholder="비밀번호를 입력해 주세요"
-                 className={style.input}
+                 
                  name="password" // ✅ name 추가
                  type="password"
                  onChange={handleChange}

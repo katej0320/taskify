@@ -21,8 +21,20 @@
     border-radius: 8px;
     padding: 0 16px;
     border: 1px solid $gray3;
- 
     outline: none;
+}
+
+.passwordinput{
+    width: 520px;
+    height: 50px;
+    border-radius: 8px;
+    padding: 0 16px;
+    border: 1px solid $gray3;
+    outline: none;
+    background-image: url('../../public/images/passwordeye.png');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px 18px;
 }
 
 .input:focus{
