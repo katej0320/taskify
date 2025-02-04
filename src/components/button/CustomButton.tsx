@@ -1,4 +1,4 @@
-import styles from "./CustomButton.style.module.scss";
+import styles from "./CustomButton.style.module.scss";
 
 interface CustomButtonProps {
   children: React.ReactNode;
