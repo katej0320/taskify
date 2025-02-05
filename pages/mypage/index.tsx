@@ -1,31 +1,32 @@
+"use client";
+
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./mypage.module.scss";
 
-export default function Page() {
+export default function ProfileSettings() {
+  const router = useRouter();
   const [nickname, setNickname] = useState("장보배");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState(false);
-  const [allFieldsFilled, setAllFieldsFilled] = useState(false);
-
-  const correctCurrentPassword = "123456"; // 예제용
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSave = () => {
-    console.log("프로필 저장: ", { nickname, profileImage });
+    console.log("프로필 저장: ", { nickname });
   };
 
   const handleChangePassword = () => {
-    if (currentPassword !== correctCurrentPassword) {
-      alert("현재 비밀번호가 틀립니다");
-      return;
-    }
+    if (!currentPassword || !newPassword || !confirmPassword) return;
+    
     if (newPassword !== confirmPassword) {
-      alert("새 비밀번호가 일치하지 않습니다.");
+      setErrorMessage("비밀번호가 일치하지 않습니다.");
       return;
     }
+
     console.log("비밀번호 변경: ", { currentPassword, newPassword });
+    setErrorMessage("");
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,108 +40,81 @@ export default function Page() {
     }
   };
 
-  const handleConfirmPasswordBlur = () => {
-    setPasswordError(newPassword !== confirmPassword);
-  };
-
-  React.useEffect(() => {
-    setAllFieldsFilled(
-      currentPassword.trim() !== "" &&
-        newPassword.trim() !== "" &&
-        confirmPassword.trim() !== ""
-    );
-  }, [currentPassword, newPassword, confirmPassword]);
-
   return (
-    <>
-      <div className={styles.profileSettings}>
-        <button
-          className={styles.backButton}
-          onClick={() => window.history.back()}
-        >
-          &lt; 돌아가기
-        </button>
+    <div className={styles.profileSettings}>
+      {/* 돌아가기 버튼 */}
+      <button className={styles.backButton} onClick={() => router.back()}>
+        &lt; 돌아가기
+      </button>
 
-        <div className={styles.profileCard}>
-          <h2>프로필</h2>
-          <div className={styles.profileInfo}>
-            <label className={styles.avatarUpload}>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                hidden
-              />
-              {profileImage ? (
-                <img
-                  src={profileImage}
-                  alt="Profile"
-                  className={styles.avatar}
-                />
-              ) : (
-                <div className={styles.avatarPlaceholder}>+</div>
-              )}
-            </label>
-            <div className={styles.profileInputs}>
-              <div className={styles.profileInputGroup}>
-                <label>이메일</label>
-                <input type="email" value="johndoe@gmail.com" disabled />
-              </div>
-              <div className={styles.profileInputGroup}>
-                <label>닉네임</label>
-                <input
-                  type="text"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                />
-              </div>
+      <div className={styles.profileCard}>
+        <h2>프로필</h2>
+        <div className={styles.profileInfo}>
+          <label className={styles.avatarUpload}>
+            <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
+            {profileImage ? (
+              <img src={profileImage} alt="Profile" className={styles.avatar} />
+            ) : (
+              <div className={styles.avatarPlaceholder}>+</div>
+            )}
+          </label>
+
+          <div className={styles.profileInputs}>
+            <div className={styles.profileInputGroup}>
+              <label>이메일</label>
+              <input type="email" value="johndoe@gmail.com" disabled />
+            </div>
+
+            <div className={styles.profileInputGroup}>
+              <label>닉네임</label>
+              <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
             </div>
           </div>
-          <button onClick={handleSave} className={styles.saveButton}>
-            저장
-          </button>
+        </div>
+        <button onClick={handleSave} className={styles.saveButton}>
+          저장
+        </button>
+      </div>
+
+      <div className={styles.passwordCard}>
+        <h2>비밀번호 변경</h2>
+
+        <div className={styles.passwordInputGroup}>
+          <label>현재 비밀번호</label>
+          <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
         </div>
 
-        <div className={styles.passwordCard}>
-          <h2>비밀번호 변경</h2>
-          <div className={styles.passwordInputGroup}>
-            <label>현재 비밀번호</label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-            />
-          </div>
-          <div className={styles.passwordInputGroup}>
-            <label>새 비밀번호</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-          </div>
-          <div className={styles.passwordInputGroup}>
-            <label>새 비밀번호 확인</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              onBlur={handleConfirmPasswordBlur}
-              className={passwordError ? styles.errorInput : ""}
-            />
-            {passwordError && (
-              <p className={styles.errorText}>비밀번호가 일치하지 않습니다.</p>
-            )}
-          </div>
-          <button
-            onClick={handleChangePassword}
-            className={styles.changeButton}
-            disabled={!allFieldsFilled}
-          >
-            변경
-          </button>
+        <div className={styles.passwordInputGroup}>
+          <label>새 비밀번호</label>
+          <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
         </div>
+
+        <div className={styles.passwordInputGroup}>
+          <label>새 비밀번호 확인</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onBlur={() => {
+              if (confirmPassword && newPassword !== confirmPassword) {
+                setErrorMessage("비밀번호가 일치하지 않습니다.");
+              } else {
+                setErrorMessage("");
+              }
+            }}
+            className={newPassword !== confirmPassword && confirmPassword ? styles.errorInput : ""}
+          />
+          {errorMessage && <span className={styles.errorText}>{errorMessage}</span>}
+        </div>
+
+        <button
+          onClick={handleChangePassword}
+          className={styles.changeButton}
+          disabled={!currentPassword || !newPassword || !confirmPassword}
+        >
+          변경
+        </button>
       </div>
-    </>
+    </div>
   );
 }

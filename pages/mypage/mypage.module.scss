@@ -1,12 +1,16 @@
 @import "../../styles/color";
 
 .backButton {
+    background: none;
+    border: none;
+    color: $black2;
     font-size: 16px;
-    font-weight: 500;
-    border-style: none;
-    margin: 30px;
-    background-color: $gray1;
-}
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
 
 .profileSettings {
   background-color: $gray1;
@@ -146,18 +150,15 @@
     width: 100%; 
   }
   
+  .errorInput {
+    border-color: red !important;
+  }
+  
   .errorText {
     position: absolute;
-    bottom: -27px; 
+    bottom: -17px;
     left: 0;
     width: 100%;
-    text-align: left; 
     color: red;
     font-size: 12px;
   }
-  
-
-.errorInput {
-    border-color: red !important;
-    border-width: 2px !important;
-}
