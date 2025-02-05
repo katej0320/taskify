@@ -17,7 +17,7 @@ export default function LoginPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const router = useRouter();
 
   // 유저가 입력한 값의 상태 저장
@@ -75,11 +75,7 @@ export default function LoginPage() {
       .post(
         "/auth/login",
         { email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { withCredentials : true }
       )
       .then((response) => {
         console.log("✅ 로그인 성공:", response.data);
