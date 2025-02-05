@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./mypage.module.scss";
+import NavBar from "@/src/components/nav/NavBar";
+import SideBar from "@/src/components/sidebar/SideBar";
 
 export default function ProfileSettings() {
   const router = useRouter();
@@ -41,6 +43,9 @@ export default function ProfileSettings() {
   };
 
   return (
+    <div className={styles.global}>
+    <NavBar></NavBar>
+    <SideBar></SideBar>
     <div className={styles.profileSettings}>
       {/* 돌아가기 버튼 */}
       <button className={styles.backButton} onClick={() => router.back()}>
@@ -116,5 +121,6 @@ export default function ProfileSettings() {
         </button>
       </div>
     </div>
+    </div>
   );
-}
+};

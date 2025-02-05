@@ -1,5 +1,9 @@
 @import "../../styles/color";
 
+.global {
+    background-color: $gray1;
+}
+
 .backButton {
     background: none;
     border: none;
@@ -13,8 +17,10 @@
   }
 
 .profileSettings {
-  background-color: $gray1;
-  
+  margin-top: 20px;
+  margin-left: 320px;
+
+
   .profileCard {
     width: 672px;
     height: 366px;
