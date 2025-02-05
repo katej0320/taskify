@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "../../src/api/api";
+import axios from "../../src/api/axios";
 import loginlogo from "@/public/icons/loginlogo.png";
 import Image from "next/image";
 import style from "./index.module.scss";
