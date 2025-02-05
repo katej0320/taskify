@@ -1,0 +1,15 @@
+@use "/styles/color.scss" as *;
+
+.contents {
+  display: flex;
+  flex-direction: column;
+  /* 원하는 배경색 설정 */
+  min-height: 100vh; /* 페이지 전체 높이를 차지 */
+}
+
+.content {
+  margin-left: 300px; /* Sidebar의 너비만큼 왼쪽 여백 */
+  padding: 20px;
+  background-color: #f0f0f0; /* 콘텐츠 영역 배경 */
+  flex-grow: 1; /* 남은 공간을 차지하도록 */
+}
