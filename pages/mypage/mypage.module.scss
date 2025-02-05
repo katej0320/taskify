@@ -1,9 +1,15 @@
 @import "../../styles/color";
 
+.backButton {
+    font-size: 16px;
+    font-weight: 500;
+    border-style: none;
+    margin: 30px;
+    background-color: $gray1;
+}
+
 .profileSettings {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 20px;
+  background-color: $gray1;
   
   .profileCard {
     width: 672px;
@@ -102,7 +108,7 @@
       font-size: 16px;
       font-weight: 600;
       color: $black2;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
     }
 
     input {
@@ -133,4 +139,25 @@
     cursor: pointer;
     align-self: flex-end;
   }
+}
+
+.passwordInputGroup {
+    position: relative; 
+    width: 100%; 
+  }
+  
+  .errorText {
+    position: absolute;
+    bottom: -27px; 
+    left: 0;
+    width: 100%;
+    text-align: left; 
+    color: red;
+    font-size: 12px;
+  }
+  
+
+.errorInput {
+    border-color: red !important;
+    border-width: 2px !important;
 }
