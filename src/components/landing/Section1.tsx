@@ -10,7 +10,7 @@ export default function Section1() {
       <Image
         src="/images/landing_hero.png"
         width={722}
-        height={428}
+        height={422}
         alt="landing_hero.png"
         priority
       />
@@ -19,7 +19,9 @@ export default function Section1() {
         <span className={styles.taskify}>Taskify</span>
       </div>
       <CustomButton width={280} height={54} className={styles.button}>
-        <Link href="/login">로그인하기</Link>
+        <Link className={styles.link} href="/login">
+          로그인하기
+        </Link>
       </CustomButton>
     </div>
   );
