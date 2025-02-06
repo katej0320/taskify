@@ -8,6 +8,7 @@ import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import loginlogo from "@/public/icons/loginlogo.png";
 import Image from "next/image";
 import style from "./index.module.scss";
+import CustomModal from "@/src/components/modal/CustomModal";
 
 export default function RegisterPage() {
   const [values, setValues] = useState({
@@ -16,7 +17,13 @@ export default function RegisterPage() {
     password: "",
     passwordRepeat: "",
   });
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordRepeatError, setPasswordRepeatError] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [isPasswordRepeatVisible, setIsPasswordRepeatVisible] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
   const router = useRouter();
 
   //유저가 입력한 값의 상태 저장
@@ -24,6 +31,10 @@ export default function RegisterPage() {
     const { name, value } = e.target;
 
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
+
+    setErrorMessage("");
+    setPasswordError("");
+    setPasswordRepeatError("");
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -31,7 +42,7 @@ export default function RegisterPage() {
 
     //비밀번호동일한지 확인
     if (values.password !== values.passwordRepeat) {
-      alert("비밀번호가 일치하지 않습니다.");
+      setPasswordRepeatError('비밀번호가 동일하지 않습니다다');
     }
 
     const { email, nickname, password } = values;
@@ -62,8 +73,21 @@ export default function RegisterPage() {
           error.response?.data || error.message
         );
         alert(`회원가입 실패: ${error.response?.data?.message || "서버 오류"}`);
+        setIsModalOpen(true);
       });
   }
+  //로고누르면 마이대쉬보드로 이동동
+  function handleLogoClick() {
+    router.push("/mydashboard");
+  }
+  //비밀번호 눈알
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+  //비밀번호 확인 눈알
+  const togglePasswordRepeatVisibility = () => {
+    setIsPasswordRepeatVisible(!isPasswordRepeatVisible);
+  };
 
   return (
     <div className={style.container}>
@@ -89,54 +113,70 @@ export default function RegisterPage() {
          {errorMessage && <span className={style.error}>{errorMessage}</span>}
         <p className={style.tag}>닉네임</p>
         <input
-          placeholder="닉네임임을 입력해 주세요"
+          placeholder="닉네임을 입력해 주세요"
           name="nickname" // ✅ name 추가
           type="text"
           onChange={handleChange}
           value={values.nickname}
+          className={style.input}
         />
+
+        {/* 비밀번호 */}
         <p className={style.tag}>비밀번호</p>
         <div className={style.passwordWrapper}>
-        <input
-          className={`${style.passwordinput} ${
-          passwordError ? style.inputError : ""
-        }`}
-         placeholder="비밀번호를 입력해 주세요"
-          name="password" // ✅ name 추가
-          type="password"
-          onChange={handleChange}
-          value={values.password}
-          type={isPasswordVisible ? "password" : "text"}
-        />
-        <span className={style.eyeIcon} onClick={passwordVisible}>
-            <Image
-              className={isPasswordVisible ? style.passwordeye : style.passwordeyeopen} 
-              src={isPasswordVisible ? passwordeye : passwordeyeopen}
-              alt="Toggle Password Visibility"
-              
-            />
+          <input
+            className={`${style.passwordinput} ${
+            passwordError ? style.inputError : ""
+          }`}
+          placeholder="비밀번호를 입력해 주세요"
+            name="password" // ✅ name 추가
+            onChange={handleChange}
+            value={values.password}
+            type={isPasswordVisible ? "password" : "text"}
+          />
+          <span className={style.eyeIcon1} onClick={togglePasswordVisibility}>
+              <Image
+                className={isPasswordVisible ? style.passwordeye : style.passwordeyeopen} 
+                src={isPasswordVisible ? passwordeye : passwordeyeopen}
+                alt="Toggle Password Visibility"
+                
+              />
           </span>
-        <p className={style.tag}>비밀번호 확인</p>
-        <input
-          name="passwordRepeat" // ✅ name 추가
-          type="password"
-          onChange={handleChange}
-          value={values.passwordRepeat}
-        />
-        <span className={style.eyeIcon} onClick={passwordVisible}>
-            <Image
-              className={isPasswordVisible ? style.passwordeye : style.passwordeyeopen} 
-              src={isPasswordVisible ? passwordeye : passwordeyeopen}
-              alt="Toggle Password Visibility"
-              
-            />
+
+          
+          {/* 비밀번호 확인 */}
+          <p className={style.tag}>비밀번호 확인</p>
+          <input
+            name="passwordRepeat" // ✅ name 추가
+            type={isPasswordRepeatVisible ? "password" : "text"}
+            onChange={handleChange}
+            value={values.passwordRepeat}
+            className={`${style.passwordinput} ${
+              passwordRepeatError ? style.inputRepeatError : ""
+            }`}
+            placeholder="비밀번호를 한번 더 입력해주세요"
+          />
+          {errorMessage && <span className={style.error}>{errorMessage}</span>}
+          <span className={style.eyeIcon2} onClick={togglePasswordRepeatVisibility}>
+              <Image
+                className={isPasswordRepeatVisible ? style.passwordeye : style.passwordeyeopen} 
+                src={isPasswordRepeatVisible ? passwordeye : passwordeyeopen}
+                alt="Toggle Password Visibility"
+                
+              />
           </span>
-          </div>
-          {passwordError && <span className={style.error}>{passwordError}</span>}
+        </div>
+          {passwordRepeatError && <span className={style.error}>{passwordError}</span>}
         <p>이용약관에 동의합니다.</p>
         <br />
         <button>회원가입하기</button>
       </form>
+
+      {/* 모달 컴포넌트 */}
+      <CustomModal isOpen={isModalOpen} onClose={()=> setIsModalOpen(false)}>
+        <p>비밀번호가 일치하지 않습니다.</p>
+        <button onClick={() => setIsModalOpen(false)}>확인</button>
+      </CustomModal>
     </div>
   );
 }

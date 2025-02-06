@@ -1,0 +1,140 @@
+@import '@/styles/color.scss';
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.logo{
+    cursor: pointer;
+}
+.logotext{
+    font-size: 20px;
+}
+.tag{
+    font-size: 16px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.error{
+    color: red;
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+}
+.input  {
+    width: 520px;
+    height: 50px;
+    border-radius: 8px;
+    padding: 0 16px;
+    border: 1px solid $gray3;
+    outline: none;
+}
+
+.inputError {
+    border: 1px solid red;  // 에러일 때 빨간색 테두리
+}
+
+.inputRepeatError{
+    border: 1px solid red;  // 에러일 때 빨간색 테두리
+
+}
+.passwordinput.inputError {
+    border-color: $red;  // 에러일 때 빨간색 테두리
+}
+
+.passwordinput{
+    width: 520px;
+    height: 50px;
+    border-radius: 8px;
+    padding: 0 16px;
+    border: 1px solid $gray3;
+    outline: none;
+
+ }
+
+
+
+.passwordWrapper{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.eyeIcon1{
+        position: absolute;
+        right: 20px;
+        top: 18%;
+        transform: translateY(-50%);
+        cursor: pointer;
+  
+
+}
+
+.eyeIcon2{
+    position: absolute;
+    right: 20px;
+    top: 82%;
+    transform: translateY(-50%);
+    cursor: pointer;
+
+
+}
+
+.passwordeye{
+    width: 22px;
+    height: 19px;
+    position: absolute;
+    right: 0px;
+    top: 56%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.passwordeyeopen{
+    width: 22px;
+    height: 15px;
+
+}
+
+.input:focus{
+    border-color: $violet2;
+    outline: none;
+}
+
+.passwordinput:focus{
+    border-color: $violet2;
+    outline: none;
+
+}
+.loginbutton{
+    width: 520px;
+    height: 50px;
+    border-radius: 8px;
+    padding: 0 16px;
+    margin-top: 24px;
+    border: none;
+    color: white;
+    background-color: $gray4;
+  
+    font-size: 18px;
+}
+
+.buttonActivated{
+    background-color: $violet2;
+    cursor:pointer;
+}
+
+.signuptext{
+    text-align: center;
+}
+
+.signuptextbutton{
+    cursor: pointer;
+    color: $violet2;
+    text-decoration: underline;
+}
