@@ -39,6 +39,8 @@
     border: 1px solid red;  // 에러일 때 빨간색 테두리
 }
 
+
+
 .inputRepeatError{
     border: 1px solid red;  // 에러일 때 빨간색 테두리
 
@@ -68,7 +70,7 @@
 .eyeIcon1{
         position: absolute;
         right: 20px;
-        top: 16%;
+        top: 19%;
         transform: translateY(-50%);
         cursor: pointer;
   
@@ -78,7 +80,7 @@
 .eyeIcon2{
     position: absolute;
     right: 20px;
-    top: 72%;
+    top: 85%;
     transform: translateY(-50%);
     cursor: pointer;
 
@@ -111,7 +113,7 @@
     outline: none;
 
 }
-.loginbutton{
+.registerbutton{
     width: 520px;
     height: 50px;
     border-radius: 8px;
@@ -137,4 +139,30 @@
     cursor: pointer;
     color: $violet2;
     text-decoration: underline;
+}
+
+.agreementlabel{
+    display: flex;
+    gap : 5px;
+    margin-left: 2px;
+    margin-top: 12px;
+    align-items: center;
+}
+
+.customcheckbox{
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid $gray3;
+    cursor: pointer;
+
+}
+
+.customcheckbox:checked{
+    background-color: $violet1;
+    background-image: url(../../public/images/check.png);
+    background-repeat: no-repeat;
+    background-position: center;
 }

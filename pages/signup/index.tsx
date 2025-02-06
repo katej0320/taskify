@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "../../src/api/axios";
 import passwordeye from "@/public/images/passwordeye.png";
@@ -26,7 +27,28 @@ export default function RegisterPage() {
   const [isPasswordRepeatVisible, setIsPasswordRepeatVisible] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isChecked, setIsChecked] = useState(false);
   const router = useRouter();
+
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(e.target.checked);
+  };
+
+
+
+  useEffect(() => {
+    const isValid =
+      validateEmail(values.email) &&
+      values.nickname.trim() !== "" &&
+      values.nickname.length <= 10 &&
+      values.password.length >= 8 &&
+      values.password === values.passwordRepeat
+      isChecked;
+  
+    setIsButtonDisabled(!isValid);
+  }, [values, isChecked]); // values가 변경될 때마다 실행
+  
 
   //유저가 입력한 값의 상태 저장
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -37,6 +59,7 @@ export default function RegisterPage() {
     setErrorMessage("");
     setPasswordError("");
     setPasswordRepeatError("");
+    setNicknameError("");
 
     // 이메일 형식 실시간 검증
     if (name === "email") {
@@ -47,46 +70,49 @@ export default function RegisterPage() {
       } else {
         setErrorMessage("");
       }
-    }
+    }; 
+
+
     //닉네임 형식 검증
     if(name === "nickname"){
-      if( value === "")
+      {if( value === "")
       setNicknameError("");
-    } else if (value.length > 10){
-      setNicknameError("열 자 이하로 작성해주세요")
+     } if (value.length > 10){
+      setNicknameError("열 자 이하로 작성해주세요");
       } else {
       setNicknameError("");
       }
+    }
+    
 
  
 
      // 비밀번호 길이 검증
-     if (name === "password") {
+     if (name === "password"){
       if (value === "") {
         setPasswordError("");
-      } else if  (value.length < 8)
+      } if (value.length < 8){
         setPasswordError("비밀번호는 8자 이상이어야 합니다");
       } else {
         setPasswordError("");
       }
-
+    }
 
       //비밀번호동일한지 확인
-      if (name === "passwordRepeat")
+      if (name === "passwordRepeat"){
         if(value===""){
           setPasswordRepeatError("");
-        } else if (values.password !== value) {
+        } if (values.password !== value) {
           setPasswordRepeatError('비밀번호가 동일하지 않습니다');
         } else {
           setPasswordRepeatError("");
-        }
+        }}
 
-       //로그인 버튼 비활성화/활성화화
-    if (validateEmail(values.email) && values.password.length > 8 && values.password === values.passwordRepeat) {
-      setIsButtonDisabled(false);
-    } else {
-      setIsButtonDisabled(true);
-    }
+    //회원가입 버튼 활성화/ 비활성화
+
+
+    
+
   }
     // 이메일 형식 검증 함수
     const validateEmail = (email: string) => {
@@ -143,7 +169,7 @@ export default function RegisterPage() {
       />
       <p className={style.logotext}>첫 방문을 환영합니다!</p>
 
-
+      {/* 이메일일 */}
       <form onSubmit={handleSubmit}>
         <p className={style.tag}>이메일</p>
         <input
@@ -155,6 +181,8 @@ export default function RegisterPage() {
           value={values.email}
         />
          {errorMessage && <span className={style.error}>{errorMessage}</span>}
+
+         {/* 닉네임 */}
         <p className={style.tag}>닉네임</p>
         <input
           placeholder="닉네임을 입력해 주세요"
@@ -178,6 +206,7 @@ export default function RegisterPage() {
             value={values.password}
             type={isPasswordVisible ? "password" : "text"}
           />
+           {passwordError && <span className={style.error}>{passwordError}</span>}
           <span className={style.eyeIcon1} onClick={togglePasswordVisibility}>
               <Image
                 className={isPasswordVisible ? style.passwordeye : style.passwordeyeopen} 
@@ -211,9 +240,22 @@ export default function RegisterPage() {
           </span>
         </div>
           {passwordRepeatError && <span className={style.error}>{passwordError}</span>}
-        <p>이용약관에 동의합니다.</p>
-        <br />
-        <button>회원가입하기</button>
+        <label className={style.agreementlabel}>
+          <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+          className={style.customcheckbox}
+          />
+          <p>이용약관에 동의합니다.</p>
+        </label>
+        
+        {/* 회원가입 버튼 */}
+        <button 
+        className={`${style.registerbutton} ${
+          !isButtonDisabled ? style.buttonActivated : ""
+        }`}
+        disabled={isButtonDisabled}>회원가입하기</button>
       </form>
 
       {/* 모달 컴포넌트 */}
