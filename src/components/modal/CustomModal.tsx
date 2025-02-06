@@ -13,7 +13,7 @@ export default function CustomModal({ isOpen, onClose, children }: ModalProps) {
 
   return createPortal(
     <div className={styles.modalOverlay} onClick={onClose}>
-      {/* 모달 내용 */}
+      {/* 모달 내 용 */}
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         {children}
       </div>
