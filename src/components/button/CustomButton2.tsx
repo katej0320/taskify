@@ -7,7 +7,7 @@ interface Container {
 }
 
 export const Button = styled.div<Container>`
-  width: ${(props) => (props.half ? `50%` : `100%`)};
+  width: 100%;
   height: 62px;
   line-height: 62px;
   border-radius: 8px;
@@ -16,22 +16,25 @@ export const Button = styled.div<Container>`
   text-align: center;
   background: #fff;
   ${(props) =>
-    props.signature &&
-    css`
-      height: 54px;
-      line-height: 54px;
-      background: #5534da;
-      color: #fff;
-    `};
-  ${(props) =>
-    props.sub &&
-    css`
-      max-width: 84px;
-      height: 32px;
-      border-radius: 4px;
-      line-height: 32px;
-      color: #5534da;
-      font-weight: 500;
-      font-size: 14px;
-    `}
+    props.signature
+      ? css`
+          height: 54px;
+          line-height: 54px;
+          background: #5534da;
+          color: #fff;
+        `
+      : props.sub
+      ? css`
+          max-width: 84px;
+          height: 32px;
+          border-radius: 4px;
+          line-height: 32px;
+          color: #5534da;
+          font-weight: 500;
+          font-size: 14px;
+        `
+      : props.half ? css`
+        width:50%;
+        background:#fafafa
+      `: ''};
 `;
