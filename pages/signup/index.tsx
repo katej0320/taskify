@@ -37,6 +37,7 @@ export default function RegisterPage() {
     setErrorMessage("");
     setPasswordError("");
     setPasswordRepeatError("");
+    setNicknameError("");
 
     // 이메일 형식 실시간 검증
     if (name === "email") {
@@ -47,39 +48,43 @@ export default function RegisterPage() {
       } else {
         setErrorMessage("");
       }
-    }
+    }; 
+
+
     //닉네임 형식 검증
     if(name === "nickname"){
-      if( value === " ")
+      {if( value === "")
       setNicknameError("");
-     }else if (value.length > 10){
-      setNicknameError("열 자 이하로 작성해주세요")
+     } if (value.length > 10){
+      setNicknameError("열 자 이하로 작성해주세요");
       } else {
-      setNicknameError(" ");
+      setNicknameError("");
       }
+    }
+    
 
  
 
      // 비밀번호 길이 검증
-     if (name === "password") {
+     if (name === "password"){
       if (value === "") {
         setPasswordError("");
-      } else if  (value.length < 8)
+      } if (value.length < 8){
         setPasswordError("비밀번호는 8자 이상이어야 합니다");
       } else {
         setPasswordError("");
       }
-
+    }
 
       //비밀번호동일한지 확인
-      if (name === "passwordRepeat")
+      if (name === "passwordRepeat"){
         if(value===""){
           setPasswordRepeatError("");
-        } else if (values.password !== value) {
+        } if (values.password !== value) {
           setPasswordRepeatError('비밀번호가 동일하지 않습니다');
         } else {
           setPasswordRepeatError("");
-        }
+        }}
 
        //로그인 버튼 비활성화/활성화화
     if (validateEmail(values.email) && values.password.length > 8 && values.password === values.passwordRepeat) {
@@ -156,7 +161,7 @@ export default function RegisterPage() {
         />
          {errorMessage && <span className={style.error}>{errorMessage}</span>}
 
-         {/* 닉네임임 */}
+         {/* 닉네임 */}
         <p className={style.tag}>닉네임</p>
         <input
           placeholder="닉네임을 입력해 주세요"
