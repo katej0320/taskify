@@ -86,18 +86,19 @@ export default function ProfileSettings() {
 
         <div className={styles.passwordInputGroup}>
           <label>현재 비밀번호</label>
-          <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+          <input type="password" placeholder="비밀번호 입력" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
         </div>
 
         <div className={styles.passwordInputGroup}>
           <label>새 비밀번호</label>
-          <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+          <input type="password" placeholder="새 비밀번호 입력" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
         </div>
 
         <div className={styles.passwordInputGroup}>
           <label>새 비밀번호 확인</label>
           <input
             type="password"
+            placeholder="새 비밀번호 입력"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             onBlur={() => {
@@ -124,3 +125,4 @@ export default function ProfileSettings() {
     </div>
   );
 };
+
