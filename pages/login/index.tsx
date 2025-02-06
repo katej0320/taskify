@@ -81,6 +81,7 @@ export default function LoginPage() {
     try {
         const response = await axios.post('/auth/login',
              {email, password},
+           //이거 확인하기기
              { withCredentials :true});
         console.log("로그인 성공", response.data);
         router.push("/dashboard"); 
@@ -157,7 +158,8 @@ export default function LoginPage() {
         </div>
         {passwordError && <span className={style.error}>{passwordError}</span>}
 
-        <br />
+     
+        {/* 로그인버튼튼 */}
         <button
           className={`${style.loginbutton} ${
             !isButtonDisabled ? style.buttonActivated : ""
@@ -166,6 +168,9 @@ export default function LoginPage() {
         >
           로그인
         </button>
+
+
+        {/* 회원가입페이지로이동버튼튼 */}
         <p className={style.signuptext}>
           회원이 아니신가요?{" "}
           <span className={style.signuptextbutton} onClick={handleSignupClick}>
