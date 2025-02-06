@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "../../src/api/axios";
 import passwordeye from "@/public/images/passwordeye.png";
@@ -26,7 +27,28 @@ export default function RegisterPage() {
   const [isPasswordRepeatVisible, setIsPasswordRepeatVisible] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isChecked, setIsChecked] = useState(false);
   const router = useRouter();
+
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(e.target.checked);
+  };
+
+
+
+  useEffect(() => {
+    const isValid =
+      validateEmail(values.email) &&
+      values.nickname.trim() !== "" &&
+      values.nickname.length <= 10 &&
+      values.password.length >= 8 &&
+      values.password === values.passwordRepeat
+      isChecked;
+  
+    setIsButtonDisabled(!isValid);
+  }, [values, isChecked]); // values가 변경될 때마다 실행
+  
 
   //유저가 입력한 값의 상태 저장
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -86,12 +108,11 @@ export default function RegisterPage() {
           setPasswordRepeatError("");
         }}
 
-       //로그인 버튼 비활성화/활성화화
-    if (validateEmail(values.email) && values.password.length > 8 && values.password === values.passwordRepeat) {
-      setIsButtonDisabled(false);
-    } else {
-      setIsButtonDisabled(true);
-    }
+    //회원가입 버튼 활성화/ 비활성화
+
+
+    
+
   }
     // 이메일 형식 검증 함수
     const validateEmail = (email: string) => {
@@ -219,9 +240,21 @@ export default function RegisterPage() {
           </span>
         </div>
           {passwordRepeatError && <span className={style.error}>{passwordError}</span>}
-        <p>이용약관에 동의합니다.</p>
+        <label>
+          <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+          />
+          <p>이용약관에 동의합니다.</p>
+        </label>
         <br />
-        <button>회원가입하기</button>
+        {/* 회원가입 버튼튼 */}
+        <button 
+        className={`${style.registerbutton} ${
+          !isButtonDisabled ? style.buttonActivated : ""
+        }`}
+        disabled={isButtonDisabled}>회원가입하기</button>
       </form>
 
       {/* 모달 컴포넌트 */}
