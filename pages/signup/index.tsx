@@ -50,12 +50,12 @@ export default function RegisterPage() {
     }
     //닉네임 형식 검증
     if(name === "nickname"){
-      if( value === "")
+      if( value === " ")
       setNicknameError("");
-    } else if (value.length > 10){
+     }else if (value.length > 10){
       setNicknameError("열 자 이하로 작성해주세요")
       } else {
-      setNicknameError("");
+      setNicknameError(" ");
       }
 
  
@@ -143,7 +143,7 @@ export default function RegisterPage() {
       />
       <p className={style.logotext}>첫 방문을 환영합니다!</p>
 
-
+      {/* 이메일일 */}
       <form onSubmit={handleSubmit}>
         <p className={style.tag}>이메일</p>
         <input
@@ -155,6 +155,8 @@ export default function RegisterPage() {
           value={values.email}
         />
          {errorMessage && <span className={style.error}>{errorMessage}</span>}
+
+         {/* 닉네임임 */}
         <p className={style.tag}>닉네임</p>
         <input
           placeholder="닉네임을 입력해 주세요"
@@ -178,6 +180,7 @@ export default function RegisterPage() {
             value={values.password}
             type={isPasswordVisible ? "password" : "text"}
           />
+           {passwordError && <span className={style.error}>{passwordError}</span>}
           <span className={style.eyeIcon1} onClick={togglePasswordVisibility}>
               <Image
                 className={isPasswordVisible ? style.passwordeye : style.passwordeyeopen} 
