@@ -52,11 +52,33 @@
     padding: 0 16px;
     border: 1px solid $gray3;
     outline: none;
-    position: relative;
+    background-color: #fff;
+    background-image: url("../../public/images/passwordeye.png");
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    padding-right: 40px; /* 아이콘이 겹치지 않게 패딩 추가 */
 
  }
 
+ .passwordinput[type="text"] {
+    background-image: url("../../public/images/passwordeyeopen.png"); /* 비밀번호 보이게 할 때의 아이콘 */
+  }
 
+  .eyeButton {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer; /* 클릭 가능하게 표시 */
+    z-index: 1; /* 클릭 가능한 영역을 우선으로 설정 */
+  }
+  
+  /* 커서를 올리면 클릭 가능 표시 */
+  .passwordinput:hover {
+    cursor: pointer; /* 입력 필드에도 커서 표시 */
+  }
 
 .passwordWrapper{
     position: relative;

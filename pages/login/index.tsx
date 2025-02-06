@@ -150,13 +150,14 @@ export default function LoginPage() {
             />
             {passwordError && <span className={style.error}>{passwordError}</span>}
            </div>
-         
+          
           <Image
             onClick={passwordVisible}
             className={!isPasswordVisible ? style.passwordeyeopen : style.passwordeye} 
             src={!isPasswordVisible ? passwordeyeopen : passwordeye}
             alt="Toggle Password Visibility"
           />
+           
         
        </div>
 
