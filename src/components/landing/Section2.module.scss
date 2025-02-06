@@ -1,0 +1,49 @@
+@use "/styles/color.scss" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  background: $white;
+  padding: 50px;
+  color: $black4;
+}
+
+.feature {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $gray2;
+  padding: 40px;
+  border-radius: 8px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.text {
+  flex: 1;
+}
+
+.text h2 {
+  font-family: Pretendard;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 26.25px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: $black1;
+}
+
+.text p {
+  font-family: Pretendard;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 64px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+
+  margin-top: 100px;
+}

@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "../../src/api/api";
+import axios from "../../src/api/axios";
+import passwordeye from "@/public/images/passwordeye.png";
+import passwordeyeopen from "@/public/images/passwordeyeopen.png";
+import loginlogo from "@/public/icons/loginlogo.png";
+import Image from "next/image";
+import style from "./index.module.scss";
 
 export default function RegisterPage() {
   const [values, setValues] = useState({
@@ -61,37 +66,74 @@ export default function RegisterPage() {
   }
 
   return (
-    <div>
-      <h1>회원가입</h1>
+    <div className={style.container}>
+       <Image
+        className={style.logo}
+        onClick={handleLogoClick}
+        src={loginlogo}
+        alt="loginlogo"
+      />
+      <p className={style.logotext}>첫 방문을 환영합니다!</p>
+
+
       <form onSubmit={handleSubmit}>
-        <p>이메일</p>
+        <p className={style.tag}>이메일</p>
         <input
+          placeholder="이메일을 입력해 주세요"
+          className={`${style.input} ${errorMessage ? style.inputError : ""}`}
           name="email" // ✅ name 추가
           type="email"
           onChange={handleChange}
           value={values.email}
         />
-        <p>닉네임</p>
+         {errorMessage && <span className={style.error}>{errorMessage}</span>}
+        <p className={style.tag}>닉네임</p>
         <input
+          placeholder="닉네임임을 입력해 주세요"
           name="nickname" // ✅ name 추가
           type="text"
           onChange={handleChange}
           value={values.nickname}
         />
-        <p>비밀번호</p>
+        <p className={style.tag}>비밀번호</p>
+        <div className={style.passwordWrapper}>
         <input
+          className={`${style.passwordinput} ${
+          passwordError ? style.inputError : ""
+        }`}
+         placeholder="비밀번호를 입력해 주세요"
           name="password" // ✅ name 추가
           type="password"
           onChange={handleChange}
           value={values.password}
+          type={isPasswordVisible ? "password" : "text"}
         />
-        <p>비밀번호 확인</p>
+        <span className={style.eyeIcon} onClick={passwordVisible}>
+            <Image
+              className={isPasswordVisible ? style.passwordeye : style.passwordeyeopen} 
+              src={isPasswordVisible ? passwordeye : passwordeyeopen}
+              alt="Toggle Password Visibility"
+              
+            />
+          </span>
+        <p className={style.tag}>비밀번호 확인</p>
         <input
           name="passwordRepeat" // ✅ name 추가
           type="password"
           onChange={handleChange}
           value={values.passwordRepeat}
         />
+        <span className={style.eyeIcon} onClick={passwordVisible}>
+            <Image
+              className={isPasswordVisible ? style.passwordeye : style.passwordeyeopen} 
+              src={isPasswordVisible ? passwordeye : passwordeyeopen}
+              alt="Toggle Password Visibility"
+              
+            />
+          </span>
+          </div>
+          {passwordError && <span className={style.error}>{passwordError}</span>}
+        <p>이용약관에 동의합니다.</p>
         <br />
         <button>회원가입하기</button>
       </form>
