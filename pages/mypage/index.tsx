@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import styles from "./mypage.module.scss";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
+import Image from "next/image";
 
 export default function ProfileSettings() {
   const router = useRouter();
@@ -58,7 +59,7 @@ export default function ProfileSettings() {
           <label className={styles.avatarUpload}>
             <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
             {profileImage ? (
-              <img src={profileImage} alt="Profile" className={styles.avatar} />
+              <Image src={profileImage} alt="Profile" className={styles.avatar} />
             ) : (
               <div className={styles.avatarPlaceholder}>+</div>
             )}
