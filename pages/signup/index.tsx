@@ -240,16 +240,17 @@ export default function RegisterPage() {
           </span>
         </div>
           {passwordRepeatError && <span className={style.error}>{passwordError}</span>}
-        <label>
+        <label className={style.agreementlabel}>
           <input
           type="checkbox"
           checked={isChecked}
           onChange={handleCheckboxChange}
+          className={style.customcheckbox}
           />
           <p>이용약관에 동의합니다.</p>
         </label>
-        <br />
-        {/* 회원가입 버튼튼 */}
+        
+        {/* 회원가입 버튼 */}
         <button 
         className={`${style.registerbutton} ${
           !isButtonDisabled ? style.buttonActivated : ""
