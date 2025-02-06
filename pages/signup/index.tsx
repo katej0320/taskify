@@ -17,13 +17,15 @@ export default function RegisterPage() {
     password: "",
     passwordRepeat: "",
   });
+  
   const [errorMessage, setErrorMessage] = useState("");
+  const [nicknameError, setNicknameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [passwordRepeatError, setPasswordRepeatError] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
   const [isPasswordRepeatVisible, setIsPasswordRepeatVisible] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const router = useRouter();
 
   //유저가 입력한 값의 상태 저장
@@ -35,15 +37,68 @@ export default function RegisterPage() {
     setErrorMessage("");
     setPasswordError("");
     setPasswordRepeatError("");
-  }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    // 이메일 형식 실시간 검증
+    if (name === "email") {
+      if (value === "") {
+        setErrorMessage(""); // 이메일이 빈 값이면 에러 메시지 초기화
+      } else if (!validateEmail(value)) {
+        setErrorMessage("이메일 형식으로 입력해주세요");
+      } else {
+        setErrorMessage("");
+      }
+    }
+    //닉네임 형식 검증
+    if(name === "nickname"){
+      if( value === "")
+      setNicknameError("");
+    } else if (value.length > 10){
+      setNicknameError("열 자 이하로 작성해주세요")
+      } else {
+      setNicknameError("");
+      }
+
+ 
+
+     // 비밀번호 길이 검증
+     if (name === "password") {
+      if (value === "") {
+        setPasswordError("");
+      } else if  (value.length < 8)
+        setPasswordError("비밀번호는 8자 이상이어야 합니다");
+      } else {
+        setPasswordError("");
+      }
+
+
+      //비밀번호동일한지 확인
+      if (name === "passwordRepeat")
+        if(value===""){
+          setPasswordRepeatError("");
+        } else if (values.password !== value) {
+          setPasswordRepeatError('비밀번호가 동일하지 않습니다');
+        } else {
+          setPasswordRepeatError("");
+        }
+
+       //로그인 버튼 비활성화/활성화화
+    if (validateEmail(values.email) && values.password.length > 8 && values.password === values.passwordRepeat) {
+      setIsButtonDisabled(false);
+    } else {
+      setIsButtonDisabled(true);
+    }
+  }
+    // 이메일 형식 검증 함수
+    const validateEmail = (email: string) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+  
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    //비밀번호동일한지 확인
-    if (values.password !== values.passwordRepeat) {
-      setPasswordRepeatError('비밀번호가 동일하지 않습니다다');
-    }
+   
 
     const { email, nickname, password } = values;
 
@@ -53,28 +108,16 @@ export default function RegisterPage() {
     );
 
     //axios 리퀘스트 보내기
-    axios
-      .post(
-        "/users", // 📌 Swagger 문서에서 올바른 엔드포인트 확인 필요!
-        { email, nickname, password }, // ✅ Swagger에 맞게 수정
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("✅ 회원가입 성공:", response.data);
-        alert("회원가입이 완료되었습니다!");
-      })
-      .catch((error) => {
-        console.error(
-          "❌ 회원가입 실패:",
-          error.response?.data || error.message
-        );
-        alert(`회원가입 실패: ${error.response?.data?.message || "서버 오류"}`);
-        setIsModalOpen(true);
-      });
+    try {
+      const response = await axios.post('/users',
+        { email, nickname, password });
+        console.log("로그인 성공", response.data);
+        router.push("/login");
+    } catch(error:any){
+      console.error("회원가입실패:", error.response?.data || error.message);
+
+    }
+
   }
   //로고누르면 마이대쉬보드로 이동동
   function handleLogoClick() {
@@ -88,6 +131,7 @@ export default function RegisterPage() {
   const togglePasswordRepeatVisibility = () => {
     setIsPasswordRepeatVisible(!isPasswordRepeatVisible);
   };
+
 
   return (
     <div className={style.container}>
@@ -118,9 +162,9 @@ export default function RegisterPage() {
           type="text"
           onChange={handleChange}
           value={values.nickname}
-          className={style.input}
+          className={`${style.input} ${nicknameError ? style.inputError : ""}`}
         />
-
+          {nicknameError && <span className={style.error}>{nicknameError}</span>}
         {/* 비밀번호 */}
         <p className={style.tag}>비밀번호</p>
         <div className={style.passwordWrapper}>
@@ -156,7 +200,7 @@ export default function RegisterPage() {
             }`}
             placeholder="비밀번호를 한번 더 입력해주세요"
           />
-          {errorMessage && <span className={style.error}>{errorMessage}</span>}
+          {passwordRepeatError && <span className={style.error}>{passwordRepeatError}</span>}
           <span className={style.eyeIcon2} onClick={togglePasswordRepeatVisibility}>
               <Image
                 className={isPasswordRepeatVisible ? style.passwordeye : style.passwordeyeopen} 
