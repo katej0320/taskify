@@ -1,0 +1,62 @@
+@use "/styles/color.scss" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  color: $black4;
+  padding: 50px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.title {
+  margin-bottom: 30px;
+  font-family: Pretendard;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 33.41px;
+  text-align: right;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 33px;
+  max-width: 1400px;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: $white;
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 1;
+  max-width: 450px;
+}
+
+.imageContainer {
+  width: 100%;
+  background: $gray2;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.card img {
+  object-fit: contain;
+}
+
+.text {
+  width: 100%;
+  padding: 33px;
+  background: $black4;
+  color: $white;
+  p {
+    margin-top: 18px;
+  }
+}
