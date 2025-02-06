@@ -27,8 +27,15 @@ export default function RegisterPage() {
   const [isPasswordRepeatVisible, setIsPasswordRepeatVisible] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  
+  const [isChecked, setIsChecked] = useState(false);
   const router = useRouter();
+
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(e.target.checked);
+  };
+
+
 
   useEffect(() => {
     const isValid =
@@ -36,10 +43,11 @@ export default function RegisterPage() {
       values.nickname.trim() !== "" &&
       values.nickname.length <= 10 &&
       values.password.length >= 8 &&
-      values.password === values.passwordRepeat;
+      values.password === values.passwordRepeat
+      isChecked;
   
     setIsButtonDisabled(!isValid);
-  }, [values]); // values가 변경될 때마다 실행
+  }, [values, isChecked]); // values가 변경될 때마다 실행
   
 
   //유저가 입력한 값의 상태 저장
@@ -232,7 +240,14 @@ export default function RegisterPage() {
           </span>
         </div>
           {passwordRepeatError && <span className={style.error}>{passwordError}</span>}
-        <p>이용약관에 동의합니다.</p>
+        <label>
+          <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+          />
+          <p>이용약관에 동의합니다.</p>
+        </label>
         <br />
         {/* 회원가입 버튼튼 */}
         <button 
