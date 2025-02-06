@@ -3,6 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "../../src/api/axios";
+import passwordeye from "@/public/images/passwordeye.png";
+import passwordeyeopen from "@/public/images/passwordeyeopen.png";
+import loginlogo from "@/public/icons/loginlogo.png";
+import Image from "next/image";
+import style from "./index.module.scss";
+import CustomModal from "@/src/components/modal/CustomModal";
 
 export default function RegisterPage() {
   const [values, setValues] = useState({
@@ -11,7 +17,15 @@ export default function RegisterPage() {
     password: "",
     passwordRepeat: "",
   });
-
+  
+  const [errorMessage, setErrorMessage] = useState("");
+  const [nicknameError, setNicknameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordRepeatError, setPasswordRepeatError] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [isPasswordRepeatVisible, setIsPasswordRepeatVisible] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const router = useRouter();
 
   //유저가 입력한 값의 상태 저장
@@ -19,15 +33,72 @@ export default function RegisterPage() {
     const { name, value } = e.target;
 
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
-  }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    setErrorMessage("");
+    setPasswordError("");
+    setPasswordRepeatError("");
+
+    // 이메일 형식 실시간 검증
+    if (name === "email") {
+      if (value === "") {
+        setErrorMessage(""); // 이메일이 빈 값이면 에러 메시지 초기화
+      } else if (!validateEmail(value)) {
+        setErrorMessage("이메일 형식으로 입력해주세요");
+      } else {
+        setErrorMessage("");
+      }
+    }
+    //닉네임 형식 검증
+    if(name === "nickname"){
+      if( value === " ")
+      setNicknameError("");
+     }else if (value.length > 10){
+      setNicknameError("열 자 이하로 작성해주세요")
+      } else {
+      setNicknameError(" ");
+      }
+
+ 
+
+     // 비밀번호 길이 검증
+     if (name === "password") {
+      if (value === "") {
+        setPasswordError("");
+      } else if  (value.length < 8)
+        setPasswordError("비밀번호는 8자 이상이어야 합니다");
+      } else {
+        setPasswordError("");
+      }
+
+
+      //비밀번호동일한지 확인
+      if (name === "passwordRepeat")
+        if(value===""){
+          setPasswordRepeatError("");
+        } else if (values.password !== value) {
+          setPasswordRepeatError('비밀번호가 동일하지 않습니다');
+        } else {
+          setPasswordRepeatError("");
+        }
+
+       //로그인 버튼 비활성화/활성화화
+    if (validateEmail(values.email) && values.password.length > 8 && values.password === values.passwordRepeat) {
+      setIsButtonDisabled(false);
+    } else {
+      setIsButtonDisabled(true);
+    }
+  }
+    // 이메일 형식 검증 함수
+    const validateEmail = (email: string) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+  
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    //비밀번호동일한지 확인
-    if (values.password !== values.passwordRepeat) {
-      alert("비밀번호가 일치하지 않습니다.");
-    }
+   
 
     const { email, nickname, password } = values;
 
@@ -37,64 +108,122 @@ export default function RegisterPage() {
     );
 
     //axios 리퀘스트 보내기
-    axios
-      .post(
-        "/users", // 📌 Swagger 문서에서 올바른 엔드포인트 확인 필요!
-        { email, nickname, password }, // ✅ Swagger에 맞게 수정
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("✅ 회원가입 성공:", response.data);
-        alert("회원가입이 완료되었습니다!");
-      })
-      .catch((error) => {
-        console.error(
-          "❌ 회원가입 실패:",
-          error.response?.data || error.message
-        );
-        alert(`회원가입 실패: ${error.response?.data?.message || "서버 오류"}`);
-      });
+    try {
+      const response = await axios.post('/users',
+        { email, nickname, password });
+        console.log("로그인 성공", response.data);
+        router.push("/login");
+    } catch(error:any){
+      console.error("회원가입실패:", error.response?.data || error.message);
+
+    }
+
   }
+  //로고누르면 마이대쉬보드로 이동동
+  function handleLogoClick() {
+    router.push("/mydashboard");
+  }
+  //비밀번호 눈알
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+  //비밀번호 확인 눈알
+  const togglePasswordRepeatVisibility = () => {
+    setIsPasswordRepeatVisible(!isPasswordRepeatVisible);
+  };
+
 
   return (
-    <div>
-      <h1>회원가입</h1>
+    <div className={style.container}>
+       <Image
+        className={style.logo}
+        onClick={handleLogoClick}
+        src={loginlogo}
+        alt="loginlogo"
+      />
+      <p className={style.logotext}>첫 방문을 환영합니다!</p>
+
+      {/* 이메일일 */}
       <form onSubmit={handleSubmit}>
-        <p>이메일</p>
+        <p className={style.tag}>이메일</p>
         <input
+          placeholder="이메일을 입력해 주세요"
+          className={`${style.input} ${errorMessage ? style.inputError : ""}`}
           name="email" // ✅ name 추가
           type="email"
           onChange={handleChange}
           value={values.email}
         />
-        <p>닉네임</p>
+         {errorMessage && <span className={style.error}>{errorMessage}</span>}
+
+         {/* 닉네임임 */}
+        <p className={style.tag}>닉네임</p>
         <input
+          placeholder="닉네임을 입력해 주세요"
           name="nickname" // ✅ name 추가
           type="text"
           onChange={handleChange}
           value={values.nickname}
+          className={`${style.input} ${nicknameError ? style.inputError : ""}`}
         />
-        <p>비밀번호</p>
-        <input
-          name="password" // ✅ name 추가
-          type="password"
-          onChange={handleChange}
-          value={values.password}
-        />
-        <p>비밀번호 확인</p>
-        <input
-          name="passwordRepeat" // ✅ name 추가
-          type="password"
-          onChange={handleChange}
-          value={values.passwordRepeat}
-        />
+          {nicknameError && <span className={style.error}>{nicknameError}</span>}
+        {/* 비밀번호 */}
+        <p className={style.tag}>비밀번호</p>
+        <div className={style.passwordWrapper}>
+          <input
+            className={`${style.passwordinput} ${
+            passwordError ? style.inputError : ""
+          }`}
+          placeholder="비밀번호를 입력해 주세요"
+            name="password" // ✅ name 추가
+            onChange={handleChange}
+            value={values.password}
+            type={isPasswordVisible ? "password" : "text"}
+          />
+           {passwordError && <span className={style.error}>{passwordError}</span>}
+          <span className={style.eyeIcon1} onClick={togglePasswordVisibility}>
+              <Image
+                className={isPasswordVisible ? style.passwordeye : style.passwordeyeopen} 
+                src={isPasswordVisible ? passwordeye : passwordeyeopen}
+                alt="Toggle Password Visibility"
+                
+              />
+          </span>
+
+          
+          {/* 비밀번호 확인 */}
+          <p className={style.tag}>비밀번호 확인</p>
+          <input
+            name="passwordRepeat" // ✅ name 추가
+            type={isPasswordRepeatVisible ? "password" : "text"}
+            onChange={handleChange}
+            value={values.passwordRepeat}
+            className={`${style.passwordinput} ${
+              passwordRepeatError ? style.inputRepeatError : ""
+            }`}
+            placeholder="비밀번호를 한번 더 입력해주세요"
+          />
+          {passwordRepeatError && <span className={style.error}>{passwordRepeatError}</span>}
+          <span className={style.eyeIcon2} onClick={togglePasswordRepeatVisibility}>
+              <Image
+                className={isPasswordRepeatVisible ? style.passwordeye : style.passwordeyeopen} 
+                src={isPasswordRepeatVisible ? passwordeye : passwordeyeopen}
+                alt="Toggle Password Visibility"
+                
+              />
+          </span>
+        </div>
+          {passwordRepeatError && <span className={style.error}>{passwordError}</span>}
+        <p>이용약관에 동의합니다.</p>
         <br />
         <button>회원가입하기</button>
       </form>
+
+      {/* 모달 컴포넌트 */}
+      <CustomModal isOpen={isModalOpen} onClose={()=> setIsModalOpen(false)}>
+        <p>비밀번호가 일치하지 않습니다.</p>
+        <button onClick={() => setIsModalOpen(false)}>확인</button>
+      </CustomModal>
     </div>
   );
 }
