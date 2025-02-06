@@ -1,7 +1,31 @@
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
+import { useEdit } from "@/src/contexts/EditProvider";
+import { useEffect, useState } from "react";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
+
+interface Item {
+  id: number;
+  email:string;
+  isOwner:boolean,
+  nickname:string;
+  createdAt: string;
+  updatedAt: string;
+  profileImageUrl: null | string | StaticImport;
+  userId:number
+}
 
 export default function MemberContainer() {
+  const [isMembersData, isSetMemberData] = useState<Item[]>();
+  const { isMembers } = useEdit();
+
+  useEffect(() => {
+    if (isMembers) {
+      const { members } = isMembers;
+      isSetMemberData(members);
+    }
+  }, [isMembers]);
+
   return (
     <>
       <div className={`${styles.container} ${styles.section2}`}>
@@ -12,13 +36,20 @@ export default function MemberContainer() {
         <div className={styles.contents}>
           <p className={styles.title}>이름</p>
           <ul className={styles.memberList}>
-            <li className={styles.tile}>
-              <div className={styles.profileCover}>
-                <div className={styles.thumbnail}></div>
-                <p className={styles.nickname}>정민철</p>
-              </div>
-              <Button sub="sub">삭제</Button>
-            </li>
+            {isMembersData &&
+              isMembersData?.map((item) => {
+                return (
+                  <>
+                    <li key={item.id} className={styles.tile}>
+                      <div className={styles.profileCover}>
+                        <div className={styles.thumbnail}></div>
+                        <p className={styles.nickname}>{item.nickname}</p>
+                      </div>
+                      <Button sub="sub">삭제</Button>
+                    </li>
+                  </>
+                );
+              })}
           </ul>
         </div>
       </div>
