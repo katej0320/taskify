@@ -137,26 +137,32 @@ export default function LoginPage() {
 
         <p className={style.tag}>비밀번호</p>
         <div className={style.passwordWrapper}>
-          <input
-            className={`${style.passwordinput} ${
-              passwordError ? style.inputError : ""
-            }`}
-            placeholder="비밀번호를 입력해 주세요"
-            name="password"
-            onChange={handleChange}
-            value={values.password}
-            type={isPasswordVisible ? "password" : "text"}
-          />
-          <span className={style.eyeIcon} onClick={passwordVisible}>
-            <Image
-              className={isPasswordVisible ? style.passwordeye : style.passwordeyeopen} 
-              src={isPasswordVisible ? passwordeye : passwordeyeopen}
-              alt="Toggle Password Visibility"
-              
+          <div className={style.passwordinputandtext}>
+            <input
+              className={`${style.passwordinput} ${
+                passwordError ? style.inputError : ""
+              }`}
+              placeholder="비밀번호를 입력해 주세요"
+              name="password"
+              onChange={handleChange}
+              value={values.password}
+              type={isPasswordVisible ? "password" : "text"}
             />
-          </span>
-        </div>
-        {passwordError && <span className={style.error}>{passwordError}</span>}
+            {passwordError && <span className={style.error}>{passwordError}</span>}
+           </div>
+         
+          <Image
+            onClick={passwordVisible}
+            className={!isPasswordVisible ? style.passwordeyeopen : style.passwordeye} 
+            src={!isPasswordVisible ? passwordeyeopen : passwordeye}
+            alt="Toggle Password Visibility"
+          />
+        
+       </div>
+
+
+        
+       
 
      
         {/* 로그인버튼튼 */}

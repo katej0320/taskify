@@ -37,6 +37,7 @@
 
 .inputError {
     border: 1px solid red;  // 에러일 때 빨간색 테두리
+    position: relative;
 }
 
 
@@ -51,6 +52,7 @@
     padding: 0 16px;
     border: 1px solid $gray3;
     outline: none;
+    position: relative;
 
  }
 
@@ -62,31 +64,32 @@
     align-items: center;
 }
 
-.eyeIcon{
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-  
+// .eyeIcon {
+//     position: absolute;
+//     right: 16px; /* input 내부에서 오른쪽 정렬 */
+//     cursor: pointer;
+//     z-index: 100;
+//     display: flex;
+//     width: 22px;
+//     height: 22px;
+// }
 
-}
 
-.passwordeye{
+/* 비밀번호 가림 아이콘 */
+.passwordeye {
     width: 22px;
-    height: 19px;
+    height: auto;
     position: absolute;
-    right: 0px;
-    top: 56%;
-    transform: translateY(-50%);
-    cursor: pointer;
+    
 }
 
-.passwordeyeopen{
+/* 비밀번호 표시 아이콘 */
+.passwordeyeopen {
     width: 22px;
-    height: 15px;
-
+    height: auto;
+    position: absolute;
 }
+
 
 .input:focus{
     border-color: $violet2;
