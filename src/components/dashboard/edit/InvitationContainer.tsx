@@ -66,8 +66,6 @@ export default function InvitationContainer() {
     }
   }, [isInvitations]);
 
-  console.log(isInvitationsData);
-
   return (
     <>
       <div className={`${styles.container} ${styles.section3}`}>
