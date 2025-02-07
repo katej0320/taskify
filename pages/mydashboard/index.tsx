@@ -1,30 +1,39 @@
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
 import styles from "./index.module.scss";
-import { getDashboard } from "@/src/api/api";
-import ListCard from "@/src/components/dashboardlist/ListCard";
+import { getDashboard, getInviteList } from "@/src/api/api";
+import ListCard from "@/src/components/dashboardlist/card/ListCard";
 import Pagination from "@/src/components/pagination/Pagination";
 import Image from "next/image";
+import SearchBar from "@/src/components/dashboardlist/invite/SearchBar";
+import None from "@/src/components/dashboardlist/invite/none";
 
 export async function getServerSideProps() {
   try {
     const { dashboards = [] } = await getDashboard();
+    const { invitations = [] } = await getInviteList();
 
     return {
-      props: { dashboards },
+      props: { dashboards, invitations },
     };
   } catch (error) {
     console.error("Failed to fetch dashboard:", error);
     return {
-      props: { dashboards: [] },
+      props: { dashboards: [], invitations: [] },
     };
   }
 }
 
-export default function MyDashboardPage({ dashboards }: { dashboards: any[] }) {
+export default function MyDashboardPage({
+  dashboards,
+  invitations,
+}: {
+  dashboards: any[];
+  invitations: any[];
+}) {
   return (
     <div className={styles.contents}>
-      <SideBar />
+      <SideBar dashboards={dashboards} />
       <NavBar />
       <div className={styles.content}>
         <div>
@@ -62,6 +71,24 @@ export default function MyDashboardPage({ dashboards }: { dashboards: any[] }) {
           <div className={styles.pagination}>
             <Pagination />
           </div>
+        </div>
+        {/* 초대받은 대시보드 컴포넌트화*/}
+        <div className={styles.inviteContent}>
+          <h2>초대받은 대시보드</h2>
+
+          {invitations.length > 0 ? (
+            invitations.map((invite) => {
+              return (
+                <div key={invite.id}>
+                  <SearchBar />
+                  <div>{invite.dashboard.title}</div>
+                  <div>{invite.dashboard.title}</div>
+                </div>
+              );
+            })
+          ) : (
+            <None />
+          )}
         </div>
       </div>
     </div>

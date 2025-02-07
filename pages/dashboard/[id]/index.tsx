@@ -1,7 +1,25 @@
 import { useState } from "react";
 import CustomModal from "@/src/components/modal/CustomModal";
+import SideBar from "@/src/components/sidebar/SideBar";
+import NavBar from "@/src/components/nav/NavBar";
+import { getDashboard } from "@/src/api/api";
 
-export default function Page() {
+export async function getServerSideProps() {
+  try {
+    const { dashboards = [] } = await getDashboard();
+
+    return {
+      props: { dashboards },
+    };
+  } catch (error) {
+    console.error("Failed to fetch dashboard:", error);
+    return {
+      props: { dashboards: [] },
+    };
+  }
+}
+
+export default function Page({ dashboards }: { dashboards: any[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true); // 모달을 여는 함수
@@ -9,7 +27,9 @@ export default function Page() {
 
   return (
     <>
-      <div>dashboard상세</div>
+      <SideBar dashboards={dashboards} />
+      <NavBar />
+
       <button onClick={openModal}>모달 열기</button>
       <CustomModal isOpen={isModalOpen} onClose={closeModal}>
         <h2>모달 제목</h2>
