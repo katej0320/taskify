@@ -82,8 +82,7 @@ export default function LoginPage() {
       const response = await axiosinstance.post(
         "/auth/login",
         { email, password },
-        //이거 확인하기기
-        { withCredentials: true }
+        
       );
       console.log("로그인 성공", response.data);
       const { accessToken } = response.data;
