@@ -2,13 +2,17 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "../../src/api/axios";
+import axiosinstance from "../../src/api/axios";
 import loginlogo from "@/public/icons/loginlogo.png";
 import Image from "next/image";
 import style from "./index.module.scss";
 import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import CustomModal from "@/src/components/modal/CustomModal";
+import loginStyles from "./modal.module.scss";
+import CustomButton from "@/src/components/button/CustomButton";
+import buttonStyles from "./button.module.scss"
+
 
 export default function LoginPage() {
   const [values, setValues] = useState({
@@ -74,23 +78,17 @@ export default function LoginPage() {
     // axios 리퀘스트 보내기
 
     try {
-      const response = await axios.post(
-        "/auth/login",
-        { email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axiosinstance.post("/auth/login", {
+        email,
+        password,
+      });
       console.log("로그인 성공", response.data);
-      router.push("/dashboard");
-
       const { accessToken } = response.data;
-      console.log("로그인 응답 데이터:", response.data);
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("accessToken", accessToken); // 클라이언트에서만 실행
-      }
+      sessionStorage.setItem("accessToken", accessToken);
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 0);
+
     } catch (error: any) {
       console.error("로그인 실패:", error.response?.data || error.message);
       setIsModalOpen(true);
@@ -173,9 +171,20 @@ export default function LoginPage() {
       </form>
 
       {/* 모달 컴포넌트 */}
+
+
       <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <p>비밀번호가 일치하지 않습니다.</p>
-        <button onClick={() => setIsModalOpen(false)}>확인</button>
+        <div className={loginStyles.modalOverlay}>
+          {/* <div className={loginStyles.modalContent}> */}
+            <div className={loginStyles.contentstyle}>
+              <div className={loginStyles.textandbutton}>
+                <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
+                <CustomButton width={240} height={48} className={buttonStyles.button1} onClick={() => setIsModalOpen(false)}>확인</CustomButton>
+              </div>
+            </div>
+          {/* </div> */}
+        </div>
+
       </CustomModal>
     </div>
   );
