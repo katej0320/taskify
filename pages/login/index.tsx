@@ -10,7 +10,8 @@ import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import CustomModal from "@/src/components/modal/CustomModal";
 import loginStyles from "./modal.module.scss";
-
+import CustomButton from "@/src/components/button/CustomButton";
+import buttonStyles from "./button.module.scss"
 // import {Icon} from 'react-icons-kit';
 // import { ic_visibility_off } from 'react-icons-kit/md/ic_visibility_off';
 // import { ic_visibility } from 'react-icons-kit/md/ic_visibility';
@@ -191,7 +192,7 @@ export default function LoginPage() {
             <div className={loginStyles.contentstyle}>
               <div className={loginStyles.textandbutton}>
                 <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
-                <button onClick={() => setIsModalOpen(false)}>확인</button>
+                <CustomButton width={240} height={48} className={buttonStyles.button1} onClick={() => setIsModalOpen(false)}>확인</CustomButton>
               </div>
             </div>
           {/* </div> */}

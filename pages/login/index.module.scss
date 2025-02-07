@@ -1,4 +1,4 @@
-@import '@/styles/color.scss';
+@use "/styles/color.scss" as *;
 
 
 .container {
@@ -141,7 +141,7 @@
 
 .signuptext{
     text-align: center;
-    margin-top: 5px;
+    margin-top: 21px;
 }
 
 .signuptextbutton{
