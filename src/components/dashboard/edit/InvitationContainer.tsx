@@ -2,9 +2,8 @@ import styled from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
 import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
-import { useEdit } from "@/src/contexts/EditProvider";
+import { useEdit } from "@/src/contexts/EditDashbordProvider";
 import { useEffect, useState } from "react";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 const InviteButton = styled(Button)`
   width: fit-content;
@@ -16,6 +15,7 @@ const InviteButton = styled(Button)`
   color: #fff;
   font-weight: 500;
   font-size: 14px;
+  cursor: pointer;
 
   svg {
     padding-top: 2px;
@@ -84,13 +84,13 @@ export default function InvitationContainer() {
           <ul className={styles.memberList}>
             {isInvitationsData &&
               isInvitationsData.map((item) => {
-                const {invitee} = item;
+                const { invitee } = item;
                 return (
                   <li key={item.id} className={styles.tile}>
                     <div className={styles.profileCover}>
                       <p className={styles.email}>{invitee.email}</p>
                     </div>
-                    <Button sub="sub">취소</Button>
+                    <Button $sub="sub">취소</Button>
                   </li>
                 );
               })}

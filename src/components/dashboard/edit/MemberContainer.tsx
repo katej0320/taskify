@@ -1,6 +1,6 @@
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
-import { useEdit } from "@/src/contexts/EditProvider";
+import { useEdit } from "@/src/contexts/EditDashbordProvider";
 import { useEffect, useState } from "react";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
@@ -44,7 +44,7 @@ export default function MemberContainer() {
                       <div className={styles.thumbnail}></div>
                       <p className={styles.nickname}>{item.nickname}</p>
                     </div>
-                    <Button sub="sub">삭제</Button>
+                    <Button $sub="sub">삭제</Button>
                   </li>
                 );
               })}

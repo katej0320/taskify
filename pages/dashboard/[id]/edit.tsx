@@ -6,7 +6,7 @@ import BebridgeContainer from "@/src/components/dashboard/edit/BebridgeContainer
 import DeleteContainer from "@/src/components/dashboard/edit/DeleteContainer";
 import InvitationContainer from "@/src/components/dashboard/edit/InvitationContainer";
 import MemberContainer from "@/src/components/dashboard/edit/MemberContainer";
-import { EditProvider } from "@/src/contexts/EditProvider";
+import { EditProvider } from "@/src/contexts/EditDashbordProvider";
 
 // 공통 스타일이기 때문에 작업을 위한 임시 CSS 적용
 const Container = styled.div`

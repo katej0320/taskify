@@ -7,7 +7,11 @@ import {
 } from "react";
 import axiosInstance from "../api/axios";
 
-const EditContext = createContext({ isMembers: null, isInvitations: null });
+const EditContext = createContext({
+  isBebridge: null,
+  isMembers: null,
+  isInvitations: null,
+});
 
 export function EditProvider({
   children,
@@ -17,9 +21,20 @@ export function EditProvider({
   dashboardId: string | string[] | undefined;
 }) {
   const [values, setValues] = useState({
+    isBebridge: null,
     isMembers: null,
     isInvitations: null,
   });
+
+  async function getDashboardDetail() {
+    const res = await axiosInstance.get(`/dashboards/${dashboardId}`);
+    const bebridge = res.data;
+
+    setValues((prevValues) => ({
+      ...prevValues,
+      isBebridge: bebridge,
+    }));
+  }
 
   async function getMembers() {
     const res = await axiosInstance.get(`/members?dashboardId=${dashboardId}`);
@@ -45,6 +60,7 @@ export function EditProvider({
 
   useEffect(() => {
     if (dashboardId) {
+      getDashboardDetail();
       getMembers();
       getInvitations();
     }
@@ -53,6 +69,7 @@ export function EditProvider({
   return (
     <EditContext.Provider
       value={{
+        isBebridge: values.isBebridge,
         isMembers: values.isMembers,
         isInvitations: values.isInvitations,
       }}
