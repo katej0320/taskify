@@ -191,10 +191,12 @@ export default function LoginPage() {
       </form>
 
       {/* 모달 컴포넌트 */}
-      <div className={style.loginModal}>
+      <div className={loginStyles.loginModal}>
         <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <p>비밀번호가 일치하지 않습니다.</p>
+        <div className={loginStyles.loginModalContent}>
+          <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
           <button onClick={() => setIsModalOpen(false)}>확인</button>
+        </div>
         </CustomModal>
       </div>
     </div>
