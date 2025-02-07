@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CustomModal from "@/src/components/modal/CustomModal";
+import CustomModal from "@/src/components/modals/CustomModal";
 
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
