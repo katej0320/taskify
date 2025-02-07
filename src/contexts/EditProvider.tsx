@@ -22,9 +22,7 @@ export function EditProvider({
   });
 
   async function getMembers() {
-    const res = await axiosInstance.get(
-      `/members?dashboardId=${dashboardId}`
-    );
+    const res = await axiosInstance.get(`/members?dashboardId=${dashboardId}`);
     const members = res.data;
 
     setValues((prevValues) => ({
@@ -33,9 +31,22 @@ export function EditProvider({
     }));
   }
 
+  async function getInvitations() {
+    const res = await axiosInstance.get(
+      `/dashboards/${dashboardId}/invitations`
+    );
+    const invitaions = res.data;
+
+    setValues((prevValues) => ({
+      ...prevValues,
+      isInvitations: invitaions,
+    }));
+  }
+
   useEffect(() => {
     if (dashboardId) {
       getMembers();
+      getInvitations();
     }
   }, [dashboardId]);
 

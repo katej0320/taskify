@@ -6,13 +6,13 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 interface Item {
   id: number;
-  email:string;
-  isOwner:boolean,
-  nickname:string;
+  email: string;
+  isOwner: boolean;
+  nickname: string;
   createdAt: string;
   updatedAt: string;
   profileImageUrl: null | string | StaticImport;
-  userId:number
+  userId: number;
 }
 
 export default function MemberContainer() {
@@ -37,17 +37,15 @@ export default function MemberContainer() {
           <p className={styles.title}>이름</p>
           <ul className={styles.memberList}>
             {isMembersData &&
-              isMembersData?.map((item) => {
+              isMembersData?.map((item, i) => {
                 return (
-                  <>
-                    <li key={item.id} className={styles.tile}>
-                      <div className={styles.profileCover}>
-                        <div className={styles.thumbnail}></div>
-                        <p className={styles.nickname}>{item.nickname}</p>
-                      </div>
-                      <Button sub="sub">삭제</Button>
-                    </li>
-                  </>
+                  <li key={item.id} className={styles.tile}>
+                    <div className={styles.profileCover}>
+                      <div className={styles.thumbnail}></div>
+                      <p className={styles.nickname}>{item.nickname}</p>
+                    </div>
+                    <Button sub="sub">삭제</Button>
+                  </li>
                 );
               })}
           </ul>
