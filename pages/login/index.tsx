@@ -10,7 +10,8 @@ import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import CustomModal from "@/src/components/modal/CustomModal";
 import loginStyles from "./modal.module.scss";
-
+import CustomButton from "@/src/components/button/CustomButton";
+import buttonStyles from "./button.module.scss"
 // import {Icon} from 'react-icons-kit';
 // import { ic_visibility_off } from 'react-icons-kit/md/ic_visibility_off';
 // import { ic_visibility } from 'react-icons-kit/md/ic_visibility';
@@ -79,15 +80,13 @@ export default function LoginPage() {
     // axios 리퀘스트 보내기
 
     try {
-      const response = await axiosinstance.post(
-        "/auth/login",
-        { email, password },
-        //이거 확인하기기
-        { withCredentials: true }
-      );
+      const response = await axiosinstance.post("/auth/login", {
+        email,
+        password,
+      });
       console.log("로그인 성공", response.data);
-      const { token } = response.data;
-      sessionStorage.setItem("token", token);
+      const { accessToken } = response.data;
+      sessionStorage.setItem("accessToken", accessToken);
       setTimeout(() => {
         router.push("/dashboard");
       }, 0);
@@ -187,12 +186,16 @@ export default function LoginPage() {
 
       {/* 모달 컴포넌트 */}
 
-      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className={loginStyles.modalContent}>
-        <div >
-          <div className={loginStyles.contentstyle}>
-            <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
-            <button onClick={() => setIsModalOpen(false)}>확인</button>
-          </div>
+      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <div className={loginStyles.modalOverlay}>
+          {/* <div className={loginStyles.modalContent}> */}
+            <div className={loginStyles.contentstyle}>
+              <div className={loginStyles.textandbutton}>
+                <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
+                <CustomButton width={240} height={48} className={buttonStyles.button1} onClick={() => setIsModalOpen(false)}>확인</CustomButton>
+              </div>
+            </div>
+          {/* </div> */}
         </div>
       </CustomModal>
     </div>
