@@ -40,3 +40,17 @@
   border-radius: 50px;
   background-color: $white;
 }
+
+.inviteContent {
+  width: 1022px;
+  min-height: 390px;
+  background-color: $white;
+  border-radius: 8px;
+  padding: 32px 28px;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+  }
+}
