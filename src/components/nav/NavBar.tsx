@@ -1,11 +1,30 @@
 import Image from "next/image";
 import styles from "./NavBar.module.scss";
+import { useParams, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
+const arr = [{ name: "a" }, { name: "b" }];
 
 export default function NavBar() {
+  const params = useParams();
+
+  const pathname = usePathname();
+  const [headerTitle, setHeaderTitle] = useState("내 대시보드");
+  useEffect(() => {
+    if (pathname === "mydashboard") {
+      setHeaderTitle("내 대시보드");
+      return;
+    }
+    if (pathname === "") {
+    }
+    console.log("pathname", pathname);
+    console.log("params>>", params);
+  }, [pathname]);
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.leftSection}>
-        <span className={styles.dashboardTitle}>내 대시보드</span>
+        <span className={styles.dashboardTitle}>{headerTitle}</span>
       </div>
       <div className={styles.rightSection}>
         <button className={styles.navButton}>
@@ -24,7 +43,7 @@ export default function NavBar() {
             height={20}
             alt="더하기 버튼"
           />
-          조회하기
+          초대하기
         </button>
 
         <div className={styles.profile}>

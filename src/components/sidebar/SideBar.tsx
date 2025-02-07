@@ -2,7 +2,7 @@ import styles from "./SideBar.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function SideBar() {
+export default function SideBar({ dashboards }: { dashboards: any[] }) {
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarcontent}>
@@ -28,6 +28,15 @@ export default function SideBar() {
             </Link>
           </div>
         </div>
+        {dashboards?.map((dashboard, index) => (
+          <div key={index} className={styles.dashboardlist}>
+            <div
+              className={styles.colorCircle}
+              style={{ backgroundColor: dashboard.color }}
+            ></div>
+            <div>{dashboard.title}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

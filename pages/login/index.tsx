@@ -8,6 +8,9 @@ import Image from "next/image";
 import style from "./index.module.scss";
 import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
+import CustomModal from "@/src/components/modal/CustomModal";
+
+
 
 export default function LoginPage() {
   const [values, setValues] = useState({
@@ -18,7 +21,10 @@ export default function LoginPage() {
   const [passwordError, setPasswordError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
+
+
 
   // 유저가 입력한 값의 상태 저장
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -65,29 +71,35 @@ export default function LoginPage() {
     return emailRegex.test(email);
   };
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const { email, password } = values;
 
     // axios 리퀘스트 보내기
-    axios
-      .post(
-        "/auth/login",
-        { email, password },
-        { withCredentials : true }
-      )
-      .then((response) => {
-        console.log("✅ 로그인 성공:", response.data);
-        alert("로그인 완료되었습니다!");
-      })
-      .catch((error) => {
-        console.error("❌ 로그인 실패:", error.response?.data || error.message);
-        alert(`로그인 실패: ${error.response?.data?.message || "서버 오류"}`);
-      });
+
+    try {
+        const response = await axios.post('/auth/login',
+             {email, password},
+             { withCredentials :true});
+        console.log("로그인 성공", response.data);
+        router.push("/dashboard"); 
+
+        const { token } = response.data;
+
+        sessionStorage.setItem('token', token);
+
+    } catch (error: any){
+        console.error("로그인 실패:", error.response?.data || error.message);
+        setIsModalOpen(true);
+            
+    }
+
+  
+
   }
 
-  function handleClick() {
+  function handleSignupClick() {
     router.push("/signup");
   }
 
@@ -156,11 +168,17 @@ export default function LoginPage() {
         </button>
         <p className={style.signuptext}>
           회원이 아니신가요?{" "}
-          <span className={style.signuptextbutton} onClick={handleClick}>
+          <span className={style.signuptextbutton} onClick={handleSignupClick}>
             회원가입하기
           </span>
         </p>
       </form>
+
+      {/* 모달 컴포넌트 */}
+      <CustomModal isOpen={isModalOpen} onClose={()=> setIsModalOpen(false)}>
+        <p>비밀번호가 일치하지 않습니다.</p>
+        <button onClick={() => setIsModalOpen(false)}>확인</button>
+      </CustomModal>
     </div>
   );
 }
