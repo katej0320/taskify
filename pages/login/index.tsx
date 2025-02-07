@@ -86,8 +86,8 @@ export default function LoginPage() {
         { withCredentials: true }
       );
       console.log("로그인 성공", response.data);
-      const { token } = response.data;
-      sessionStorage.setItem("token", token);
+      const { accessToken } = response.data;
+      sessionStorage.setItem("accessToken", accessToken);
       setTimeout(() => {
         router.push("/dashboard");
       }, 0);
