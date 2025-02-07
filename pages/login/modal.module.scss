@@ -1,18 +1,8 @@
-@use "/styles/color.scss" as *;
 
-/* 로그인 페이지 전용 모달 스타일 */
-
-.loginModal .modalContent{
-  height: 100px !important;
-}
-.loginModalContent {
-  width: 500px; /* 로그인 페이지에서는 좀 더 큰 모달 */
-  padding: 40px;
-  background-color: $gray1;
-  border-radius: 12px;
-  height: 100px !important;
+.contentstyle{
+  height: 100px;
 }
 
-.tag{
-  color :red !important;
+.modalContent{
+  height: 200px;
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "../../src/api/axios";
+import axiosinstance from "../../src/api/axios";
 import loginlogo from "@/public/icons/loginlogo.png";
 import Image from "next/image";
 import style from "./index.module.scss";
@@ -35,46 +35,41 @@ export default function LoginPage() {
     setValues((prevValues) => {
       const newValues = { ...prevValues, [name]: value };
 
-    
+      // 이메일 형식 검증 함수
+      const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      };
 
-    // 이메일 형식 검증 함수
-    const validateEmail = (email: string) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
-  
-
-    // 이메일 형식 실시간 검증
-    if (name === "email") {
-      if (value === "") {
-        setEmailErrorMessage(""); // 이메일이 빈 값이면 에러 메시지 초기화
-      } else if (!validateEmail(value)) {
-        setEmailErrorMessage("이메일 형식으로 입력해주세요");
-      } else {
-        setEmailErrorMessage("");
+      // 이메일 형식 실시간 검증
+      if (name === "email") {
+        if (value === "") {
+          setEmailErrorMessage(""); // 이메일이 빈 값이면 에러 메시지 초기화
+        } else if (!validateEmail(value)) {
+          setEmailErrorMessage("이메일 형식으로 입력해주세요");
+        } else {
+          setEmailErrorMessage("");
+        }
       }
-    }
 
-    if (name === "password") {
-      if (value === "") {
-        setPasswordError("");
-      } else if (value.length < 8) {
-        setPasswordError("비밀번호는 8자 이상이어야 합니다");
-      } else {
-        setPasswordError("");
+      if (name === "password") {
+        if (value === "") {
+          setPasswordError("");
+        } else if (value.length < 8) {
+          setPasswordError("비밀번호는 8자 이상이어야 합니다");
+        } else {
+          setPasswordError("");
+        }
       }
-    }
 
-    
-    //로그인 버튼 비활성화/활성화화
-    setIsButtonDisabled(!(validateEmail(newValues.email) && newValues.password.length >= 8));
+      //로그인 버튼 비활성화/활성화화
+      setIsButtonDisabled(
+        !(validateEmail(newValues.email) && newValues.password.length >= 8)
+      );
 
-        return newValues;
+      return newValues;
     });
-  
   }
-
-
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -84,7 +79,7 @@ export default function LoginPage() {
     // axios 리퀘스트 보내기
 
     try {
-      const response = await axios.post(
+      const response = await axiosinstance.post(
         "/auth/login",
         { email, password },
         //이거 확인하기기
@@ -191,15 +186,15 @@ export default function LoginPage() {
       </form>
 
       {/* 모달 컴포넌트 */}
-      <div className={loginStyles.loginModal}>
-        <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className={loginStyles.loginModalContent}>
-          <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
-          <button onClick={() => setIsModalOpen(false)}>확인</button>
+
+      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className={loginStyles.modalContent}>
+        <div >
+          <div className={loginStyles.contentstyle}>
+            <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
+            <button onClick={() => setIsModalOpen(false)}>확인</button>
+          </div>
         </div>
-        </CustomModal>
-      </div>
+      </CustomModal>
     </div>
   );
-  }
-
+}
