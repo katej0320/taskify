@@ -7,6 +7,7 @@ import Pagination from "@/src/components/pagination/Pagination";
 import Image from "next/image";
 import SearchBar from "@/src/components/dashboardlist/invite/SearchBar";
 import None from "@/src/components/dashboardlist/invite/none";
+import Link from "next/link";
 
 export async function getServerSideProps() {
   try {
@@ -51,20 +52,22 @@ export default function MyDashboardPage({
             </ListCard>
             {/* 대시보드 리스트 */}
             {dashboards.map((dashboard, index) => (
-              <ListCard key={index}>
-                <div
-                  className={styles.colorCircle}
-                  style={{ backgroundColor: dashboard.color }}
-                ></div>
-                <div>{dashboard.title}</div>{" "}
-                <Image
-                  src="/icons/arrow.svg"
-                  width={22}
-                  height={22}
-                  alt="arrow.svg"
-                  priority
-                />
-              </ListCard>
+              <Link href={`/dashboard/${dashboard.id}`}>
+                <ListCard key={index}>
+                  <div
+                    className={styles.colorCircle}
+                    style={{ backgroundColor: dashboard.color }}
+                  ></div>
+                  <div>{dashboard.title}</div>{" "}
+                  <Image
+                    src="/icons/arrow.svg"
+                    width={22}
+                    height={22}
+                    alt="arrow.svg"
+                    priority
+                  />
+                </ListCard>
+              </Link>
             ))}
           </div>
           {/* 페이지네이션 버튼 */}
