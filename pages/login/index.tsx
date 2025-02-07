@@ -189,8 +189,10 @@ export default function LoginPage() {
         <div className={loginStyles.modalOverlay}>
           {/* <div className={loginStyles.modalContent}> */}
             <div className={loginStyles.contentstyle}>
-              <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
-              <button onClick={() => setIsModalOpen(false)}>확인</button>
+              <div className={loginStyles.textandbutton}>
+                <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
+                <button onClick={() => setIsModalOpen(false)}>확인</button>
+              </div>
             </div>
           {/* </div> */}
         </div>
