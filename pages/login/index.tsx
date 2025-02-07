@@ -9,6 +9,8 @@ import style from "./index.module.scss";
 import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import CustomModal from "@/src/components/modal/CustomModal";
+import loginStyles from "./modal.module.scss";
+
 // import {Icon} from 'react-icons-kit';
 // import { ic_visibility_off } from 'react-icons-kit/md/ic_visibility_off';
 // import { ic_visibility } from 'react-icons-kit/md/ic_visibility';
@@ -21,37 +23,26 @@ export default function LoginPage() {
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [password, setPassword] = useState("");
-  const [type, setType] = useState("password");
-  // const [icon, setIcon] = useState(ic_visibility_off);
-  const router = useRouter();
 
-  //   const handleToggle = () => {
-  //     if (type==='password'){
-  //        setIcon(ic_visibility);
-  //        setType('text')
-  //     } else {
-  //        setIcon(ic_visibility_off)
-  //        setType('password')
-  //     }
-  //  }
+  const router = useRouter();
 
   // 유저가 입력한 값의 상태 저장
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
 
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
+    setValues((prevValues) => {
+      const newValues = { ...prevValues, [name]: value };
+
+    
 
     // 이메일 형식 검증 함수
     const validateEmail = (email: string) => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email);
     };
+  
 
     // 이메일 형식 실시간 검증
     if (name === "email") {
@@ -74,16 +65,17 @@ export default function LoginPage() {
       }
     }
 
+    
     //로그인 버튼 비활성화/활성화화
-    setIsButtonDisabled(!(validateEmail(value) && value.length >= 8));
+    setIsButtonDisabled(!(validateEmail(newValues.email) && newValues.password.length >= 8));
 
-    //   if (validateEmail(values.email) && values.password.length >= 8) {
-    //     setIsButtonDisabled(false);
-    //   } else {
-    //     setIsButtonDisabled(true);
-    //   }
-    // }
+        return newValues;
+    });
+  
   }
+
+
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -148,31 +140,36 @@ export default function LoginPage() {
           <span className={style.error}>{emailErrorMessage}</span>
         )}
 
-      <p className={style.tag}>비밀번호</p>
-      <div className={style.passwordWrapper}>
+        <p className={style.tag}>비밀번호</p>
+        <div className={style.passwordWrapper}>
           <input
-            className={`${style.passwordinput} ${passwordError ? style.inputError : ""}`}
+            className={`${style.passwordinput} ${
+              passwordError ? style.inputError : ""
+            }`}
             placeholder="비밀번호를 입력해 주세요"
             name="password"
             onChange={handleChange}
             value={values.password}
             type={isPasswordVisible ? "text" : "password"}
           />
-         
-        <span onClick={passwordVisible} className={style.passwordimg}>
-          <Image
-            className={
-              isPasswordVisible ? style.passwordeyeopen : style.passwordeye
-            }
-            src={isPasswordVisible ? passwordeyeopen : passwordeye}
-            alt="Toggle Password Visibility"
-          />
-        </span>
-        <span className={`${style.passwordError} ${passwordError ? style.show : ""}`}>
-          {passwordError}
-        </span>
-      </div>
 
+          <span onClick={passwordVisible} className={style.passwordimg}>
+            <Image
+              className={
+                isPasswordVisible ? style.passwordeyeopen : style.passwordeye
+              }
+              src={isPasswordVisible ? passwordeyeopen : passwordeye}
+              alt="Toggle Password Visibility"
+            />
+          </span>
+          <span
+            className={`${style.passwordError} ${
+              passwordError ? style.show : ""
+            }`}
+          >
+            {passwordError}
+          </span>
+        </div>
 
         {/* 로그인버튼 */}
         <button
@@ -184,7 +181,7 @@ export default function LoginPage() {
           로그인
         </button>
 
-        {/* 회원가입페이지로이동버튼튼 */}
+        {/* 회원가입페이지로이동버튼 */}
         <p className={style.signuptext}>
           회원이 아니신가요?{" "}
           <span className={style.signuptextbutton} onClick={handleSignupClick}>
@@ -194,10 +191,13 @@ export default function LoginPage() {
       </form>
 
       {/* 모달 컴포넌트 */}
-      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <p>비밀번호가 일치하지 않습니다.</p>
-        <button onClick={() => setIsModalOpen(false)}>확인</button>
-      </CustomModal>
+      <div className={style.loginModal}>
+        <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <p>비밀번호가 일치하지 않습니다.</p>
+          <button onClick={() => setIsModalOpen(false)}>확인</button>
+        </CustomModal>
+      </div>
     </div>
   );
-}
+  }
+
