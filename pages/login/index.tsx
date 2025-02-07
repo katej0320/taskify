@@ -79,11 +79,10 @@ export default function LoginPage() {
     // axios 리퀘스트 보내기
 
     try {
-      const response = await axiosinstance.post(
-        "/auth/login",
-        { email, password },
-        
-      );
+      const response = await axiosinstance.post("/auth/login", {
+        email,
+        password,
+      });
       console.log("로그인 성공", response.data);
       const { accessToken } = response.data;
       sessionStorage.setItem("accessToken", accessToken);
@@ -186,12 +185,14 @@ export default function LoginPage() {
 
       {/* 모달 컴포넌트 */}
 
-      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className={loginStyles.modalContent}>
-        <div >
-          <div className={loginStyles.contentstyle}>
-            <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
-            <button onClick={() => setIsModalOpen(false)}>확인</button>
-          </div>
+      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <div className={loginStyles.modalOverlay}>
+          {/* <div className={loginStyles.modalContent}> */}
+            <div className={loginStyles.contentstyle}>
+              <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
+              <button onClick={() => setIsModalOpen(false)}>확인</button>
+            </div>
+          {/* </div> */}
         </div>
       </CustomModal>
     </div>
