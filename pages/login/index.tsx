@@ -10,7 +10,6 @@ import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import CustomModal from "@/src/components/modal/CustomModal";
 import loginStyles from "./modal.module.scss";
-
 import CustomButton from "@/src/components/button/CustomButton";
 import buttonStyles from "./button.module.scss"
 
@@ -89,7 +88,6 @@ export default function LoginPage() {
       setTimeout(() => {
         router.push("/dashboard");
       }, 0);
-
     } catch (error: any) {
       console.error("로그인 실패:", error.response?.data || error.message);
       setIsModalOpen(true);
@@ -185,9 +183,6 @@ export default function LoginPage() {
       </form>
 
       {/* 모달 컴포넌트 */}
-
-
-
       <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className={loginStyles.modalOverlay}>
           {/* <div className={loginStyles.modalContent}> */}
@@ -199,7 +194,6 @@ export default function LoginPage() {
             </div>
           {/* </div> */}
         </div>
-
       </CustomModal>
     </div>
   );
