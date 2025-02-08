@@ -139,6 +139,8 @@ export default function RegisterPage() {
         { email, nickname, password });
         console.log("로그인 성공", response.data);
         router.push("/login");
+        
+        
     } catch(error:any){
       console.error("회원가입실패:", error.response?.data || error.message);
 
