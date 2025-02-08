@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axios from "../../src/api/axios";
+import axiosinstance from "../../src/api/axios";
 import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import loginlogo from "@/public/icons/loginlogo.png";
@@ -19,7 +19,7 @@ export default function RegisterPage() {
     passwordRepeat: "",
   });
   
-  const [errorMessage, setErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [nicknameError, setNicknameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [passwordRepeatError, setPasswordRepeatError] = useState("");
@@ -34,17 +34,22 @@ export default function RegisterPage() {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(e.target.checked);
   };
+ // 이메일 형식 검증 함수
+ const validateEmail = (email: string) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
 
-
-
+  //조건 만족하면 회원가입 버튼 활성화화
   useEffect(() => {
     const isValid =
       validateEmail(values.email) &&
       values.nickname.trim() !== "" &&
       values.nickname.length <= 10 &&
       values.password.length >= 8 &&
-      values.password === values.passwordRepeat
-      isChecked;
+      values.password === values.passwordRepeat &&
+      isChecked === true;
+      
   
     setIsButtonDisabled(!isValid);
   }, [values, isChecked]); // values가 변경될 때마다 실행
@@ -56,19 +61,21 @@ export default function RegisterPage() {
 
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
 
-    setErrorMessage("");
+    setEmailErrorMessage("");
     setPasswordError("");
     setPasswordRepeatError("");
     setNicknameError("");
 
+    
+
     // 이메일 형식 실시간 검증
     if (name === "email") {
       if (value === "") {
-        setErrorMessage(""); // 이메일이 빈 값이면 에러 메시지 초기화
+        setEmailErrorMessage(""); // 이메일이 빈 값이면 에러 메시지 초기화
       } else if (!validateEmail(value)) {
-        setErrorMessage("이메일 형식으로 입력해주세요");
+        setEmailErrorMessage("이메일 형식으로 입력해주세요");
       } else {
-        setErrorMessage("");
+        setEmailErrorMessage("");
       }
     }; 
 
@@ -108,17 +115,10 @@ export default function RegisterPage() {
           setPasswordRepeatError("");
         }}
 
-    //회원가입 버튼 활성화/ 비활성화
-
-
-    
+  
 
   }
-    // 이메일 형식 검증 함수
-    const validateEmail = (email: string) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
+
   
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -135,7 +135,7 @@ export default function RegisterPage() {
 
     //axios 리퀘스트 보내기
     try {
-      const response = await axios.post('/users',
+      const response = await axiosinstance.post('/users',
         { email, nickname, password });
         console.log("로그인 성공", response.data);
         router.push("/login");
@@ -169,18 +169,18 @@ export default function RegisterPage() {
       />
       <p className={style.logotext}>첫 방문을 환영합니다!</p>
 
-      {/* 이메일일 */}
+      {/* 이메일 */}
       <form onSubmit={handleSubmit}>
         <p className={style.tag}>이메일</p>
         <input
           placeholder="이메일을 입력해 주세요"
-          className={`${style.input} ${errorMessage ? style.inputError : ""}`}
+          className={`${style.input} ${emailErrorMessage ? style.inputError : ""}`}
           name="email" // ✅ name 추가
           type="email"
           onChange={handleChange}
           value={values.email}
         />
-         {errorMessage && <span className={style.error}>{errorMessage}</span>}
+         {emailErrorMessage && <span className={style.error}>{emailErrorMessage}</span>}
 
          {/* 닉네임 */}
         <p className={style.tag}>닉네임</p>
