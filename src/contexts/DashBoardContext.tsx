@@ -11,6 +11,8 @@ interface DashboardContextType {
   dashboards: any[];
   setDashboards: (dashboards: any[]) => void;
   loading: boolean;
+  navigationMethod: string; // navigationMethod 상태 추가
+  setNavigationMethod: (method: string) => void; // navigationMethod 변경 함수 추가
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(
@@ -20,13 +22,16 @@ const DashboardContext = createContext<DashboardContextType | undefined>(
 export const DashboardProvider = ({ children }: { children: ReactNode }) => {
   const [dashboards, setDashboards] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [navigationMethod, setNavigationMethod] =
+    useState<string>("infiniteScroll"); // 기본값 설정
 
   useEffect(() => {
     async function fetchDashboards() {
       try {
         setLoading(true); // 로딩 상태 시작
         const data = await getDashboard({
-          size: 6, // 예시로 페이지당 6개 대시보드
+          navigationMethod, // navigationMethod를 API 호출에 반영
+          size: 10, // 예시로 페이지당 6개 대시보드
         });
         if (data) {
           setDashboards(data.dashboards); // 받아온 대시보드 데이터 상태에 저장
@@ -38,10 +43,18 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     fetchDashboards();
-  }, []);
+  }, [navigationMethod]); // navigationMethod가 변경될 때마다 API 호출
 
   return (
-    <DashboardContext.Provider value={{ dashboards, setDashboards, loading }}>
+    <DashboardContext.Provider
+      value={{
+        dashboards,
+        setDashboards,
+        loading,
+        navigationMethod,
+        setNavigationMethod,
+      }}
+    >
       {children}
     </DashboardContext.Provider>
   );

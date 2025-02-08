@@ -2,9 +2,16 @@ import { useDashboard } from "@/src/contexts/DashBoardContext";
 import styles from "./SideBar.module.scss";
 import Image from "next/image";
 import Link from "next/link";
+import CustomModal from "../modal/CustomModal";
+import { useState } from "react";
+import Board from "../dashboardlist/createBoard/Board";
 
 export default function SideBar() {
   const { dashboards } = useDashboard(); // context에서 dashboards 데이터를 가져옴
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true); // 모달을 여는 함수
+  const closeModal = () => setIsModalOpen(false); // 모달을 닫는 함수
 
   return (
     <div className={styles.sidebar}>
@@ -21,14 +28,20 @@ export default function SideBar() {
         <div className={styles.subtitles}>
           <div className={styles.subtitle}>Dash Boards</div>
           <div>
-            <Link href="/">
-              <Image
-                src="/icons/add_box.svg"
-                width={20}
-                height={20}
-                alt="더하기 버튼"
-              />
-            </Link>
+            <Image
+              src="/icons/add_box.svg"
+              width={20}
+              height={20}
+              alt="더하기 버튼"
+              priority
+              onClick={openModal}
+              style={{ cursor: "pointer" }}
+            />
+            {isModalOpen && (
+              <CustomModal isOpen={isModalOpen} onClose={closeModal}>
+                <Board />
+              </CustomModal>
+            )}
           </div>
         </div>
         {dashboards.map((dashboard) => (
