@@ -1,8 +1,11 @@
+import { useDashboard } from "@/src/contexts/DashBoardContext";
 import styles from "./SideBar.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function SideBar({ dashboards }: { dashboards: any[] }) {
+export default function SideBar() {
+  const { dashboards } = useDashboard(); // context에서 dashboards 데이터를 가져옴
+
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarcontent}>
@@ -28,14 +31,16 @@ export default function SideBar({ dashboards }: { dashboards: any[] }) {
             </Link>
           </div>
         </div>
-        {dashboards?.map((dashboard, index) => (
-          <div key={index} className={styles.dashboardlist}>
-            <div
-              className={styles.colorCircle}
-              style={{ backgroundColor: dashboard.color }}
-            ></div>
-            <div>{dashboard.title}</div>
-          </div>
+        {dashboards.map((dashboard) => (
+          <Link key={dashboard.id} href={`/dashboard/${dashboard.id}`}>
+            <div className={styles.dashboardlist}>
+              <div
+                className={styles.colorCircle}
+                style={{ backgroundColor: dashboard.color }}
+              ></div>
+              <div>{dashboard.title}</div>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

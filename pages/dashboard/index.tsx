@@ -1,7 +1,7 @@
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
 import styles from "./index.module.scss";
-import { getDashboard, getInviteList } from "@/src/api/api";
+import { getDashboard, getInviteList } from "@/src/api/dashboardApi";
 import ListCard from "@/src/components/dashboardlist/card/ListCard";
 import Pagination from "@/src/components/pagination/Pagination";
 import Image from "next/image";
@@ -34,7 +34,7 @@ export default function MyDashboardPage({
 }) {
   return (
     <div className={styles.contents}>
-      <SideBar dashboards={dashboards} />
+      <SideBar />
       <NavBar />
       <div className={styles.content}>
         <div>
