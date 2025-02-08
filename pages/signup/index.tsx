@@ -136,7 +136,7 @@ export default function RegisterPage() {
   }
   //로고누르면 마이대쉬보드로 이동동
   function handleLogoClick() {
-    router.push("/mydashboard");
+    router.push("/");
   }
   //비밀번호 눈알
   const passwordVisible = () => {
