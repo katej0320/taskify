@@ -8,7 +8,7 @@ import { getDashboard, getInviteList } from "@/src/api/dashboardApi";
 import Pagination from "@/src/components/pagination/Pagination";
 import None from "@/src/components/dashboardlist/invite/none";
 import InviteDashboardList from "@/src/components/dashboardlist/invite/InviteList";
-import NewDashboard from "@/src/components/dashboardlist/newDashBoard";
+import NewDashboardCard from "@/src/components/dashboardlist/newDashBoard";
 import DashboardList from "@/src/components/dashboardlist/DashBoardList";
 
 export default function MyDashboardPage() {
@@ -36,14 +36,20 @@ export default function MyDashboardPage() {
       <div className={styles.content}>
         <div>
           <div className={styles.dashboard}>
-            <NewDashboard />
+            {/* 새로운 대시보드 컴포넌트 */}
+            <NewDashboardCard />
+
+            {/* 대시보드 리스트 컴포넌트 */}
             <DashboardList dashboards={dashboards} />
           </div>
+
           {/* 페이지네이션 버튼 */}
           <div className={styles.pagination}>
             <Pagination />
           </div>
         </div>
+
+        {/* 초대받은 대시보드 */}
         <div className={styles.inviteContent}>
           <h2>초대받은 대시보드</h2>
           {invitations.length > 0 ? (
