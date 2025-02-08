@@ -14,16 +14,16 @@
 }
 
 /* 모달 내용 스타일 */
-.modalContent {
-  background-color: $white;
-  width: 584px;
-  height: 973px;
-  max-height: 90vh;
-  padding-top: 32px; // padding 위, 아래는 고정
-  padding-bottom: 32px;
-  padding-left: 32px; // padding 좌,우는 버튼 개수에 따라 유동적으로 조정
-  padding-right: 32px;
-  border-radius: 16px;
-  position: relative;
-  overflow-y: hidden;
-}
+// .modalContent {
+//   background-color: $white;
+//   width: 584px;
+//   height: 973px;
+//   max-height: 90vh;
+//   padding-top: 32px; // padding 위, 아래는 고정
+//   padding-bottom: 32px;
+//   padding-left: 32px; // padding 좌,우는 버튼 개수에 따라 유동적으로 조정
+//   padding-right: 32px;
+//   border-radius: 16px;
+//   position: relative;
+//   overflow-y: hidden;
+// }
