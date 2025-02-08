@@ -1,8 +1,8 @@
 import { useState } from "react";
-import CustomModal from "@/src/components/modal/CustomModal";
 import SideBar from "@/src/components/sidebar/SideBar";
 import NavBar from "@/src/components/nav/NavBar";
 import { getDashboard } from "@/src/api/api";
+import TaskCardModal from "@/src/components/modals/TaskCardModal";
 
 export async function getServerSideProps() {
   try {
@@ -21,20 +21,33 @@ export async function getServerSideProps() {
 
 export default function Page({ dashboards }: { dashboards: any[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCardId, setSelectedCardId] = useState<number>(1);
 
-  const openModal = () => setIsModalOpen(true); // 모달을 여는 함수
-  const closeModal = () => setIsModalOpen(false); // 모달을 닫는 함수
+  const openModal = (cardId: number) => {
+    setSelectedCardId(cardId);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <>
       <SideBar dashboards={dashboards} />
       <NavBar />
+      {/* 임시 버튼: TaskCardModal 열기 */}
+      <button onClick={() => openModal(1)}> 할일 모달 열기</button>
 
-      <button onClick={openModal}>모달 열기</button>
-      <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-        <h2>모달 제목</h2>
-        <p>모달 내용</p>
-      </CustomModal>
+      {/* TaskCardModal 추가 */}
+      {isModalOpen && selectedCardId}
+      <TaskCardModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onOpenEditModal={() => console.log("할 일 수정 모달 열기(구현필요)")}
+        teamId="12-1"
+        cardId={selectedCardId}
+      />
     </>
   );
 }
