@@ -12,9 +12,6 @@ import CustomModal from "@/src/components/modal/CustomModal";
 import loginStyles from "./modal.module.scss";
 import CustomButton from "@/src/components/button/CustomButton";
 import buttonStyles from "./button.module.scss"
-// import {Icon} from 'react-icons-kit';
-// import { ic_visibility_off } from 'react-icons-kit/md/ic_visibility_off';
-// import { ic_visibility } from 'react-icons-kit/md/ic_visibility';
 
 export default function LoginPage() {
   const [values, setValues] = useState({
@@ -80,6 +77,7 @@ export default function LoginPage() {
     // axios 리퀘스트 보내기
 
     try {
+
       const response = await axiosinstance.post("/auth/login", {
         email,
         password,
@@ -185,7 +183,6 @@ export default function LoginPage() {
       </form>
 
       {/* 모달 컴포넌트 */}
-
       <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className={loginStyles.modalOverlay}>
           {/* <div className={loginStyles.modalContent}> */}
