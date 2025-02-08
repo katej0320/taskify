@@ -32,7 +32,7 @@ export default function MyDashboardPage() {
 
   return (
     <div className={styles.contents}>
-      <SideBar dashboards={dashboards} />
+      <SideBar />
       <NavBar />
       <div className={styles.content}>
         <div>

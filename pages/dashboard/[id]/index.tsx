@@ -2,23 +2,21 @@ import { useState } from "react";
 import CustomModal from "@/src/components/modal/CustomModal";
 import SideBar from "@/src/components/sidebar/SideBar";
 import NavBar from "@/src/components/nav/NavBar";
-import { getDashboard } from "@/src/api/api";
+import styled from "styled-components";
 
-export async function getServerSideProps() {
-  try {
-    const { dashboards = [] } = await getDashboard();
+const Contents = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
 
-    return {
-      props: { dashboards },
-    };
-  } catch (error) {
-    console.error("Failed to fetch dashboard:", error);
-    return {
-      props: { dashboards: [] },
-    };
-  }
-}
-
+const Container = styled.div`
+  margin-left: 300px;
+  padding: 20px;
+  background-color: #f0f0f0;
+  flex-grow: 1;
+  gap: 20px;
+`;
 export default function Page({ dashboards }: { dashboards: any[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -27,14 +25,17 @@ export default function Page({ dashboards }: { dashboards: any[] }) {
 
   return (
     <>
-      <SideBar dashboards={dashboards} />
+      <SideBar />
       <NavBar />
-
-      <button onClick={openModal}>모달 열기</button>
-      <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-        <h2>모달 제목</h2>
-        <p>모달 내용</p>
-      </CustomModal>
+      <Contents>
+        <Container>
+          <button onClick={openModal}>모달 열기</button>
+          <CustomModal isOpen={isModalOpen} onClose={closeModal}>
+            <h2>모달 제목</h2>
+            <p>모달 내용</p>
+          </CustomModal>
+        </Container>
+      </Contents>
     </>
   );
 }
