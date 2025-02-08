@@ -173,6 +173,12 @@ export default function RegisterPage() {
     setIsModalOpen(false);
     router.push("/login");
   };
+
+  //로그인페이지로 이동
+  const handleSignupClick = () => {
+    router.push("/login");
+  }
+
   return (
     <div className={style.container}>
       <Image
@@ -293,8 +299,15 @@ export default function RegisterPage() {
           }`}
           disabled={isButtonDisabled}
         >
-          회원가입하기
+          가입하기
         </button>
+         {/* 로그인 페이지로이동버튼 */}
+         <p className={style.logintext}>
+          이미 회원이신가요?{" "}
+          <span className={style.logintextbutton} onClick={handleSignupClick}>
+            로그인하기
+          </span>
+        </p>
       </form>
 
       {/* 모달 컴포넌트 */}
