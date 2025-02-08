@@ -1,6 +1,21 @@
 import { useState } from "react";
 import SideBar from "@/src/components/sidebar/SideBar";
 import NavBar from "@/src/components/nav/NavBar";
+import styled from "styled-components";
+
+const Contents = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
+const Container = styled.div`
+  margin-left: 300px;
+  padding: 20px;
+  background-color: #f0f0f0;
+  flex-grow: 1;
+  gap: 20px;
+`;
 import { getDashboard } from "@/src/api/api";
 import TaskCardModal from "@/src/components/modals/TaskCardModal";
 
@@ -34,20 +49,24 @@ export default function Page({ dashboards }: { dashboards: any[] }) {
 
   return (
     <>
-      <SideBar dashboards={dashboards} />
+      <SideBar />
       <NavBar />
-      {/* 임시 버튼: TaskCardModal 열기 */}
-      <button onClick={() => openModal(1)}> 할일 모달 열기</button>
 
-      {/* TaskCardModal 추가 */}
-      {isModalOpen && selectedCardId}
-      <TaskCardModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onOpenEditModal={() => console.log("할 일 수정 모달 열기(구현필요)")}
-        teamId="12-1"
-        cardId={selectedCardId}
-      />
+      <Contents>
+        <Container>
+          <button onClick={() => openModal(1)}> 할일 모달 열기</button>
+          {isModalOpen && selectedCardId}
+          <TaskCardModal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            onOpenEditModal={() =>
+              console.log("할 일 수정 모달 열기(구현필요)")
+            }
+            teamId="12-1"
+            cardId={selectedCardId}
+          />
+        </Container>
+      </Contents>
     </>
   );
 }

@@ -16,6 +16,7 @@
     "react": "^19.0.0",
     "react-datetime": "^3.3.1",
     "react-dom": "^19.0.0",
+    "react-icons-kit": "^2.0.0",
     "sass": "^1.83.4",
     "styled-components": "^6.1.15"
   },
