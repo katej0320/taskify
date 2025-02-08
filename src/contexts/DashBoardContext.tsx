@@ -5,7 +5,7 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import { getDashboard } from "@/src/api/api"; // API 호출 함수 import
+import { getDashboard } from "@/src/api/dashboardApi"; // API 호출 함수 import
 
 interface DashboardContextType {
   dashboards: any[];

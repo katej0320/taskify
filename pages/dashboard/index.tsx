@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
 import styles from "./index.module.scss";
-import { getDashboard, getInviteList } from "@/src/api/api";
+import { getDashboard, getInviteList } from "@/src/api/dashboardApi";
 import ListCard from "@/src/components/dashboardlist/card/ListCard";
 import Pagination from "@/src/components/pagination/Pagination";
 import Image from "next/image";
