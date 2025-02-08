@@ -10,6 +10,9 @@ import loginlogo from "@/public/icons/loginlogo.png";
 import Image from "next/image";
 import style from "./index.module.scss";
 import CustomModal from "@/src/components/modal/CustomModal";
+import registerStyles from "./modal.module.scss";
+import CustomButton from "@/src/components/button/CustomButton";
+import buttonStyles from "./button.module.scss";
 
 export default function RegisterPage() {
   const [values, setValues] = useState({
@@ -26,6 +29,8 @@ export default function RegisterPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordRepeatVisible, setIsPasswordRepeatVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalAction, setModalAction] = useState<() => void>(() => {});
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
   const router = useRouter();
@@ -130,14 +135,29 @@ export default function RegisterPage() {
         password,
       });
       console.log("로그인 성공", response.data);
-      router.push("/login");
+
+      if (response.status === 201) {
+        setIsModalOpen(true);
+        setModalMessage("가입이 완료되었습니다!");
+        setTimeout(() => {
+          setModalAction(() => registerSuccessButton);
+        }, 0);
+      }
     } catch (error: any) {
       console.error("회원가입실패:", error.response?.data || error.message);
+
+      if (error.response && error.response.status === 409) {
+        setIsModalOpen(true);
+        setModalMessage("이미 사용중인 이메일 입니다.");
+        setTimeout(() => {
+          setModalAction(() => () => setIsModalOpen(false));
+        }, 0);
+      }
     }
   }
   //로고누르면 마이대쉬보드로 이동동
   function handleLogoClick() {
-    router.push("/mydashboard");
+    router.push("/");
   }
   //비밀번호 눈알
   const passwordVisible = () => {
@@ -148,6 +168,11 @@ export default function RegisterPage() {
     setIsPasswordRepeatVisible(!isPasswordRepeatVisible);
   };
 
+  //가입완료 모달창 버튼 클릭시 화면 이동
+  const registerSuccessButton = () => {
+    setIsModalOpen(false);
+    router.push("/login");
+  };
   return (
     <div className={style.container}>
       <Image
@@ -274,9 +299,25 @@ export default function RegisterPage() {
 
       {/* 모달 컴포넌트 */}
       <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <p>비밀번호가 일치하지 않습니다.</p>
-        <button onClick={() => setIsModalOpen(false)}>확인</button>
+        <div className={registerStyles.modalOverlay}>
+          <div className={registerStyles.contentstyle}>
+            <div className={registerStyles.textandbutton}>
+              <p>{modalMessage}</p>
+              <CustomButton
+                width={240}
+                height={48}
+                className={buttonStyles.button1}
+                onClick={modalAction}
+              >
+                확인
+              </CustomButton>
+            </div>
+          </div>
+        </div>
       </CustomModal>
     </div>
   );
+}
+
+{
 }

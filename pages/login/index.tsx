@@ -99,7 +99,7 @@ export default function LoginPage() {
   }
 
   function handleLogoClick() {
-    router.push("/mydashboard");
+    router.push("/");
   }
 
   const passwordVisible = () => {
