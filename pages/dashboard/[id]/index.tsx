@@ -17,7 +17,7 @@ const Container = styled.div`
   gap: 20px;
 `;
 import { getDashboard } from "@/src/api/api";
-import TaskCardModal from "@/src/components/modals/TaskCardModal";
+import TaskCardModal from "@/src/components/modals/cards/TaskCardModal";
 
 export async function getServerSideProps() {
   try {

@@ -1,7 +1,7 @@
 import { deleteCard, getCardDetail } from "@/src/api/cards";
 import { createComment, deleteComment, getComments } from "@/src/api/comments";
 import { useEffect, useState } from "react";
-import CustomModal from "./CustomModal";
+import CustomModal from "../CustomModal";
 
 const closeIcon = "/public/icons/close.svg";
 const kebabIcon = "/public/icons/kebab.svg";
@@ -37,7 +37,7 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
       getComments(teamId, cardId).then((data) => setComments(data.comments));
       setLoading(false);
     }
-  }, [open, teamId, cardId]);
+  }, [isOpen, teamId, cardId]);
 
   // 카드 삭제 함수
   const handleDelete = () => {

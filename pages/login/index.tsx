@@ -8,10 +8,10 @@ import Image from "next/image";
 import style from "./index.module.scss";
 import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
-import CustomModal from "@/src/components/modal/CustomModal";
+import CustomModal from "@/src/components/modals/CustomModal";
 import loginStyles from "./modal.module.scss";
 import CustomButton from "@/src/components/button/CustomButton";
-import buttonStyles from "./button.module.scss"
+import buttonStyles from "./button.module.scss";
 
 export default function LoginPage() {
   const [values, setValues] = useState({
@@ -77,7 +77,6 @@ export default function LoginPage() {
     // axios 리퀘스트 보내기
 
     try {
-
       const response = await axiosinstance.post("/auth/login", {
         email,
         password,
@@ -186,12 +185,19 @@ export default function LoginPage() {
       <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className={loginStyles.modalOverlay}>
           {/* <div className={loginStyles.modalContent}> */}
-            <div className={loginStyles.contentstyle}>
-              <div className={loginStyles.textandbutton}>
-                <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
-                <CustomButton width={240} height={48} className={buttonStyles.button1} onClick={() => setIsModalOpen(false)}>확인</CustomButton>
-              </div>
+          <div className={loginStyles.contentstyle}>
+            <div className={loginStyles.textandbutton}>
+              <p className={loginStyles.tag}>비밀번호가 일치하지 않습니다.</p>
+              <CustomButton
+                width={240}
+                height={48}
+                className={buttonStyles.button1}
+                onClick={() => setIsModalOpen(false)}
+              >
+                확인
+              </CustomButton>
             </div>
+          </div>
           {/* </div> */}
         </div>
       </CustomModal>

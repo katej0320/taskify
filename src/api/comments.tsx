@@ -7,10 +7,19 @@ export const getComments = async (
   size = 10,
   cursorId?: number
 ) => {
-  const response = await axios.get(`/teams/${teamId}/comments`, {
-    params: { cardId, size, cursorId },
-  });
-  return response.data;
+  try {
+    const response = await axios.get(`/${teamId}/comments`, {
+      params: { cardId, size, cursorId },
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "댓글 목록 조회 실패:",
+      error.response?.status,
+      error.response?.data
+    );
+    throw error;
+  }
 };
 
 // 댓글 생성 (POST)
@@ -21,13 +30,19 @@ export const createComment = async (
   columnId: number,
   dashboardId: number
 ) => {
-  const response = await axios.post(`/teams/${teamId}/comments`, {
-    content,
-    cardId,
-    columnId,
-    dashboardId,
-  });
-  return response.data;
+  try {
+    const response = await axios.post(`/${teamId}/comments`, {
+      params: { content, cardId, columnId, dashboardId },
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "댓글 생성 실패:",
+      error.response?.status,
+      error.response?.data
+    );
+    throw error;
+  }
 };
 
 // 댓글 수정 (PUT)
@@ -36,14 +51,32 @@ export const updateComment = async (
   commentId: number,
   content: string
 ) => {
-  const response = await axios.put(`/teams/${teamId}/comments/${commentId}`, {
-    content,
-  });
-  return response.data;
+  try {
+    const response = await axios.post(`/${teamId}/comments/${commentId}`, {
+      content,
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "댓글 수정 실패:",
+      error.response?.status,
+      error.response?.data
+    );
+    throw error;
+  }
 };
 
 // 댓글 삭제 (DELETE)
 export const deleteComment = async (teamId: string, commentId: number) => {
-  const response = await axios.delete(`/teams/${teamId}/comments/${commentId}`);
-  return response.data;
+  try {
+    const response = await axios.delete(`/${teamId}/comments/${commentId}`);
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "댓글 삭제 실패:",
+      error.response?.status,
+      error.response?.data
+    );
+    throw error;
+  }
 };

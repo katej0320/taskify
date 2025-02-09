@@ -2,7 +2,7 @@ import { useDashboard } from "@/src/contexts/DashBoardContext";
 import styles from "./SideBar.module.scss";
 import Image from "next/image";
 import Link from "next/link";
-import CustomModal from "../modal/CustomModal";
+import CustomModal from "../modals/CustomModal";
 import { useState } from "react";
 import Board from "../dashboardlist/createBoard/Board";
 
