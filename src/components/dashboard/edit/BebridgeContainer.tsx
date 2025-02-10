@@ -5,7 +5,7 @@ import { useEdit } from "@/src/contexts/EditDashbordProvider";
 import { Button } from "../../button/CustomButton2";
 import IconCheck from "@/public/images/dashboard/edit/ic_check.svg";
 
-const COLOR_PALETTE = ["#7AC555", "#760DDE", "#FFA500", "#76A5EA", "#E876EA"];
+const COLOR_PALETTE = ["#7ac555", "#760dde", "#ffa500", "#76a5ea", "#e876ea"];
 
 const ColorTile = styled.li`
   background: ${(props) => props.color};
@@ -35,9 +35,16 @@ export default function BebridgeContainer() {
   };
 
   useEffect(() => {
-    if (isTitle !== isUpdateTitle || isColor !== isUpdateColor) {
+    if (
+      isUpdateTitle !== "" &&
+      (isTitle !== isUpdateTitle ||
+      isColor !== isUpdateColor)
+    ) {
       setIsDisabled(false);
-    } else {
+    } else if (
+      isUpdateTitle === "" ||
+      isTitle === isUpdateTitle && isColor === isUpdateColor
+    ) {
       setIsDisabled(true);
     }
   }, [isUpdateTitle, isUpdateColor]);
