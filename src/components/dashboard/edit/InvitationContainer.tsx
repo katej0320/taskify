@@ -4,11 +4,8 @@ import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
 import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
-
-type ArrowButton = {
-  $right?: string;
-  $left?: string;
-};
+import { InviteItem } from "@/src/types/EditComponent";
+import { ArrowButton } from "@/src/types/EditPagination";
 
 const PaginationButton = styled(Button)<ArrowButton>`
   width: 40px;
@@ -60,34 +57,8 @@ const InviteButton = styled(Button)`
   }
 `;
 
-type Inviter = {
-  nickname: string;
-  email: string;
-  id: number;
-};
-type Dashboard = {
-  title: string;
-  id: number;
-};
-type Invitee = {
-  nickname: string;
-  email: string;
-  id: number;
-};
-
-interface Item {
-  id: number;
-  inviter: Inviter;
-  teamId: string;
-  dashboard: Dashboard;
-  invitee: Invitee;
-  inviteAccepte: boolean;
-  createdAt: string;
-  updatedA: string;
-}
-
 export default function InvitationContainer() {
-  const [isInvitationsData, setIsInvitationsData] = useState<Item[]>();
+  const [isInvitationsData, setIsInvitationsData] = useState<InviteItem[]>();
   const [isTotalCount, setIsTotalCount] = useState(0);
   const { invitePage, isInvitations, handlePrevClick, handleNextClick } =
     useEdit();

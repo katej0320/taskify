@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
 import { useEdit } from "@/src/contexts/EditDashboardProvider";
-
-type ArrowButton = {
-  $right?: string;
-  $left?: string;
-};
+import { MemberItem } from "@/src/types/EditComponent";
+import { ArrowButton } from "@/src/types/EditPagination";
 
 const PaginationButton = styled(Button)<ArrowButton>`
   width: 40px;
@@ -36,19 +32,8 @@ const PaginationButton = styled(Button)<ArrowButton>`
   }
 `;
 
-interface Item {
-  id: number;
-  email: string;
-  isOwner: boolean;
-  nickname: string;
-  createdAt: string;
-  updatedAt: string;
-  profileImageUrl: null | string | StaticImport;
-  userId: number;
-}
-
 export default function MemberContainer() {
-  const [isMembersData, isSetMemberData] = useState<Item[]>();
+  const [isMembersData, isSetMemberData] = useState<MemberItem[]>();
   const [isTotalCount, setIsTotalCount] = useState(0);
   const { memberPage, isMembers, handlePrevClick, handleNextClick } = useEdit();
 
