@@ -74,7 +74,7 @@ export function EditProvider({
       getMembers();
       getInvitations();
     }
-  }, [dashboardId, invitePage]);
+  }, [dashboardId, memberPage, invitePage]);
 
   return (
     <EditContext.Provider
