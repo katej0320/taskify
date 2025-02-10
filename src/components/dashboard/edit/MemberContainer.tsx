@@ -3,7 +3,7 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
-import { useEdit } from "@/src/contexts/EditDashbordProvider";
+import { useEdit } from "@/src/contexts/EditDashboardProvider";
 
 type ArrowButton = {
   $right?: string;

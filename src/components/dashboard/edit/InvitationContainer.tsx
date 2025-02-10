@@ -1,4 +1,4 @@
-import { useEdit } from "@/src/contexts/EditDashbordProvider";
+import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";

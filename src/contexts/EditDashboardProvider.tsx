@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import axiosInstance from "../api/axios";
+import { useEditPagination } from "../hooks/useEditPagination";
 
 const EditContext = createContext({
   isBebridge: null,
@@ -29,20 +30,9 @@ export function EditProvider({
     isMembers: null,
     isInvitations: null,
   });
-  const [memberPage, setMemberPage] = useState(1);
-  const [invitePage, setInvitePage] = useState(1);
 
-  const handlePrevClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { name } = e.target as HTMLButtonElement;
-    if (name === "member") setMemberPage((prevPage) => (prevPage -= 1));
-    if (name === "invite") setInvitePage((prevPage) => (prevPage -= 1));
-  };
-
-  const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { name } = e.target as HTMLButtonElement;
-    if (name === "member") setMemberPage((nextPage) => (nextPage += 1));
-    if (name === "invite") setInvitePage((nextPage) => (nextPage += 1));
-  };
+  const { memberPage, invitePage, handlePrevClick, handleNextClick } =
+    useEditPagination();
 
   async function getDashboardDetail() {
     const res = await axiosInstance.get(`/dashboards/${dashboardId}`);
@@ -107,7 +97,7 @@ export function useEdit() {
   const context = useContext(EditContext);
 
   if (!context) {
-    throw new Error("반드시 EditProvider 안에서 사용해야 합니다.");
+    throw new Error("반드시 EditDashboardProvider 안에서 사용해야 합니다.");
   }
 
   return context;
