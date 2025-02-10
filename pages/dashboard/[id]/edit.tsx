@@ -30,7 +30,7 @@ export default function EditPage() {
   return (
     <>
       <Head>
-        <title>Teskify - 대시보드 수정</title>
+        <title>Taskify - 대시보드 수정</title>
       </Head>
       <Container>
         <Contents>
