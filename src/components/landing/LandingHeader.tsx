@@ -8,8 +8,8 @@ export default function LandingHeader() {
       <Link href="/">
         <Image
           src="/icons/landinglogo.svg"
-          width={110}
-          height={34}
+          width={150}
+          height={50}
           alt="landinglogo.svg"
           priority
         />

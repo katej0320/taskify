@@ -5,3 +5,10 @@ export interface IDashboardParams {
   page?: number;
   size?: number;
 }
+
+export interface IInviteParams {
+  teamId?: string;
+  size?: number;
+  cursorId?: number;
+  title?: string;
+}

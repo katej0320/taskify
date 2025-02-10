@@ -19,7 +19,9 @@
   border-radius: 8px;
   max-width: 1200px;
   width: 100%;
+  margin-top: 50px;
 }
+
 
 .text {
   flex: 1;
@@ -35,6 +37,18 @@
   text-decoration-skip-ink: none;
   color: $black1;
 }
+.point1{
+  position: relative;
+  top: -75px;
+  left: 55px;
+}
+
+// .point1 h2 {
+//   position: absolute; // h2를 한 곳에 고정
+//   top: 0;  // 원하는 위치 조정
+//   left: 0;
+//   z-index: 10; // 애니메이션보다 앞에 배치
+// }
 
 .text p {
   font-family: Pretendard;
@@ -42,8 +56,25 @@
   font-weight: 700;
   line-height: 64px;
   text-align: left;
-  text-underline-position: from-font;
-  text-decoration-skip-ink: none;
-
+  white-space: pre-line;
   margin-top: 100px;
+  position: relative; // 애니메이션이 부모 기준으로 움직이도록 함
+}
+
+.point2{
+  margin-left: 100px;
+  position: relative;
+  top: -49px;
+  
+}
+
+.img2{
+  position: relative;
+  bottom: -40px;
+}
+
+.img1{
+  position: relative;
+  bottom: -40px;
+  right: 13px;
 }

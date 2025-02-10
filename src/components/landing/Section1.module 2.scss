@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: white;
+  text-align: center;
+}
+
+.title {
+  margin-top: 24px;
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: bold;
+}
+
+.taskify {
+  color: #4f46e5; /* indigo-600 */
+}
+
+.button {
+  margin-top: 24px;
+}
