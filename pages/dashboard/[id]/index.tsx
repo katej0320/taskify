@@ -16,23 +16,7 @@ const Container = styled.div`
   flex-grow: 1;
   gap: 20px;
 `;
-import { getDashboard } from "@/src/api/api";
 import TaskCardModal from "@/src/components/modals/cards/TaskCardModal";
-
-export async function getServerSideProps() {
-  try {
-    const { dashboards = [] } = await getDashboard();
-
-    return {
-      props: { dashboards },
-    };
-  } catch (error) {
-    console.error("Failed to fetch dashboard:", error);
-    return {
-      props: { dashboards: [] },
-    };
-  }
-}
 
 export default function Page({ dashboards }: { dashboards: any[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);

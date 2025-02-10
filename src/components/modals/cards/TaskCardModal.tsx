@@ -3,8 +3,8 @@ import { createComment, deleteComment, getComments } from "@/src/api/comments";
 import { useEffect, useState } from "react";
 import CustomModal from "../CustomModal";
 
-const closeIcon = "/public/icons/close.svg";
-const kebabIcon = "/public/icons/kebab.svg";
+const closeIcon = "/icons/close.svg";
+const kebabIcon = "/icons/kebab.svg";
 
 interface TaskCardModalProps {
   isOpen: boolean; // 모달 열림 여부
@@ -21,23 +21,68 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
   teamId,
   cardId,
 }) => {
+  console.log("📢 TaskCardModal 실행됨! Props 확인:", {
+    isOpen,
+    cardId,
+    teamId,
+  }); // ✅ 모달 실행될 때 확인
+
   const [cardData, setCardData] = useState<any>(null); // 카드 데이터 상태
   const [comments, setComments] = useState<any[]>([]); // 댓글목록 상태
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태 (데이터 가져오는 중 표시)
   const [newComment, setNewComment] = useState<string>(""); // 새로운 댓글 입력 상태
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false); //드롭다운 상태
+  const [isClient, setIsClient] = useState(false); // 클라이언트에서만 실행
+
+  useEffect(() => {
+    setIsClient(true); // 컴포넌트가 마운트된 후에 클라이언트에서 실행됨
+  }, []);
 
   //모달이 열릴 때 카드 상세 정보와 댓글 목록 가져오기
   useEffect(() => {
+    console.log(
+      "📢 TaskCardModal useEffect 실행됨! isOpen:",
+      isOpen,
+      "cardId:",
+      cardId
+    ); // ✅ useEffect 실행 확인
+
     if (isOpen) {
       setLoading(true);
-      getCardDetail(teamId, cardId).then((data) => {
-        setCardData(data);
-      });
-      getComments(teamId, cardId).then((data) => setComments(data.comments));
+      console.log("🚀 API 요청 보냄: getCardDetail(", teamId, cardId, ")"); // ✅ API 요청 URL 확인
+
+      getCardDetail(teamId, cardId)
+        .then((data) => {
+          console.log("✅ 카드 데이터 가져오기 성공:", data); // ✅ 카드 데이터 정상 수신 확인
+          setCardData(data);
+        })
+        .catch((error) => {
+          console.error(
+            "❌ 카드 데이터 가져오기 실패:",
+            error.response?.status,
+            error.response?.data
+          ); // ❌ API 요청 실패 시 확인
+        });
+
+      getComments(teamId, cardId)
+        .then((data) => {
+          console.log("✅ 댓글 목록 가져오기 성공:", data); // ✅ 댓글 데이터 정상 수신 확인
+          setComments(data.comments);
+        })
+        .catch((error) => {
+          console.error(
+            "❌ 댓글 목록 가져오기 실패:",
+            error.response?.status,
+            error.response?.data
+          ); // ❌ 댓글 API 요청 실패 확인
+        });
       setLoading(false);
     }
   }, [isOpen, teamId, cardId]);
+
+  if (!isClient) {
+    return null; // SSR에서는 아무것도 렌더링하지 않음
+  }
 
   // 카드 삭제 함수
   const handleDelete = () => {
@@ -49,10 +94,27 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
   // 새로운 댓글 추가 함수
   const handleAddComment = () => {
     if (newComment.trim()) {
-      createComment(teamId, cardId, newComment, 0, 0).then((newData) => {
-        setComments([...comments, newData]); // 새 댓글을 목록에 추가
-        setNewComment(""); // 입력 필드 초기화
-      });
+      console.log("🛠 댓글 생성 요청 데이터:", {
+        teamId,
+        cardId,
+        content: newComment,
+        columnId: 0,
+        dashboardId: 0,
+      }); // ✅ 댓글 요청 데이터 확인용 콘솔
+
+      createComment(teamId, cardId, newComment, 0, 0)
+        .then((newData) => {
+          console.log("✅ 댓글 생성 성공 응답 데이터:", newData); // ✅ API 응답 확인
+          setComments([...comments, newData]); // 새 댓글을 목록에 추가
+          setNewComment(""); // 입력 필드 초기화
+        })
+        .catch((error) => {
+          console.error(
+            "❌ 댓글 생성 실패:",
+            error.response?.status,
+            error.response?.data
+          ); // ❌ API 요청 실패 시 확인
+        });
     }
   };
 

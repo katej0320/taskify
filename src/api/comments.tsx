@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "./axios"; // axiosInstance 사용
 
 // 댓글 목록 조회 (GET)
 export const getComments = async (
@@ -8,13 +8,13 @@ export const getComments = async (
   cursorId?: number
 ) => {
   try {
-    const response = await axios.get(`/${teamId}/comments`, {
+    const response = await axiosInstance.get(`/${teamId}/comments`, {
       params: { cardId, size, cursorId },
     });
     return response.data;
   } catch (error: any) {
     console.error(
-      "댓글 목록 조회 실패:",
+      "❌ 댓글 목록 조회 실패:",
       error.response?.status,
       error.response?.data
     );
@@ -31,16 +31,29 @@ export const createComment = async (
   dashboardId: number
 ) => {
   try {
-    const response = await axios.post(`/${teamId}/comments`, {
-      params: { content, cardId, columnId, dashboardId },
+    console.log("🛠 댓글 생성 API 요청 데이터:", {
+      teamId,
+      cardId,
+      content,
+      columnId,
+      dashboardId,
+    }); // ✅ API 요청 데이터 확인용 콘솔
+
+    const response = await axiosInstance.post(`/${teamId}/comments`, {
+      content,
+      cardId,
+      columnId,
+      dashboardId,
     });
+
+    console.log("✅ 댓글 생성 API 응답:", response.data); // ✅ API 응답 확인
     return response.data;
   } catch (error: any) {
     console.error(
-      "댓글 생성 실패:",
+      "❌ 댓글 생성 API 실패:",
       error.response?.status,
       error.response?.data
-    );
+    ); // ❌ API 요청 실패 확인
     throw error;
   }
 };
@@ -52,13 +65,19 @@ export const updateComment = async (
   content: string
 ) => {
   try {
-    const response = await axios.post(`/${teamId}/comments/${commentId}`, {
-      content,
-    });
+    // 🔍 요청 데이터 확인 로그 추가
+    console.log("🛠 댓글 수정 요청 데이터:", { teamId, commentId, content });
+
+    const response = await axiosInstance.put(
+      `/${teamId}/comments/${commentId}`,
+      {
+        content,
+      }
+    );
     return response.data;
   } catch (error: any) {
     console.error(
-      "댓글 수정 실패:",
+      "❌ 댓글 수정 실패:",
       error.response?.status,
       error.response?.data
     );
@@ -69,11 +88,13 @@ export const updateComment = async (
 // 댓글 삭제 (DELETE)
 export const deleteComment = async (teamId: string, commentId: number) => {
   try {
-    const response = await axios.delete(`/${teamId}/comments/${commentId}`);
+    const response = await axiosInstance.delete(
+      `/${teamId}/comments/${commentId}`
+    );
     return response.data;
   } catch (error: any) {
     console.error(
-      "댓글 삭제 실패:",
+      "❌ 댓글 삭제 실패:",
       error.response?.status,
       error.response?.data
     );
