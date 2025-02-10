@@ -71,6 +71,7 @@ export default function BebridgeContainer() {
             <input
               type="text"
               defaultValue={isTitle}
+              maxLength={15}
               placeholder="대시보드 이름을 입력해주세요"
               onChange={handleUpdateTitle}
             />

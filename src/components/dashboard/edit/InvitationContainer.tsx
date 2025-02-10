@@ -1,9 +1,9 @@
+import { useEdit } from "@/src/contexts/EditDashbordProvider";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
 import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
-import { useEdit } from "@/src/contexts/EditDashbordProvider";
-import { useEffect, useState } from "react";
 
 const InviteButton = styled(Button)`
   width: fit-content;
