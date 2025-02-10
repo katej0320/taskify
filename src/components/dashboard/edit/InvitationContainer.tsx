@@ -28,6 +28,7 @@ const PaginationButton = styled(Button)<ArrowButton>`
             center no-repeat #fff;
         `
       : ""}
+  background-color:${(props) => (props.disabled ? "#f9f9f9" : "")};
   @media (min-width: 769px) and (max-width: 840px) {
     width: 30px;
     height: 30px;
@@ -98,11 +99,6 @@ export default function InvitationContainer() {
       setIsTotalCount(Math.ceil(totalCount / 4));
     }
   }, [isInvitations]);
-
-  useEffect(() => {
-    if (isTotalCount === invitePage) {
-    }
-  }, [isTotalCount, invitePage]);
 
   return (
     <>

@@ -11,6 +11,7 @@ const EditContext = createContext({
   isBebridge: null,
   isMembers: null,
   isInvitations: null,
+  memberPage: 0,
   invitePage: 0,
   handlePrevClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
   handleNextClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
@@ -28,15 +29,18 @@ export function EditProvider({
     isMembers: null,
     isInvitations: null,
   });
+  const [memberPage, setMemberPage] = useState(1);
   const [invitePage, setInvitePage] = useState(1);
 
   const handlePrevClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { name } = e.target as HTMLButtonElement;
+    if (name === "member") setMemberPage((prevPage) => (prevPage -= 1));
     if (name === "invite") setInvitePage((prevPage) => (prevPage -= 1));
   };
 
   const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { name } = e.target as HTMLButtonElement;
+    if (name === "member") setMemberPage((nextPage) => (nextPage += 1));
     if (name === "invite") setInvitePage((nextPage) => (nextPage += 1));
   };
 
@@ -51,7 +55,9 @@ export function EditProvider({
   }
 
   async function getMembers() {
-    const res = await axiosInstance.get(`/members?dashboardId=${dashboardId}`);
+    const res = await axiosInstance.get(
+      `/members?dashboardId=${dashboardId}&page=${memberPage}&size=4`
+    );
     const members = res.data;
 
     setValues((prevValues) => ({
@@ -86,6 +92,7 @@ export function EditProvider({
         isBebridge: values.isBebridge,
         isMembers: values.isMembers,
         isInvitations: values.isInvitations,
+        memberPage,
         invitePage,
         handlePrevClick,
         handleNextClick,
