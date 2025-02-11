@@ -6,6 +6,7 @@ import { Button } from "../../button/CustomButton2";
 import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
 import { InviteItem } from "@/src/types/EditComponent";
 import { ArrowButton } from "@/src/types/EditPagination";
+import { CheckModal } from "./modal/CheckModal";
 
 const PaginationButton = styled(Button)<ArrowButton>`
   width: 40px;
@@ -59,9 +60,18 @@ const InviteButton = styled(Button)`
 
 export default function InvitationContainer() {
   const [isInvitationsData, setIsInvitationsData] = useState<InviteItem[]>();
-  const [isTotalCount, setIsTotalCount] = useState(0);
+  const [isTotalCount, setIsTotalCount] = useState(1);
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const isMessage = "선택된 초대를 취소하시겠습니까?";
+  const [isCancelId, setIsCancelId] = useState<number>();
+
   const { invitePage, isInvitations, handlePrevClick, handleNextClick } =
     useEdit();
+
+  const handleShowModal = (id: number) => {
+    setIsModal(true);
+    setIsCancelId(id);
+  };
 
   useEffect(() => {
     if (isInvitations) {
@@ -73,13 +83,21 @@ export default function InvitationContainer() {
 
   return (
     <>
+      {isModal && (
+        <CheckModal
+          invite={"invite"}
+          isModal={isModal}
+          setIsModal={setIsModal}
+          isMessage={isMessage}
+        />
+      )}
       <div className={`${styles.container} ${styles.section3}`}>
         <div className={styles.head}>
           <p className={styles.title}>초대 내역</p>
           <div className={styles.controlCover}>
             <div className={styles.pagination}>
               <p className={styles.number}>
-                {isTotalCount} 페이지 중 {invitePage}
+                {isTotalCount >= 1 ? isTotalCount : 1} 페이지 중 {invitePage}
               </p>
               <div className={styles.buttonContainer}>
                 <PaginationButton
@@ -89,7 +107,7 @@ export default function InvitationContainer() {
                   onClick={(e) => handlePrevClick(e)}
                 />
                 <PaginationButton
-                  disabled={isTotalCount === invitePage}
+                  disabled={isTotalCount === invitePage || isTotalCount <= 1}
                   $right={"right"}
                   name="invite"
                   onClick={(e) => handleNextClick(e)}
@@ -107,13 +125,15 @@ export default function InvitationContainer() {
           <ul className={styles.memberList}>
             {isInvitationsData &&
               isInvitationsData.map((item) => {
-                const { invitee } = item;
+                const { invitee, id } = item;
                 return (
                   <li key={item.id} className={styles.tile}>
                     <div className={styles.profileCover}>
                       <p className={styles.email}>{invitee.email}</p>
                     </div>
-                    <Button $sub="sub">취소</Button>
+                    <Button onClick={() => handleShowModal(id)} $sub="sub">
+                      취소
+                    </Button>
                   </li>
                 );
               })}

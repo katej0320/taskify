@@ -4,8 +4,9 @@ import styles from "./EditPage.style.module.scss";
 import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import { Button } from "../../button/CustomButton2";
 import IconCheck from "@/public/images/dashboard/edit/ic_check.svg";
+import { CheckModal } from "./modal/CheckModal";
 
-const COLOR_PALETTE = ["#7AC555", "#760DDE", "#FFA500", "#76A5EA", "#E876EA"];
+const COLOR_PALETTE = ["#7ac555", "#760dde", "#ffa500", "#76a5ea", "#e876ea"];
 
 const ColorTile = styled.li`
   background: ${(props) => props.color};
@@ -19,19 +20,26 @@ const ColorTile = styled.li`
 `;
 
 export default function BebridgeContainer() {
-  const [isDisabled, setIsDisabled] = useState(true);
   const [isTitle, setIsTitle] = useState("");
   const [isColor, setIsColor] = useState("");
   const [isUpdateTitle, setIsUpdateTitle] = useState("");
   const [isUpdateColor, setIsUpdateColor] = useState("");
-  const { isBebridge } = useEdit();
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const isMessage = '변경이 완료 되었습니다.';
 
+  const { isBebridge } = useEdit();
+  
   const handleUpdateTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setIsUpdateTitle(e.target.value);
   };
 
   const handleUpdateColor = (color: string) => {
     setIsUpdateColor(color);
+  };
+
+  const handleShowModal = () => {
+    setIsModal(true);
   };
 
   useEffect(() => {
@@ -50,16 +58,18 @@ export default function BebridgeContainer() {
 
   useEffect(() => {
     if (isBebridge) {
-      const { title, color } = isBebridge;
+      const { title, color }: { title: string; color: string } = isBebridge;
+      const isColor = color.toLowerCase();
       setIsTitle(title);
       setIsUpdateTitle(title);
-      setIsColor(color);
-      setIsUpdateColor(color);
+      setIsColor(isColor);
+      setIsUpdateColor(isColor);
     }
   }, [isBebridge]);
 
   return (
     <>
+    {isModal && <CheckModal isModal={isModal} setIsModal={setIsModal} isMessage={isMessage}/>}
       <div className={`${styles.container} ${styles.section1}`}>
         <div className={styles.head}>
           <p className={styles.title}>비브리지</p>
@@ -83,12 +93,16 @@ export default function BebridgeContainer() {
                   color={color}
                   onClick={() => handleUpdateColor(color)}
                 >
-                  {isUpdateColor.toUpperCase() === color && <IconCheck />}
+                  {isUpdateColor === color && <IconCheck />}
                 </ColorTile>
               );
             })}
           </ul>
-          <Button disabled={isDisabled} $signature="signature">
+          <Button
+            disabled={isDisabled}
+            $signature="signature"
+            onClick={handleShowModal}
+          >
             변경
           </Button>
         </div>

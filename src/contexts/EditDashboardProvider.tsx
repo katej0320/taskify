@@ -12,8 +12,8 @@ const EditContext = createContext({
   isBebridge: null,
   isMembers: null,
   isInvitations: null,
-  memberPage: 0,
-  invitePage: 0,
+  memberPage: 1,
+  invitePage: 1,
   handlePrevClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
   handleNextClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
 });
