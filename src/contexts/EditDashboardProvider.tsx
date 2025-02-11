@@ -6,11 +6,16 @@ import {
   useState,
 } from "react";
 import axiosInstance from "../api/axios";
+import { useEditPagination } from "../hooks/useEditPagination";
 
 const EditContext = createContext({
   isBebridge: null,
   isMembers: null,
   isInvitations: null,
+  memberPage: 0,
+  invitePage: 0,
+  handlePrevClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
+  handleNextClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
 });
 
 export function EditProvider({
@@ -26,6 +31,9 @@ export function EditProvider({
     isInvitations: null,
   });
 
+  const { memberPage, invitePage, handlePrevClick, handleNextClick } =
+    useEditPagination();
+
   async function getDashboardDetail() {
     const res = await axiosInstance.get(`/dashboards/${dashboardId}`);
     const bebridge = res.data;
@@ -37,7 +45,9 @@ export function EditProvider({
   }
 
   async function getMembers() {
-    const res = await axiosInstance.get(`/members?dashboardId=${dashboardId}`);
+    const res = await axiosInstance.get(
+      `/members?dashboardId=${dashboardId}&page=${memberPage}&size=4`
+    );
     const members = res.data;
 
     setValues((prevValues) => ({
@@ -48,7 +58,7 @@ export function EditProvider({
 
   async function getInvitations() {
     const res = await axiosInstance.get(
-      `/dashboards/${dashboardId}/invitations`
+      `/dashboards/${dashboardId}/invitations?page=${invitePage}&size=4`
     );
     const invitaions = res.data;
 
@@ -64,7 +74,7 @@ export function EditProvider({
       getMembers();
       getInvitations();
     }
-  }, [dashboardId]);
+  }, [dashboardId, memberPage, invitePage]);
 
   return (
     <EditContext.Provider
@@ -72,6 +82,10 @@ export function EditProvider({
         isBebridge: values.isBebridge,
         isMembers: values.isMembers,
         isInvitations: values.isInvitations,
+        memberPage,
+        invitePage,
+        handlePrevClick,
+        handleNextClick,
       }}
     >
       {children}
@@ -83,7 +97,7 @@ export function useEdit() {
   const context = useContext(EditContext);
 
   if (!context) {
-    throw new Error("반드시 EditProvider 안에서 사용해야 합니다.");
+    throw new Error("반드시 EditDashboardProvider 안에서 사용해야 합니다.");
   }
 
   return context;

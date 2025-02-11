@@ -69,6 +69,18 @@
 }
 
 // MemberContainer
+.section2 .pagination {
+  -webkit-display: flex;
+  display: flex;
+  align-items: center;
+
+  .buttonContainer {
+    margin-left: 15px;
+    -webkit-display: flex;
+    display: flex;
+    align-items: center;
+  }
+}
 .contents .memberList .tile {
   -webkit-display: flex;
   display: flex;
@@ -117,6 +129,19 @@
   -webkit-display: flex;
   display: flex;
   align-items: center;
+
+  .pagination {
+    -webkit-display: flex;
+    display: flex;
+    align-items: center;
+
+    .buttonContainer {
+      margin-left: 15px;
+      -webkit-display: flex;
+      display: flex;
+      align-items: center;
+    }
+  }
 }
 .section3 .memberList .tile {
   @media (max-width: 768px) {
