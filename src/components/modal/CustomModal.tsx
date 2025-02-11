@@ -5,8 +5,8 @@ import styles from "./CustomModal.style.module.scss";
 
 
 interface ModalProps {
-  isOpen: boolean; // 모달이 열려 있는지 여부
-  onClose: () => void; // 모달을 닫는 함수
+  isOpen?: boolean; // 모달이 열려 있는지 여부
+  onClose?: () => void; // 모달을 닫는 함수
   children: React.ReactNode; // 모달 내부에 렌더링할 내용
   className?: string;
 }

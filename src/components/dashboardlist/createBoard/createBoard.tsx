@@ -3,7 +3,11 @@ import { useState } from "react";
 import styles from "./createBoard.module.scss";
 import axiosInstance from "@/src/api/axios";
 
-export default function createBoard() {
+interface CreateBoardProps {
+  onClose: () => void; // ✅ 부모에서 모달을 닫을 수 있도록 콜백 추가
+}
+
+export default function createBoard({ onClose }: CreateBoardProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [dashboardName, setDashboardName] = useState("");
   const [selectedColor, setSelectedColor] = useState(""); // 색상 상태 추가
@@ -79,7 +83,7 @@ export default function createBoard() {
         />
       </div>
       <div className={styles.buttonGroup}>
-        <button className={styles.cancle} onClick={closeModal}>
+        <button className={styles.cancle} onClick={onClose}>
           취소
         </button>
         <button className={styles.create} onClick={handleCreate}>

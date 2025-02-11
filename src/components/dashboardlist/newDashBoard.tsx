@@ -26,8 +26,10 @@ export default function NewDashboard() {
 
       {/* 모달 */}
       {isModalOpen && (
-        <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-          <CreateBoard />
+        <CustomModal 
+        isOpen={isModalOpen} onClose={closeModal}
+        >
+          <CreateBoard onClose={() => setIsModalOpen(false)}  />
         </CustomModal>
       )}
     </ListCard>
