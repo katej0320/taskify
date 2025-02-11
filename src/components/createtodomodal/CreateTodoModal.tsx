@@ -18,15 +18,17 @@ export default function createTodoModal(){
 
     return(
         <div>
+            
             <CustomModal isOpen={isModalOpen} onClose={()=>{setIsModalOpen(false)}}>
                 <div className={styles.modalOveerlay}>
                     <div className={styles.contentstyle}>
-                        <InputManager />
-                        <InputTitle />
-                        <InputDescription />
-                        <InputDeadline />
-                        <InputTag />
-                        <InputImage />
+                        <h1>할일생성</h1>
+                            <InputManager />
+                            <InputTitle />
+                            <InputDescription />
+                            <InputDeadline />
+                            <InputTag />
+                            <InputImage />
                     </div>
                 </div>
             </CustomModal>

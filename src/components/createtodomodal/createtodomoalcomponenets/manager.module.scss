@@ -15,16 +15,16 @@
 
 .img {
     position: absolute;
-    top: 50px;
-    right: 280px;
+    top: 95px;
+    right: 50px;
     cursor: pointer; // 클릭 가능하도록 설정
 }
 
 .dropdown {
     position: absolute;
-    top: 85px; // input 필드 아래 배치
+    top: 120px; // input 필드 아래 배치
     left: 0;
-    width: 100%;
+    width: 550px;
     background: white;
     border: 1px solid #ccc;
     border-radius: 4px;

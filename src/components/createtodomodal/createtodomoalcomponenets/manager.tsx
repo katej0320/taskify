@@ -14,18 +14,20 @@ export default function InputManager(){
     setIsToggleDropdown((prev)=>!prev);
   }
 
-  
+
 
 
 return(
   <div className={styles.container}>
     <InputField
-      children={"담당자"}
+      text={'담당자'}
       placeholder={"이름을 입력해 주세요"}
       height={48}
       className={styles.input}
-    ></InputField>
-     <Image onClick={toggleDropdown} className={styles.img} src="/icons/todomodalmanagertoggle.png" alt="togglebutton" width={48} height={40}/>
+    >
+    {/* <Image onClick={toggleDropdown} className={styles.img} src="/icons/todomodalmanagertoggle.png" alt="togglebutton" width={8} height={4}/> */}
+    </InputField>
+     
      {/* 드롭다운 리스트 */}
      {isDropdown && (
         <ul className={styles.dropdown}>
