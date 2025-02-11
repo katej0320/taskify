@@ -83,7 +83,7 @@ export default function BebridgeContainer() {
                   color={color}
                   onClick={() => handleUpdateColor(color)}
                 >
-                  {isUpdateColor === color && <IconCheck />}
+                  {isUpdateColor.toUpperCase() === color && <IconCheck />}
                 </ColorTile>
               );
             })}
