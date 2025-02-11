@@ -3,6 +3,7 @@ import styles from "./NavBar.module.scss";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDashboard } from "@/src/contexts/DashBoardContext"; // 예제
+import Link from "next/link";
 
 export default function NavBar() {
   const params = useParams();

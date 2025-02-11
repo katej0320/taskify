@@ -9,6 +9,7 @@ import CustomModal from "../modal/CustomModal";
 import { useRouter } from "next/router";
 import { addColumns, getColumns } from "@/src/api/dashboardApi";
 import styles from "./Board.module.scss";
+import axiosInstance from "@/src/api/axios";
 
 export default function Board() {
   const {
@@ -34,7 +35,6 @@ export default function Board() {
       if (response?.result === "SUCCESS") {
         const updatedColumns = response.data.map((column: any) => ({
           ...column,
-          tasks: [], // 빈 tasks 배열 추가
         }));
         setColumns(updatedColumns);
       }
@@ -48,15 +48,25 @@ export default function Board() {
     if (!newColumnTitle.trim()) return;
 
     try {
-      const response = await addColumns(+id, newColumnTitle);
-      if (response?.result === "성공") {
-        setColumns([...columns, { ...response.data, tasks: [] }]); // tasks 빈 배열 포함
+      const response = await axiosInstance.post(`/columns`, {
+        title: newColumnTitle,
+        dashboardId: +id, // URL에서 가져온 id를 사용
+      });
+
+      if (response) {
+        setColumns([...columns, { ...response.data }]);
         setIsModalOpen(false);
         setNewColumnTitle("");
       }
     } catch (error) {
       console.error("Error adding column:", error);
     }
+  };
+
+  const handleDeleteColumn = (columnId: number) => {
+    setColumns(
+      (prevColumns) => prevColumns.filter((column) => column.id !== columnId) // 컬럼 삭제 처리
+    );
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -73,9 +83,6 @@ export default function Board() {
     );
     if (!sourceColumn || !destColumn) return;
 
-    const [movedTask] = sourceColumn.tasks.splice(source.index, 1);
-    destColumn.tasks.splice(destination.index, 0, movedTask);
-
     setColumns(newColumns);
   };
 
@@ -84,12 +91,16 @@ export default function Board() {
       <div className={styles.boardContainer}>
         {columns.map((column) => (
           <>
-            <Column key={column.id} column={column} />
+            <Column
+              key={column.id}
+              column={column}
+              onDelete={handleDeleteColumn}
+            />
             <div className={styles.columnLine} />
           </>
         ))}
         <ListCard className={styles.listCard}>
-          <div>새로운 컬럼추가하기</div>
+          <div>새로운 컬럼 추가하기</div>
           <Image
             src="/icons/chip.svg"
             width={22}
@@ -102,17 +113,29 @@ export default function Board() {
         </ListCard>
       </div>
 
-      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <h2>새로운 컬럼 추가</h2>
-        <form onSubmit={handleAddColumn}>
-          <input
-            type="text"
-            value={newColumnTitle}
-            onChange={(e) => setNewColumnTitle(e.target.value)}
-            placeholder="컬럼 이름 입력"
-          />
-          <button type="submit">추가</button>
-        </form>
+      <CustomModal
+        className={styles.listCardModal}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      >
+        <h2>새 컬럼 생성</h2>
+        <div>이름</div>
+
+        <input
+          type="text"
+          value={newColumnTitle}
+          onChange={(e) => setNewColumnTitle(e.target.value)}
+          placeholder="컬럼 이름 입력"
+          className={styles.input}
+        />
+        <div className={styles.buttonGroup}>
+          <button className={styles.cancle} onClick={closeModal}>
+            취소
+          </button>
+          <button className={styles.create} onClick={handleAddColumn}>
+            생성
+          </button>
+        </div>
       </CustomModal>
     </DragDropContext>
   );

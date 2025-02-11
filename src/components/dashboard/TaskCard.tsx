@@ -1,43 +1,59 @@
 import { Draggable } from "@hello-pangea/dnd";
 import Image from "next/image";
-import styled from "styled-components";
+import styles from "./TaskCard.module.scss";
+import { useState } from "react";
+import CustomModal from "../modal/CustomModal";
+import DetailModal from "./detailModal";
 
-const TaskWrapper = styled.div`
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-`;
+export default function TaskCard({ card, index }: any) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-const TaskImage = styled(Image)`
-  border-radius: 8px;
-`;
-
-const Tag = styled.span`
-  background: #ddd;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 12px;
-`;
-
-export default function TaskCard({ task, index }: any) {
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const dueDate = card.dueDate;
+  const date = dueDate ? dueDate.split(" ")[0] : "";
   return (
-    <Draggable draggableId={task.id} index={index}>
+    <Draggable draggableId={String(card.id)} index={index}>
       {(provided) => (
-        <TaskWrapper
+        <div
+          className={styles.taskWrapper}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <TaskImage src={task.image} width={200} height={120} alt="task" />
-          <h4>{task.title}</h4>
-          <div>
-            {task.tags.map((tag: string) => (
-              <Tag key={tag}>{tag}</Tag>
-            ))}
+          <div onClick={openModal}>
+            <Image
+              className={styles.taskImg}
+              src={card.image}
+              width={274}
+              height={160}
+              alt="카드 이미지"
+            />
+            <h3>{card.title}</h3>
+            <div>
+              {card.tags.map((tag: string) => (
+                <span className={styles.tag} key={tag}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className={styles.date}>
+              <Image
+                src="/icons/calendar.svg"
+                width={20}
+                height={20}
+                alt="설정"
+              />
+              <p>{date}</p>
+            </div>
           </div>
-          <p>{task.date}</p>
-        </TaskWrapper>
+          {/* 모달 */}
+          {isModalOpen && (
+            <CustomModal isOpen={isModalOpen} onClose={closeModal}>
+              <DetailModal card={card} />
+            </CustomModal>
+          )}
+        </div>
       )}
     </Draggable>
   );
