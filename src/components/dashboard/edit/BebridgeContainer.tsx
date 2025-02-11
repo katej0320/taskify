@@ -5,7 +5,7 @@ import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import { Button } from "../../button/CustomButton2";
 import IconCheck from "@/public/images/dashboard/edit/ic_check.svg";
 
-const COLOR_PALETTE = ["#7ac555", "#760dde", "#ffa500", "#76a5ea", "#e876ea"];
+const COLOR_PALETTE = ["#7AC555", "#760DDE", "#FFA500", "#76A5EA", "#E876EA"];
 
 const ColorTile = styled.li`
   background: ${(props) => props.color};
