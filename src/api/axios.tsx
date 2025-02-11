@@ -1,12 +1,17 @@
 import axios from "axios";
 
-console.log("🚀 Axios Base URL:", process.env.NEXT_PUBLIC_BASE_URL); // 확인용 로그
+const TEST_ACCESS_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTE5NSwidGVhbUlkIjoiMTItMSIsImlhdCI6MTczOTI2NDI4MSwiaXNzIjoic3AtdGFza2lmeSJ9.DKRnIN43t9-eww231-Qdw97hxZwJ0OAAm-3yuwIPkRU";
+
+const getToken = () =>
+  // ✅ 항상 하드코딩된 토큰을 반환 (로그인 기능이 없으므로 sessionStorage 사용 안 함)
+  TEST_ACCESS_TOKEN;
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: "https://sp-taskify-api.vercel.app", // ✅ API baseURL
   headers: {
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTE1NywidGVhbUlkIjoiMTItMSIsImlhdCI6MTczODczMDk2NiwiaXNzIjoic3AtdGFza2lmeSJ9.lUVG2mbV9MVWlkGkDGNPmmAY7NTTu33aZDTEHmAwTh0",
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${getToken()}`, // ✅ 항상 하드코딩된 토큰을 사용
   },
 });
 

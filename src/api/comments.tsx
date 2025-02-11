@@ -1,15 +1,19 @@
-import axiosInstance from "./axios"; // axiosInstance 사용
+import axiosInstance from "./axios";
 
 // 댓글 목록 조회 (GET)
 export const getComments = async (
   teamId: string,
   cardId: number,
-  size = 10,
-  cursorId?: number
+  size: number = 10,
+  cursorId: number | null = null //기본값 설정
 ) => {
   try {
     const response = await axiosInstance.get(`/${teamId}/comments`, {
-      params: { cardId, size, cursorId },
+      params: {
+        cardId,
+        size,
+        ...(cursorId ? { cursorId } : {}), //cursorId가 있을 때만 포함
+      },
     });
     return response.data;
   } catch (error: any) {
