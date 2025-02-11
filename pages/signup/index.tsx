@@ -128,6 +128,7 @@ export default function RegisterPage() {
 
     //axios 리퀘스트 보내기
     try {
+
       const response = await axiosinstance.post("/users", {
         email,
         nickname,

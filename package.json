@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/react-slick": "^0.23.13",
     "axios": "^1.7.9",
     "babel-plugin-styled-components": "^2.1.4",
     "next": "15.1.6",
@@ -18,14 +17,15 @@
     "react-datetime": "^3.3.1",
     "react-dom": "^19.0.0",
     "react-icons-kit": "^2.0.0",
-    "react-slick": "^0.30.3",
     "sass": "^1.83.4",
-    "styled-components": "^6.1.15"
+    "styled-components": "^6.1.15",
+    "typed.js": "^2.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@svgr/webpack": "^8.1.0",
     "@swc/plugin-styled-components": "^6.7.0",
+    "@types/aos": "^3.0.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
