@@ -1,4 +1,4 @@
-@import '@/styles/color.scss';
+@use "/styles/color.scss" as *;
 
 
 .container {
@@ -39,6 +39,8 @@
     border: 1px solid red;  // 에러일 때 빨간색 테두리
 }
 
+
+
 .inputRepeatError{
     border: 1px solid red;  // 에러일 때 빨간색 테두리
 
@@ -52,8 +54,10 @@
     height: 50px;
     border-radius: 8px;
     padding: 0 16px;
+    padding-right: 40px;
     border: 1px solid $gray3;
     outline: none;
+    position: relative;
 
  }
 
@@ -65,41 +69,76 @@
     flex-direction: column;
 }
 
-.eyeIcon1{
-        position: absolute;
-        right: 20px;
-        top: 16%;
-        transform: translateY(-50%);
-        cursor: pointer;
-  
 
+.passwordWrapper2{
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-.eyeIcon2{
+
+.passwordimg{
     position: absolute;
-    right: 20px;
-    top: 72%;
-    transform: translateY(-50%);
+    right: 17px;
     cursor: pointer;
-
-
+    width: 22px;
+    height: auto;
+    top: 16px;
 }
 
-.passwordeye{
-    width: 22px;
-    height: 19px;
+.passwordimg2{
     position: absolute;
-    right: 0px;
-    top: 56%;
-    transform: translateY(-50%);
+    right: 17px;
     cursor: pointer;
-}
-
-.passwordeyeopen{
     width: 22px;
-    height: 15px;
-
+    height: auto;
+    top: 17px;
 }
+
+/* 비밀번호 가림 아이콘 */
+.passwordeye {
+    width: 22px;
+    height: auto;
+    position: absolute;
+    top: -1px;
+    
+}
+
+/* 비밀번호 표시 아이콘 */
+.passwordeyeopen {
+    width: 22px;
+    height: auto;
+    position: absolute;
+}
+
+.passwordError {
+    min-height: 20px; /* 항상 공간을 유지해서 인풋이 움직이지 않도록 함 */
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+    display: none; /* 기본적으로 안 보이게 함 */
+}
+
+/* 🟢 에러 메시지가 있을 때만 보이게 설정 */
+.passwordError.show {
+    display: block;
+   
+}
+
+.passwordRepeatError{
+    min-height: 20px; /* 항상 공간을 유지해서 인풋이 움직이지 않도록 함 */
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+    display: none; /* 기본적으로 안 보이게 함 */
+}
+
+.passwordRepeatError.show {
+    display: block;
+   
+}
+
+
 
 .input:focus{
     border-color: $violet2;
@@ -111,7 +150,7 @@
     outline: none;
 
 }
-.loginbutton{
+.registerbutton{
     width: 520px;
     height: 50px;
     border-radius: 8px;
@@ -129,12 +168,41 @@
     cursor:pointer;
 }
 
-.signuptext{
+.logintext{
     text-align: center;
+    margin-top: 21px;
 }
 
-.signuptextbutton{
+.logintextbutton{
     cursor: pointer;
     color: $violet2;
     text-decoration: underline;
 }
+
+.agreementlabel{
+    display: flex;
+    gap : 5px;
+    margin-left: 2px;
+    margin-top: 12px;
+    align-items: center;
+}
+
+.customcheckbox{
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid $gray3;
+    cursor: pointer;
+
+}
+
+.customcheckbox:checked{
+    background-color: $violet1;
+    background-image: url(../../public/images/check.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
