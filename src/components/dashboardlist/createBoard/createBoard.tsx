@@ -1,10 +1,9 @@
 "use Client";
 import { useState } from "react";
-import styles from "./Board.module.scss";
-import axios from "axios";
+import styles from "./createBoard.module.scss";
 import axiosInstance from "@/src/api/axios";
 
-export default function Board() {
+export default function createBoard() {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [dashboardName, setDashboardName] = useState("");
   const [selectedColor, setSelectedColor] = useState(""); // 색상 상태 추가
@@ -12,15 +11,14 @@ export default function Board() {
   const closeModal = () => setIsModalOpen(false);
 
   const handleCreate = async () => {
-    // POST 요청을 보내는 부분 (axios 사용)
     try {
       const response = await axiosInstance.post("/dashboards", {
         title: dashboardName,
-        color: selectedColor, // 선택한 색상도 함께 보내기
+        color: selectedColor,
       });
 
       if (response.status === 200) {
-        setIsModalOpen(false); // 요청 성공 시 모달 닫기
+        setIsModalOpen(false);
       } else {
         console.error("Failed to create dashboard");
       }

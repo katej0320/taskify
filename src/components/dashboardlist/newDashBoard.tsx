@@ -2,7 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import CustomModal from "@/src/components/modal/CustomModal";
 import ListCard from "@/src/components/dashboardlist/card/ListCard";
-import Board from "@/src/components/dashboardlist/createBoard/Board";
+import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard";
 import styles from "../../../pages/dashboard/index.module.scss";
 
 export default function NewDashboard() {
@@ -27,7 +27,7 @@ export default function NewDashboard() {
       {/* 모달 */}
       {isModalOpen && (
         <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-          <Board />
+          <CreateBoard />
         </CustomModal>
       )}
     </ListCard>

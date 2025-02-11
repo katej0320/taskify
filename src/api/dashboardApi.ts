@@ -7,7 +7,6 @@ async function fetchWithAuth(url: string, params?: object) {
 
     // 세션 스토리지에서 토큰 가져오기
     const accessToken = sessionStorage.getItem("accessToken");
-    console.log("Token from sessionStorage:", accessToken);
     if (!accessToken) {
       console.error("Token not found in sessionStorage");
       return null;
@@ -37,4 +36,19 @@ export async function getInviteList({
   ...params
 }: IInviteParams = {}) {
   return fetchWithAuth("/invitations", { teamId, ...params });
+}
+
+export async function getColumns(dashboardId: number) {
+  const url = "/columns";
+
+  return fetchWithAuth(url, {
+    dashboardId,
+  });
+}
+
+export async function addColumns(dashboardId: number, title: string) {
+  return fetchWithAuth(`/columns`, {
+    method: "POST",
+    data: { title, dashboardId },
+  });
 }
