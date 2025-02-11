@@ -7,11 +7,12 @@
   height: 60px;
   background-color: $white;
   border-bottom: 1px solid $gray3;
-  padding: 0 20px;
+  padding: 0 20px 0 80px;
   position: sticky;
   top: 0px;
   margin-left: 300px;
-  margin-right: 80px;
+
+  z-index: 1000;
 }
 
 .leftSection {

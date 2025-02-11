@@ -1,9 +1,35 @@
 import Image from "next/image";
 import styles from "./Section3.module.scss";
+import AOS from "aos";
+import 'aos/dist/aos.css'; 
+import { useEffect } from "react";
 
 export default function Section3() {
+
+    useEffect(() => {
+      AOS.init({
+        disable: false, 
+        startEvent: "DOMContentLoaded",
+        initClassName: "aos-init",
+        animatedClassName: "aos-animate",
+        useClassNames: false,
+        disableMutationObserver: false,
+        debounceDelay: 50,
+        throttleDelay: 99,
+        offset: 120,
+        delay: 0,
+        duration: 400,
+        easing: "ease",
+        once: false,
+        mirror: false,
+        anchorPlacement: "top-bottom",
+      });
+    }, []);
+
   return (
-    <section className={styles.container}>
+    
+    <div className={styles.container} data-aos="fade-up"
+     data-aos-duration="1000">
       <h2 className={styles.title}>생산성을 높이는 다양한 설정 ⚡</h2>
       <div className={styles.cards}>
         <div className={styles.card}>
@@ -49,6 +75,7 @@ export default function Section3() {
           </div>
         </div>
       </div>
-    </section>
+      </div>
+
   );
 }
