@@ -12,3 +12,10 @@ export interface IInviteParams {
   cursorId?: number;
   title?: string;
 }
+
+export interface IColumnsParams {
+  teamId?: string;
+  dashboardId?: number;
+  cursorId?: number;
+  title?: string;
+}

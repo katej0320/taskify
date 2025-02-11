@@ -3,6 +3,7 @@ import styles from "./NavBar.module.scss";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDashboard } from "@/src/contexts/DashBoardContext"; // 예제
+import Link from "next/link";
 
 export default function NavBar() {
   const params = useParams();
@@ -12,9 +13,6 @@ export default function NavBar() {
   const [headerTitle, setHeaderTitle] = useState("내 대시보드");
 
   useEffect(() => {
-    console.log("pathname", pathname);
-    console.log("params", params);
-
     if (!pathname) return; // pathname이 null이면 실행 안 함
 
     if (pathname.startsWith("/dashboard/") && params.id) {

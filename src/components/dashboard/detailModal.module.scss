@@ -1,0 +1,12 @@
+@use "/styles/color.scss" as *;
+
+.modalTitle {
+  display: flex;
+  color: $black2;
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    text-align: left;
+  }
+}

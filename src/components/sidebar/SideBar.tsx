@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomModal from "../modal/CustomModal";
 import { useState } from "react";
-import Board from "../dashboardlist/createBoard/Board";
+import Board from "../dashboardlist/createBoard/createBoard";
 
 export default function SideBar() {
   const { dashboards } = useDashboard(); // context에서 dashboards 데이터를 가져옴
