@@ -3,8 +3,9 @@ import styles from "./SideBar.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 import CustomModal from "../modal/CustomModal";
+import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard";
+
 import { useState } from "react";
-import Board from "../dashboardlist/createBoard/createBoard";
 
 export default function SideBar() {
   const { dashboards } = useDashboard(); // context에서 dashboards 데이터를 가져옴
@@ -16,7 +17,7 @@ export default function SideBar() {
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarcontent}>
-        <Link href="/">
+        <Link href="/dashboard">
           <Image
             src="/icons/dashboardlogo.svg"
             width={110}
@@ -39,7 +40,7 @@ export default function SideBar() {
             />
             {isModalOpen && (
               <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-                <Board />
+                <CreateBoard onClose={() => setIsModalOpen(false)} />
               </CustomModal>
             )}
           </div>
