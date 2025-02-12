@@ -41,7 +41,7 @@ export default function DashboardList({ dashboards }: DashboardListProps) {
       ))}
 
       {/* ✅ 페이지네이션 추가 */}
-      {totalPages > 1 && (
+      {totalPages > 0 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
