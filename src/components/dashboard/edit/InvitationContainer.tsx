@@ -1,7 +1,37 @@
-import styled from "styled-components";
+import { useEdit } from "@/src/contexts/EditDashboardProvider";
+import { useEffect, useState } from "react";
+import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
 import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
+import { InviteItem } from "@/src/types/EditComponent";
+import { ArrowButton } from "@/src/types/EditPagination";
+
+const PaginationButton = styled(Button)<ArrowButton>`
+  width: 40px;
+  height: 40px;
+  line-height: 43px;
+  ${(props) =>
+    props.$left
+      ? css`
+          border-radius: 4px 0 0 4px;
+          background: url("/images/dashboard/edit/ic_prevArrow.svg") center
+            center no-repeat #fff;
+        `
+      : props.$right
+      ? css`
+          border-radius: 0 4px 4px 0;
+          background: url("/images/dashboard/edit/ic_nextArrow.svg") center
+            center no-repeat #fff;
+        `
+      : ""}
+  background-color:${(props) => (props.disabled ? "#f9f9f9" : "")};
+  @media (min-width: 769px) and (max-width: 840px) {
+    width: 30px;
+    height: 30px;
+    line-height: 33px;
+  }
+`;
 
 const InviteButton = styled(Button)`
   width: fit-content;
@@ -13,6 +43,7 @@ const InviteButton = styled(Button)`
   color: #fff;
   font-weight: 500;
   font-size: 14px;
+  cursor: pointer;
 
   svg {
     padding-top: 2px;
@@ -27,13 +58,44 @@ const InviteButton = styled(Button)`
 `;
 
 export default function InvitationContainer() {
+  const [isInvitationsData, setIsInvitationsData] = useState<InviteItem[]>();
+  const [isTotalCount, setIsTotalCount] = useState(0);
+  const { invitePage, isInvitations, handlePrevClick, handleNextClick } =
+    useEdit();
+
+  useEffect(() => {
+    if (isInvitations) {
+      const { invitations, totalCount } = isInvitations;
+      setIsInvitationsData(invitations);
+      setIsTotalCount(Math.ceil(totalCount / 4));
+    }
+  }, [isInvitations]);
+
   return (
     <>
       <div className={`${styles.container} ${styles.section3}`}>
         <div className={styles.head}>
           <p className={styles.title}>초대 내역</p>
           <div className={styles.controlCover}>
-            <div>페이지네이션</div>
+            <div className={styles.pagination}>
+              <p className={styles.number}>
+                {isTotalCount} 페이지 중 {invitePage}
+              </p>
+              <div className={styles.buttonContainer}>
+                <PaginationButton
+                  disabled={invitePage === 1 ? true : false}
+                  $left={"left"}
+                  name="invite"
+                  onClick={(e) => handlePrevClick(e)}
+                />
+                <PaginationButton
+                  disabled={isTotalCount === invitePage}
+                  $right={"right"}
+                  name="invite"
+                  onClick={(e) => handleNextClick(e)}
+                />
+              </div>
+            </div>
             <InviteButton>
               <IconAdd />
               초대하기
@@ -43,12 +105,18 @@ export default function InvitationContainer() {
         <div className={styles.contents}>
           <p className={styles.title}>이메일</p>
           <ul className={styles.memberList}>
-            <li className={styles.tile}>
-              <div className={styles.profileCover}>
-                <p className={styles.email}>codeitA@codeit.com</p>
-              </div>
-              <Button sub="sub">취소</Button>
-            </li>
+            {isInvitationsData &&
+              isInvitationsData.map((item) => {
+                const { invitee } = item;
+                return (
+                  <li key={item.id} className={styles.tile}>
+                    <div className={styles.profileCover}>
+                      <p className={styles.email}>{invitee.email}</p>
+                    </div>
+                    <Button $sub="sub">취소</Button>
+                  </li>
+                );
+              })}
           </ul>
         </div>
       </div>
