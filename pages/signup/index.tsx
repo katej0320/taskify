@@ -206,9 +206,9 @@ export default function RegisterPage() {
         )}
 
         {/* 닉네임 */}
-        <p className={style.tag}>닉네임</p>
+        <p className={style.tag}>이름</p>
         <input
-          placeholder="닉네임을 입력해 주세요"
+          placeholder="이름을 입력해 주세요"
           name="nickname" // ✅ name 추가
           type="text"
           onChange={handleChange}
