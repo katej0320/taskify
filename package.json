@@ -11,12 +11,8 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "aos": "^2.3.4",
-=======
     "@hello-pangea/dnd": "^18.0.1",
     "aos": "^3.0.0-beta.6",
->>>>>>> 17930f4dfdde2cf45e6b5cc4e64bb7286a81bfe9
     "axios": "^1.7.9",
     "babel-plugin-styled-components": "^2.1.4",
     "next": "15.1.6",
