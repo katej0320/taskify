@@ -11,7 +11,7 @@ import ProfileSettings from "@/src/components/mypage/profilesetting";
 
 export default function MyPage() {
   // useSWR로 사용자 데이터 요청
-  const { data: user, error } = useSWR<User>("/users/me", getUser); // <User> 타입 지정
+  const { data: user, error } = useSWR<User>("12-1/users", getUser);
 
   if (error) return <p>데이터 오류 발생 </p>;
   if (!user) return <p>로딩 중</p>;
