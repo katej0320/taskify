@@ -1,45 +1,58 @@
+import Image from "next/image";
 import React from "react";
-import styles from "@/pages/mypage/mypage.module.scss";
-import AvatarUploader from "./avataruploader";
 
 interface ProfileCardProps {
   nickname: string;
-  setNickname: (nickname: string) => void;
+  setNickname: React.Dispatch<React.SetStateAction<string>>;
   profileImage: string | null;
-  setProfileImage: (image: string | null) => void;
+  setProfileImage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-export default function ProfileCard({
+const ProfileCard: React.FC<ProfileCardProps> = ({
   nickname,
   setNickname,
   profileImage,
   setProfileImage,
-}: ProfileCardProps) {
-  const handleSave = () => {
-    console.log("프로필 저장: ", { nickname });
+}) => {
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value);
+  };
+
+  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
-    <div className={styles.profileCard}>
-      <h2>프로필</h2>
-      <div className={styles.profileInfo}>
-        <AvatarUploader profileImage={profileImage} setProfileImage={setProfileImage} />
-
-        <div className={styles.profileInputs}>
-          <div className={styles.profileInputGroup}>
-            <label>이메일</label>
-            <input type="email" value="johndoe@gmail.com" disabled />
-          </div>
-
-          <div className={styles.profileInputGroup}>
-            <label>닉네임</label>
-            <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} />
-          </div>
-        </div>
+    <div>
+      <h3>프로필 카드</h3>
+      <div>
+        <label>닉네임:</label>
+        <input
+          type="text"
+          value={nickname}
+          onChange={handleNicknameChange}
+          placeholder="닉네임을 입력하세요"
+        />
       </div>
-      <button onClick={handleSave} className={styles.saveButton}>
-        저장
-      </button>
+      <div>
+        <label>프로필 이미지:</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleProfileImageChange}
+        />
+        {profileImage && <Image src={profileImage} alt="프로필 이미지" />}
+      </div>
     </div>
   );
-}
+};
+
+export default ProfileCard;
+
