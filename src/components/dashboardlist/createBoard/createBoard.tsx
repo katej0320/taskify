@@ -3,11 +3,19 @@ import { useState } from "react";
 import styles from "./createBoard.module.scss";
 import axiosInstance from "@/src/api/axios";
 
-interface CreateBoardProps {
-  onClose: () => void; // ✅ 부모에서 모달을 닫을 수 있도록 콜백 추가
+
+interface Dashboard {
+  id: string;
+  title: string;
+  color: string;
 }
 
-export default function createBoard({ onClose }: CreateBoardProps) {
+interface CreateBoardProps {
+  onClose: () => void; // ✅ 부모에서 모달을 닫을 수 있도록 콜백 추가
+  onDashboardCreate: (newDashboard: Dashboard) => void; // ✅ 새로운 대시보드를 부모에 전달하는 함수 추가
+}
+
+export default function createBoard({ onClose, onDashboardCreate  }: CreateBoardProps) {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [dashboardName, setDashboardName] = useState("");
   const [selectedColor, setSelectedColor] = useState(""); // 색상 상태 추가
@@ -15,7 +23,6 @@ export default function createBoard({ onClose }: CreateBoardProps) {
   const closeModal = () => setIsModalOpen(false);
 
   const handleCreate = async () => {
-    console.log("📢 Sending Data:", { title: dashboardName, color: selectedColor });
   
     if (!dashboardName.trim()) {
       alert("대시보드 이름을 입력해주세요.");
@@ -44,7 +51,13 @@ export default function createBoard({ onClose }: CreateBoardProps) {
       // ✅ 상태 코드 200 또는 201인 경우 정상 처리
       if (response.status === 200 || response.status === 201) {
         console.log("🎉 대시보드 생성 성공:", response.data);
-        setIsModalOpen(false);
+        // setIsModalOpen(false);
+        
+        setTimeout(()=>{
+          onDashboardCreate(response.data);
+          onClose();
+        }, 0);
+
       } else {
         console.error("❌ Failed to create dashboard: Unexpected response status", response.status);
       }
