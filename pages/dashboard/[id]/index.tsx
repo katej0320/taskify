@@ -2,6 +2,7 @@ import { useState } from "react";
 import SideBar from "@/src/components/sidebar/SideBar";
 import NavBar from "@/src/components/nav/NavBar";
 import styled from "styled-components";
+import TaskCardModal from "@/src/components/modals/cards/TaskCardModal";
 
 const Contents = styled.div`
   display: flex;
@@ -16,22 +17,21 @@ const Container = styled.div`
   flex-grow: 1;
   gap: 20px;
 `;
-import TaskCardModal from "@/src/components/modals/cards/TaskCardModal";
 
 export default function Page({ dashboards }: { dashboards: any[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null); // 초깃값 null로 변경
+  const [selectedCard, setSelectedCard] = useState<any | null>(null); // ✅ 카드 전체 정보를 저장
 
-  // ✅ 클릭한 카드 ID를 기반으로 모달을 열도록 수정
-  const openModal = (cardId: number) => {
-    console.log("✅ openModal 호출됨, cardId:", cardId); // 디버깅용 로그
-    setSelectedCardId(cardId);
+  // ✅ 클릭한 카드 정보를 저장하도록 수정
+  const openModal = (card: any) => {
+    console.log("✅ openModal 호출됨, card 정보:", card); // 디버깅용 로그
+    setSelectedCard(card);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedCardId(null); //  모달을 닫을 때 cardId 초기화
+    setSelectedCard(null); // 모달을 닫을 때 초기화
   };
 
   return (
@@ -41,10 +41,17 @@ export default function Page({ dashboards }: { dashboards: any[] }) {
 
       <Contents>
         <Container>
-          {/* ✅ 카드 ID를 실제 존재하는 카드의 ID로 설정해야 함 */}
-          <button onClick={() => openModal(11563)}> 할일 모달 열기</button>
+          {/* ✅ 카드 정보를 직접 전달해야 함 */}
+          <button
+            onClick={() =>
+              openModal({ cardId: 11575, columnId: 44887, dashboardId: 13289 })
+            }
+          >
+            할일 모달 열기
+          </button>
+
           {/* ✅ 수정됨 */}
-          {isModalOpen && selectedCardId && (
+          {isModalOpen && selectedCard && (
             <TaskCardModal
               isOpen={isModalOpen}
               onClose={closeModal}
@@ -52,7 +59,9 @@ export default function Page({ dashboards }: { dashboards: any[] }) {
                 console.log("할 일 수정 모달 열기(구현필요)")
               }
               teamId="12-1"
-              cardId={selectedCardId} // 동적으로 cardId를 전달
+              cardId={selectedCard.cardId} // 동적으로 cardId를 전달
+              columnId={selectedCard.columnId} // ✅ columnId 추가
+              dashboardId={selectedCard.dashboardId} // ✅ dashboardId 추가
             />
           )}
         </Container>

@@ -1,5 +1,5 @@
 import { IDashboardParams, IInviteParams } from "../types/dashboard";
-import axiosInstance from "./axios";
+import axiosInstance from "./axiosTest";
 
 async function fetchWithAuth(url: string, params?: object) {
   try {

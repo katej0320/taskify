@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axiosinstance from "../../src/api/axios";
+import axiosinstance from "../../src/api/axiosTest";
 import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import loginlogo from "@/public/icons/loginlogo.png";
@@ -128,7 +128,6 @@ export default function RegisterPage() {
 
     //axios 리퀘스트 보내기
     try {
-
       const response = await axiosinstance.post("/users", {
         email,
         nickname,
@@ -273,7 +272,9 @@ export default function RegisterPage() {
               alt="Toggle Password Visibility"
             />
           </span>
-          {passwordRepeatError && <span className={style.error}>{passwordRepeatError}</span>}
+          {passwordRepeatError && (
+            <span className={style.error}>{passwordRepeatError}</span>
+          )}
         </div>
 
         <label className={style.agreementlabel}>

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import styles from "./Board.module.scss";
 import axios from "axios";
-import axiosInstance from "@/src/api/axios";
+import axiosInstance from "@/src/api/axiosTest";
 
 export default function Board() {
   const [isModalOpen, setIsModalOpen] = useState(true);

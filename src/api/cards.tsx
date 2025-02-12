@@ -1,4 +1,4 @@
-import axiosInstance from "./axios";
+import axiosInstance from "./axiosTest";
 
 // 카드 상세 조회
 export const getCardDetail = async (teamId: string, cardId: number) => {
