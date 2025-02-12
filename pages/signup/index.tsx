@@ -256,7 +256,7 @@ export default function RegisterPage() {
             onChange={handleChange}
             value={values.passwordRepeat}
             className={`${style.passwordinput} ${
-              passwordRepeatError ? style.inputRepeatError : ""
+              passwordRepeatError ? style.inputError : ""
             }`}
             placeholder="비밀번호를 한번 더 입력해주세요"
           />
@@ -272,13 +272,7 @@ export default function RegisterPage() {
               alt="Toggle Password Visibility"
             />
           </span>
-          <span
-            className={`${style.passwordRepeatError} ${
-              passwordRepeatError ? style.show : ""
-            }`}
-          >
-            {passwordRepeatError}
-          </span>
+          {passwordRepeatError && <span className={style.error}>{passwordRepeatError}</span>}
         </div>
 
         <label className={style.agreementlabel}>
