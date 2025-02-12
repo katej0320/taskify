@@ -40,7 +40,7 @@ export default function MemberContainer() {
   const [isModal, setIsModal] = useState<boolean>(false);
   const isMessage = "선택된 구성원을 삭제하시겠습니까?";
   const [isDeleteId, setIsDeleteId] = useState<number>();
-  const [isUpdate, setIsUpdate] = useState();
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const {
     memberPage,
@@ -57,10 +57,13 @@ export default function MemberContainer() {
 
   async function deleteMember() {
     try {
+      setIsUpdate(true);
       const res = await axiosInstance.delete(`/members/${isDeleteId}`);
       setIsUpdate(res.data);
     } catch (error) {
       console.error(error);
+    }finally{
+      setIsUpdate(false);
     }
   }
 

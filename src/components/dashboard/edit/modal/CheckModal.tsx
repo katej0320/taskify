@@ -57,6 +57,7 @@ export const CheckModal = ({
   invite,
   deleteDashboard,
   deleteMember,
+  deleteInvitation,
 }: {
   isModal: boolean;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -64,7 +65,8 @@ export const CheckModal = ({
   member?: string;
   invite?: string;
   deleteDashboard?: string;
-  deleteMember?: () =>Promise<void>;
+  deleteMember?: () => Promise<void>;
+  deleteInvitation?: () => Promise<void>;
 }) => {
   const closeModal = () => setIsModal(false);
 
@@ -82,6 +84,7 @@ export const CheckModal = ({
               onClick={() => {
                 closeModal();
                 member && deleteMember?.();
+                invite && deleteInvitation?.();
               }}
             >
               {member || deleteDashboard
