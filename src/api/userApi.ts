@@ -1,5 +1,5 @@
 import { User } from "@/src/types/users"; 
-import axiosInstance from "./axios";
+import axios from "axios"
 
 // 사용자 정보 API 함수 (getUser)
 export const getUser = async (): Promise<User> => {
@@ -12,7 +12,7 @@ export const getUser = async (): Promise<User> => {
       throw new Error("Access token is missing.");
     }
 
-    const response = await axiosInstance.get(
+    const response = await axios.get(
       "https://sp-taskify-api.vercel.app/12-1/users", // 사용자 정보 가져오는 URL
       {
         headers: {
@@ -44,7 +44,7 @@ export const updateProfile = async (nickname: string, profileImage: string | nul
       formData.append("profileImage", profileImage);
     }
 
-    const response = await axiosInstance.post(
+    const response = await axios.post(
       "https://sp-taskify-api.vercel.app/12-1/users",
       formData,
       {
