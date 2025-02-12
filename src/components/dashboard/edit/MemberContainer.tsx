@@ -6,6 +6,7 @@ import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import { MemberItem } from "@/src/types/EditComponent";
 import { ArrowButton } from "@/src/types/EditPagination";
 import { CheckModal } from "./modal/CheckModal";
+import axiosInstance from "@/src/api/axios";
 
 const PaginationButton = styled(Button)<ArrowButton>`
   width: 40px;
@@ -37,15 +38,35 @@ export default function MemberContainer() {
   const [isMembersData, isSetMemberData] = useState<MemberItem[]>();
   const [isTotalCount, setIsTotalCount] = useState(0);
   const [isModal, setIsModal] = useState<boolean>(false);
-  const isMessage = '선택된 구성원을 삭제하시겠습니까?';
+  const isMessage = "선택된 구성원을 삭제하시겠습니까?";
   const [isDeleteId, setIsDeleteId] = useState<number>();
+  const [isUpdate, setIsUpdate] = useState();
 
-  const { memberPage, isMembers, handlePrevClick, handleNextClick } = useEdit();
+  const {
+    memberPage,
+    isMembers,
+    getMembers,
+    handlePrevClick,
+    handleNextClick,
+  } = useEdit();
 
-  const handleShowModal = (userId:number) => {
+  const handleShowModal = (userId: number) => {
     setIsModal(true);
-    setIsDeleteId(userId)
+    setIsDeleteId(userId);
   };
+
+  async function deleteMember() {
+    try {
+      const res = await axiosInstance.delete(`/members/${isDeleteId}`);
+      setIsUpdate(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    if (isMembers) getMembers();
+  }, [isUpdate]);
 
   useEffect(() => {
     if (isMembers) {
@@ -57,7 +78,15 @@ export default function MemberContainer() {
 
   return (
     <>
-    {isModal && <CheckModal member={'member'} isModal={isModal} setIsModal={setIsModal} isMessage={isMessage}/>}
+      {isModal && (
+        <CheckModal
+          member={"member"}
+          isModal={isModal}
+          setIsModal={setIsModal}
+          isMessage={isMessage}
+          deleteMember={deleteMember}
+        />
+      )}
       <div className={`${styles.container} ${styles.section2}`}>
         <div className={styles.head}>
           <p className={styles.title}>구성원</p>
@@ -88,14 +117,16 @@ export default function MemberContainer() {
           <ul className={styles.memberList}>
             {isMembersData &&
               isMembersData?.map((item) => {
-                const {userId} = item
+                const { id } = item;
                 return (
-                  <li key={item.id} className={styles.tile}>
+                  <li key={id} className={styles.tile}>
                     <div className={styles.profileCover}>
                       <div className={styles.thumbnail}></div>
                       <p className={styles.nickname}>{item.nickname}</p>
                     </div>
-                    <Button onClick={() => handleShowModal(userId)} $sub="sub">삭제</Button>
+                    <Button onClick={() => handleShowModal(id)} $sub="sub">
+                      삭제
+                    </Button>
                   </li>
                 );
               })}

@@ -9,12 +9,13 @@ import axiosInstance from "../api/axios";
 import { useEditPagination } from "../hooks/useEditPagination";
 
 const EditContext = createContext({
-  getDashboardDetail:() => {},
   isBebridge: null,
   isMembers: null,
   isInvitations: null,
   memberPage: 1,
   invitePage: 1,
+  getDashboardDetail:() => {},
+  getMembers:() => {},
   handlePrevClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
   handleNextClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
 });
@@ -80,12 +81,13 @@ export function EditProvider({
   return (
     <EditContext.Provider
       value={{
-        getDashboardDetail,
         isBebridge: values.isBebridge,
         isMembers: values.isMembers,
         isInvitations: values.isInvitations,
         memberPage,
         invitePage,
+        getDashboardDetail,
+        getMembers,
         handlePrevClick,
         handleNextClick,
       }}
