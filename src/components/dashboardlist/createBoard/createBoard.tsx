@@ -111,7 +111,7 @@ export default function createBoard({ onClose }: CreateBoardProps) {
         <button className={styles.cancle} onClick={onClose}>
           취소
         </button>
-        <button className={styles.create} onClick={handleCreate}>
+        <button className={styles.create} onClick={onClose}>
           생성
         </button>
       </div>
