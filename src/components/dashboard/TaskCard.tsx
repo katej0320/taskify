@@ -5,7 +5,7 @@ import { useState } from "react";
 import CustomModal from "../modal/CustomModal";
 import DetailModal from "./detailModal";
 
-export default function TaskCard({ card, index }: any) {
+export default function TaskCard({ card, index, columnTitle }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
@@ -49,8 +49,13 @@ export default function TaskCard({ card, index }: any) {
           </div>
           {/* 모달 */}
           {isModalOpen && (
-            <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-              <DetailModal card={card} />
+            <CustomModal
+              className={styles.modal}
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              width="766px"
+            >
+              <DetailModal card={card} columnTitle={columnTitle} />
             </CustomModal>
           )}
         </div>

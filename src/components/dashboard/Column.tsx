@@ -97,7 +97,12 @@ export default function Column({ column, onDelete }: any) {
               />
             </ListCard>
             {cards.map((card) => (
-              <TaskCard key={card.id} card={card} className={styles.taskCard} />
+              <TaskCard
+                key={card.id}
+                card={card}
+                className={styles.taskCard}
+                columnTitle={columnTitle}
+              />
             ))}
             {provided.placeholder}
           </div>
