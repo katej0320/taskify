@@ -4,6 +4,8 @@ import styles from "./EditPage.style.module.scss";
 import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import { Button } from "../../button/CustomButton2";
 import IconCheck from "@/public/images/dashboard/edit/ic_check.svg";
+import { CheckModal } from "./modal/CheckModal";
+import axiosInstance from "@/src/api/axios";
 
 const COLOR_PALETTE = ["#7ac555", "#760dde", "#ffa500", "#76a5ea", "#e876ea"];
 
@@ -18,13 +20,21 @@ const ColorTile = styled.li`
   cursor: pointer;
 `;
 
-export default function BebridgeContainer() {
-  const [isDisabled, setIsDisabled] = useState(true);
+export default function BebridgeContainer({
+  dashboardId,
+}: {
+  dashboardId: string | string[] | undefined;
+}) {
   const [isTitle, setIsTitle] = useState("");
   const [isColor, setIsColor] = useState("");
   const [isUpdateTitle, setIsUpdateTitle] = useState("");
   const [isUpdateColor, setIsUpdateColor] = useState("");
-  const { isBebridge } = useEdit();
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const isMessage = "변경이 완료 되었습니다.";
+  const [isUpdate, setIsUpdate] = useState();
+
+  const { isBebridge, getDashboardDetail } = useEdit();
 
   const handleUpdateTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setIsUpdateTitle(e.target.value);
@@ -33,6 +43,38 @@ export default function BebridgeContainer() {
   const handleUpdateColor = (color: string) => {
     setIsUpdateColor(color);
   };
+
+  const handleShowModal = () => {
+    setIsModal(true);
+
+    async function putDashboardDetail() {
+      try {
+        const res = await axiosInstance.put(`/dashboards/${dashboardId}`, {
+          title: isUpdateTitle,
+          color: isUpdateColor,
+        });
+        setIsUpdate(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    putDashboardDetail();
+  };
+
+  useEffect(() => {
+    if (isBebridge) getDashboardDetail();
+  }, [isUpdate]);
+
+  useEffect(() => {
+    if (isBebridge) {
+      const { title, color }: { title: string; color: string } = isBebridge;
+      const isColor = color.toLowerCase();
+      setIsTitle(title);
+      setIsUpdateTitle(title);
+      setIsColor(isColor);
+      setIsUpdateColor(isColor);
+    }
+  }, [isBebridge]);
 
   useEffect(() => {
     if (
@@ -46,20 +88,17 @@ export default function BebridgeContainer() {
     ) {
       setIsDisabled(true);
     }
-  }, [isUpdateTitle, isUpdateColor]);
-
-  useEffect(() => {
-    if (isBebridge) {
-      const { title, color } = isBebridge;
-      setIsTitle(title);
-      setIsUpdateTitle(title);
-      setIsColor(color);
-      setIsUpdateColor(color);
-    }
-  }, [isBebridge]);
+  }, [isTitle, isColor, isUpdateTitle, isUpdateColor]);
 
   return (
     <>
+      {isModal && (
+        <CheckModal
+          isModal={isModal}
+          setIsModal={setIsModal}
+          isMessage={isMessage}
+        />
+      )}
       <div className={`${styles.container} ${styles.section1}`}>
         <div className={styles.head}>
           <p className={styles.title}>비브리지</p>
@@ -88,7 +127,11 @@ export default function BebridgeContainer() {
               );
             })}
           </ul>
-          <Button disabled={isDisabled} $signature="signature">
+          <Button
+            disabled={isDisabled}
+            $signature="signature"
+            onClick={handleShowModal}
+          >
             변경
           </Button>
         </div>
