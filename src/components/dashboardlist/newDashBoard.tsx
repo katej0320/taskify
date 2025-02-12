@@ -29,7 +29,7 @@ export default function NewDashboard() {
         <CustomModal 
         isOpen={isModalOpen} onClose={closeModal}
         >
-          <CreateBoard onClose={() => setIsModalOpen(false)}  />
+          <CreateBoard onClose={closeModal}  />
         </CustomModal>
       )}
     </ListCard>
