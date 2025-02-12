@@ -164,7 +164,6 @@ export default function InvitationContainer() {
           <ul className={styles.memberList}>
             {isInvitationsData &&
               isInvitationsData.map((item) => {
-                console.log(item)
                 const { invitee, dashboard, id: invitationId } = item;
                 const { id: dashboardId } = dashboard;
                 return (
