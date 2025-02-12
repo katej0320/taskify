@@ -31,7 +31,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
         setLoading(true); // 로딩 상태 시작
         const data = await getDashboard({
           navigationMethod, // navigationMethod를 API 호출에 반영
-          size: 10, // 예시로 페이지당 6개 대시보드
+          size: 20,
         });
         if (data) {
           setDashboards(data.dashboards); // 받아온 대시보드 데이터 상태에 저장

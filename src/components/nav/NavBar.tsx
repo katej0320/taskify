@@ -38,8 +38,10 @@ export default function NavBar() {
           초대하기
         </button>
         <div className={styles.profile}>
-          <span className={styles.profileIcon}>B</span>
-          <span className={styles.profileName}>배유설</span>
+          <Link href="/mypage">
+            <span className={styles.profileIcon}>B</span>
+            <span className={styles.profileName}>배유설</span>
+          </Link>
         </div>
       </div>
     </nav>
