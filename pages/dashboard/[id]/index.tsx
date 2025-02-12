@@ -1,8 +1,8 @@
 import { useState } from "react";
-import CustomModal from "@/src/components/modal/CustomModal";
 import SideBar from "@/src/components/sidebar/SideBar";
 import NavBar from "@/src/components/nav/NavBar";
 import styled from "styled-components";
+import TaskCardModal from "@/src/components/modals/cards/TaskCardModal";
 
 const Contents = styled.div`
   display: flex;
@@ -17,23 +17,53 @@ const Container = styled.div`
   flex-grow: 1;
   gap: 20px;
 `;
+
 export default function Page({ dashboards }: { dashboards: any[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<any | null>(null); // ✅ 카드 전체 정보를 저장
 
-  const openModal = () => setIsModalOpen(true); // 모달을 여는 함수
-  const closeModal = () => setIsModalOpen(false); // 모달을 닫는 함수
+  // ✅ 클릭한 카드 정보를 저장하도록 수정
+  const openModal = (card: any) => {
+    console.log("✅ openModal 호출됨, card 정보:", card); // 디버깅용 로그
+    setSelectedCard(card);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedCard(null); // 모달을 닫을 때 초기화
+  };
 
   return (
     <>
       <SideBar />
       <NavBar />
+
       <Contents>
         <Container>
-          <button onClick={openModal}>모달 열기</button>
-          <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-            <h2>모달 제목</h2>
-            <p>모달 내용</p>
-          </CustomModal>
+          {/* ✅ 카드 정보를 직접 전달해야 함 */}
+          <button
+            onClick={() =>
+              openModal({ cardId: 11575, columnId: 44887, dashboardId: 13289 })
+            }
+          >
+            할일 모달 열기
+          </button>
+
+          {/* ✅ 수정됨 */}
+          {isModalOpen && selectedCard && (
+            <TaskCardModal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              onOpenEditModal={() =>
+                console.log("할 일 수정 모달 열기(구현필요)")
+              }
+              teamId="12-1"
+              cardId={selectedCard.cardId} // 동적으로 cardId를 전달
+              columnId={selectedCard.columnId} // ✅ columnId 추가
+              dashboardId={selectedCard.dashboardId} // ✅ dashboardId 추가
+            />
+          )}
         </Container>
       </Contents>
     </>

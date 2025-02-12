@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axiosinstance from "../../src/api/axios";
+import axiosinstance from "../../src/api/axiosTest";
 import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import loginlogo from "@/public/icons/loginlogo.png";
 import Image from "next/image";
 import style from "./index.module.scss";
-import CustomModal from "@/src/components/modal/CustomModal";
+import CustomModal from "@/src/components/modals/CustomModal";
 import registerStyles from "./modal.module.scss";
 import CustomButton from "@/src/components/button/CustomButton";
 import buttonStyles from "./button.module.scss";
@@ -128,7 +128,6 @@ export default function RegisterPage() {
 
     //axios 리퀘스트 보내기
     try {
-
       const response = await axiosinstance.post("/users", {
         email,
         nickname,
@@ -177,7 +176,7 @@ export default function RegisterPage() {
   //로그인페이지로 이동
   const handleSignupClick = () => {
     router.push("/login");
-  }
+  };
 
   return (
     <div className={style.container}>
@@ -207,9 +206,9 @@ export default function RegisterPage() {
         )}
 
         {/* 닉네임 */}
-        <p className={style.tag}>닉네임</p>
+        <p className={style.tag}>이름</p>
         <input
-          placeholder="닉네임을 입력해 주세요"
+          placeholder="이름을 입력해 주세요"
           name="nickname" // ✅ name 추가
           type="text"
           onChange={handleChange}
@@ -257,7 +256,7 @@ export default function RegisterPage() {
             onChange={handleChange}
             value={values.passwordRepeat}
             className={`${style.passwordinput} ${
-              passwordRepeatError ? style.inputRepeatError : ""
+              passwordRepeatError ? style.inputError : ""
             }`}
             placeholder="비밀번호를 한번 더 입력해주세요"
           />
@@ -273,13 +272,9 @@ export default function RegisterPage() {
               alt="Toggle Password Visibility"
             />
           </span>
-          <span
-            className={`${style.passwordRepeatError} ${
-              passwordRepeatError ? style.show : ""
-            }`}
-          >
-            {passwordRepeatError}
-          </span>
+          {passwordRepeatError && (
+            <span className={style.error}>{passwordRepeatError}</span>
+          )}
         </div>
 
         <label className={style.agreementlabel}>
@@ -301,8 +296,8 @@ export default function RegisterPage() {
         >
           가입하기
         </button>
-         {/* 로그인 페이지로이동버튼 */}
-         <p className={style.logintext}>
+        {/* 로그인 페이지로이동버튼 */}
+        <p className={style.logintext}>
           이미 회원이신가요?{" "}
           <span className={style.logintextbutton} onClick={handleSignupClick}>
             로그인하기
