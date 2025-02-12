@@ -3,8 +3,6 @@ import styles from "./SideBar.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 import CustomModal from "../modal/CustomModal";
-import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard";
-
 import { useState } from "react";
 
 export default function SideBar() {

@@ -1,6 +1,7 @@
 "use Client";
 import { useState } from "react";
-import styles from "./createBoard.module.scss";
+import styles from "./Board.module.scss";
+import axios from "axios";
 import axiosInstance from "@/src/api/axios";
 
 

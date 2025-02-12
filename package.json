@@ -11,8 +11,6 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@hello-pangea/dnd": "^18.0.1",
-    "aos": "^3.0.0-beta.6",
     "axios": "^1.7.9",
     "babel-plugin-styled-components": "^2.1.4",
     "next": "15.1.6",
@@ -30,13 +28,6 @@
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.4",
     "@eslint/eslintrc": "^3",
-    "@storybook/addon-essentials": "^8.5.3",
-    "@storybook/addon-interactions": "^8.5.3",
-    "@storybook/addon-onboarding": "^8.5.3",
-    "@storybook/blocks": "^8.5.3",
-    "@storybook/nextjs": "^8.5.4",
-    "@storybook/react": "^8.5.3",
-    "@storybook/test": "^8.5.3",
     "@svgr/webpack": "^8.1.0",
     "@swc/plugin-styled-components": "^6.7.0",
     "@types/aos": "^3.0.7",
