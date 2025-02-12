@@ -114,7 +114,7 @@ export default function InvitationContainer() {
 
   // 초대 취소 진행 시 빈 내역이 되면 이전 데이터를 출력
   useEffect(() => {
-    if (isInvitationsData?.length === 0 && isTotalCount > 1) {
+    if (isInvitationsData?.length === 0 && isTotalCount >= 1) {
       setInvitePage((prevPage) => (prevPage -= 1));
     }
   }, [isInvitationsData]);
@@ -164,6 +164,7 @@ export default function InvitationContainer() {
           <ul className={styles.memberList}>
             {isInvitationsData &&
               isInvitationsData.map((item) => {
+                console.log(item)
                 const { invitee, dashboard, id: invitationId } = item;
                 const { id: dashboardId } = dashboard;
                 return (

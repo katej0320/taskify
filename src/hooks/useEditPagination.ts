@@ -19,6 +19,7 @@ export const useEditPagination = () => {
   return {
     memberPage,
     invitePage,
+    setMemberPage,
     setInvitePage,
     handlePrevClick,
     handleNextClick,

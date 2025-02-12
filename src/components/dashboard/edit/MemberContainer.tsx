@@ -48,13 +48,16 @@ export default function MemberContainer() {
     getMembers,
     handlePrevClick,
     handleNextClick,
+    setMemberPage,
   } = useEdit();
 
+  // 모달 출력
   const handleShowModal = (userId: number) => {
     setIsModal(true);
     setIsDeleteId(userId);
   };
 
+  // 구성원 삭제 API 호출
   async function deleteMember() {
     try {
       setIsUpdate(true);
@@ -62,15 +65,17 @@ export default function MemberContainer() {
       setIsUpdate(res.data);
     } catch (error) {
       console.error(error);
-    }finally{
+    } finally {
       setIsUpdate(false);
     }
   }
 
+  // 구성원 삭제 후 내역 업데이트
   useEffect(() => {
     if (isMembers) getMembers();
   }, [isUpdate]);
 
+  // 렌더링 시 데이터 화면 출력
   useEffect(() => {
     if (isMembers) {
       const { members, totalCount } = isMembers;
@@ -78,6 +83,13 @@ export default function MemberContainer() {
       setIsTotalCount(Math.ceil(totalCount / 4));
     }
   }, [isMembers]);
+
+  // 구성원 삭제 진행 시 빈 내역이 되면 이전 데이터를 출력
+  useEffect(() => {
+    if (isMembersData?.length === 0 && isTotalCount >= 1) {
+      setMemberPage((prevPage) => (prevPage -= 1));
+    }
+  }, [isMembersData]);
 
   return (
     <>

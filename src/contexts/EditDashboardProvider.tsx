@@ -1,6 +1,5 @@
 import React, {
   createContext,
-  Dispatch,
   ReactNode,
   SetStateAction,
   useContext,
@@ -16,6 +15,7 @@ const EditContext = createContext({
   isInvitations: null,
   memberPage: 1,
   invitePage: 1,
+  setMemberPage: (value: SetStateAction<number>) => {},
   setInvitePage: (value: SetStateAction<number>) => {},
   getDashboardDetail: () => {},
   getMembers: () => {},
@@ -40,12 +40,14 @@ export function EditProvider({
   const {
     memberPage,
     invitePage,
+    setMemberPage,
     setInvitePage,
     handlePrevClick,
     handleNextClick,
   }: {
     memberPage: number;
     invitePage: number;
+    setMemberPage: (value: SetStateAction<number>) => void;
     setInvitePage: (value: SetStateAction<number>) => void;
     handlePrevClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
     handleNextClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -101,12 +103,13 @@ export function EditProvider({
         isInvitations: values.isInvitations,
         memberPage,
         invitePage,
+        setMemberPage,
+        setInvitePage,
         getDashboardDetail,
         getMembers,
         getInvitations,
         handlePrevClick,
         handleNextClick,
-        setInvitePage,
       }}
     >
       {children}
