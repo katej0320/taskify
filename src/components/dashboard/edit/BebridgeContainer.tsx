@@ -74,7 +74,6 @@ export default function BebridgeContainer({
       setIsColor(isColor);
       setIsUpdateColor(isColor);
     }
-    console.log(isBebridge)
   }, [isBebridge]);
 
   useEffect(() => {
