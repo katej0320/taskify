@@ -12,6 +12,9 @@
   z-index: 999; /* ✅ 모달보다 한 단계 낮은 z-index 설정 */
 }
 
+.modalContent{
+  width: 368px!important;
+}
 /* ✅ 모달 컨텐츠: 항상 오버레이 위에 뜨도록 설정 */
 .contentstyle {
   position: relative; /* ✅ z-index 적용을 위해 relative 추가 */

@@ -207,9 +207,9 @@ export default function RegisterPage() {
         )}
 
         {/* 닉네임 */}
-        <p className={style.tag}>닉네임</p>
+        <p className={style.tag}>이름</p>
         <input
-          placeholder="닉네임을 입력해 주세요"
+          placeholder="이름을 입력해 주세요"
           name="nickname" // ✅ name 추가
           type="text"
           onChange={handleChange}
@@ -257,7 +257,7 @@ export default function RegisterPage() {
             onChange={handleChange}
             value={values.passwordRepeat}
             className={`${style.passwordinput} ${
-              passwordRepeatError ? style.inputRepeatError : ""
+              passwordRepeatError ? style.inputError : ""
             }`}
             placeholder="비밀번호를 한번 더 입력해주세요"
           />
@@ -273,13 +273,7 @@ export default function RegisterPage() {
               alt="Toggle Password Visibility"
             />
           </span>
-          <span
-            className={`${style.passwordRepeatError} ${
-              passwordRepeatError ? style.show : ""
-            }`}
-          >
-            {passwordRepeatError}
-          </span>
+          {passwordRepeatError && <span className={style.error}>{passwordRepeatError}</span>}
         </div>
 
         <label className={style.agreementlabel}>
