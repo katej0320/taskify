@@ -9,6 +9,7 @@ import axiosInstance from "../api/axios";
 import { useEditPagination } from "../hooks/useEditPagination";
 
 const EditContext = createContext({
+  getDashboardDetail:() => {},
   isBebridge: null,
   isMembers: null,
   isInvitations: null,
@@ -79,6 +80,7 @@ export function EditProvider({
   return (
     <EditContext.Provider
       value={{
+        getDashboardDetail,
         isBebridge: values.isBebridge,
         isMembers: values.isMembers,
         isInvitations: values.isInvitations,

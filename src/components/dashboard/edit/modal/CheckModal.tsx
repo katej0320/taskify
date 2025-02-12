@@ -75,7 +75,12 @@ export const CheckModal = ({
             {(member || invite || deleteDashboard) && (
               <Button onClick={closeModal}>닫기</Button>
             )}
-            <Button $check={"check"} onClick={closeModal}>
+            <Button
+              $check={"check"}
+              onClick={() => {
+                closeModal();
+              }}
+            >
               {member || deleteDashboard
                 ? "삭제하기"
                 : invite
