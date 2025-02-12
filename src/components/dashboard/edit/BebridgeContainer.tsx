@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import styles from "./EditPage.style.module.scss";
-import { useEdit } from "@/src/contexts/EditDashbordProvider";
+import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import { Button } from "../../button/CustomButton2";
 import IconCheck from "@/public/images/dashboard/edit/ic_check.svg";
 
@@ -37,13 +37,12 @@ export default function BebridgeContainer() {
   useEffect(() => {
     if (
       isUpdateTitle !== "" &&
-      (isTitle !== isUpdateTitle ||
-      isColor !== isUpdateColor)
+      (isTitle !== isUpdateTitle || isColor !== isUpdateColor)
     ) {
       setIsDisabled(false);
     } else if (
       isUpdateTitle === "" ||
-      isTitle === isUpdateTitle && isColor === isUpdateColor
+      (isTitle === isUpdateTitle && isColor === isUpdateColor)
     ) {
       setIsDisabled(true);
     }
@@ -71,6 +70,7 @@ export default function BebridgeContainer() {
             <input
               type="text"
               defaultValue={isTitle}
+              maxLength={15}
               placeholder="대시보드 이름을 입력해주세요"
               onChange={handleUpdateTitle}
             />
