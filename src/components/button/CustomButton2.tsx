@@ -18,9 +18,6 @@ export const Button = styled.button<Container>`
   cursor: ${(props) => (props.disabled ? "auto" : "pointer")};
   transition: 0.3s;
 
-  &:hover {
-    background: ${(props) => !props.disabled && "#434190"};
-  }
   ${(props) =>
     props.$signature
       ? css`
