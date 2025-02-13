@@ -34,6 +34,11 @@ export function InviteModal({
     setIsValue(e.target.value);
   };
 
+  // input 입력 후 Enter Event 발생 시 모달 비활성화
+  const enterChangeUpdate = () => {
+    setIsUpdate(false);
+  };
+
   return (
     <CustomModal isOpen={isModal} onClose={closeModal}>
       <ModalHead>
@@ -43,6 +48,7 @@ export function InviteModal({
         </CloseButton>
       </ModalHead>
       <form
+        onChange={enterChangeUpdate}
         onSubmit={(e) => {
           e.preventDefault();
           postInvitation?.();
@@ -60,7 +66,7 @@ export function InviteModal({
           <Button onClick={closeModal}>취소</Button>
           <Button
             $confirm={"confirm"}
-            onClick={(e) => {
+            onClick={() => {
               setIsUpdate(false);
               postInvitation?.();
             }}
