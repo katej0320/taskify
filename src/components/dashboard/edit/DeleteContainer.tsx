@@ -20,8 +20,6 @@ export default function DeleteContainer({
     setIsDashboardId(dashboardId);
   };
 
-  console.log(isDashboardId);
-
   async function deleteDashboard() {
     try {
       await axiosInstance.delete(`/dashboards/${isDashboardId}`);
