@@ -36,14 +36,17 @@ export default function BebridgeContainer({
 
   const { isBebridge, getDashboardDetail } = useEdit();
 
+  // 대시보드 이름 value 저장
   const handleUpdateTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setIsUpdateTitle(e.target.value);
   };
 
+  // 대시보드 색상 value 저장
   const handleUpdateColor = (color: string) => {
     setIsUpdateColor(color);
   };
 
+  // 모달 출력 및 데이터 수정 API 호출
   const handleShowModal = () => {
     setIsModal(true);
 
@@ -61,10 +64,12 @@ export default function BebridgeContainer({
     putDashboardDetail();
   };
 
+  // 데이터 수정 후 업데이트
   useEffect(() => {
     if (isBebridge) getDashboardDetail();
   }, [isUpdate]);
 
+  // 렌더링 시 데이터 화면 출력
   useEffect(() => {
     if (isBebridge) {
       const { title, color }: { title: string; color: string } = isBebridge;
@@ -76,6 +81,7 @@ export default function BebridgeContainer({
     }
   }, [isBebridge]);
 
+  // 조건에 따라 변경 버튼 활성화/비활성화
   useEffect(() => {
     if (
       isUpdateTitle !== "" &&

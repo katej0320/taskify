@@ -55,14 +55,20 @@ export const CheckModal = ({
   isMessage,
   member,
   invite,
-  deleteDashboard,
+  dashboard,
+  deleteMember,
+  deleteInvitation,
+  deleteDashboard
 }: {
   isModal: boolean;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
   isMessage: string;
   member?: string;
   invite?: string;
-  deleteDashboard?: string;
+  dashboard?: string;
+  deleteMember?: () => Promise<void>;
+  deleteInvitation?: () => Promise<void>;
+  deleteDashboard?: () => Promise<void>;
 }) => {
   const closeModal = () => setIsModal(false);
 
@@ -72,16 +78,19 @@ export const CheckModal = ({
         <Contents>
           <MessageText>{isMessage}</MessageText>
           <ButtonContainer>
-            {(member || invite || deleteDashboard) && (
+            {(member || invite || dashboard) && (
               <Button onClick={closeModal}>닫기</Button>
             )}
             <Button
               $check={"check"}
               onClick={() => {
                 closeModal();
+                member && deleteMember?.();
+                invite && deleteInvitation?.();
+                dashboard && deleteDashboard?.();
               }}
             >
-              {member || deleteDashboard
+              {member || dashboard
                 ? "삭제하기"
                 : invite
                 ? "초대 취소하기"
