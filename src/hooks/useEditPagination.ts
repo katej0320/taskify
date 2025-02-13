@@ -16,5 +16,12 @@ export const useEditPagination = () => {
     if (name === "invite") setInvitePage((nextPage) => (nextPage += 1));
   };
 
-  return { memberPage, invitePage, handlePrevClick, handleNextClick };
+  return {
+    memberPage,
+    invitePage,
+    setMemberPage,
+    setInvitePage,
+    handlePrevClick,
+    handleNextClick,
+  };
 };
