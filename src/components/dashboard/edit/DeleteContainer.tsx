@@ -17,16 +17,17 @@ export default function DeleteContainer({
 
   const handleShowModal = () => {
     setIsModal(true);
+    setIsDashboardId(dashboardId);
   };
 
+  console.log(isDashboardId);
+
   async function deleteDashboard() {
-    try{
-      setIsDashboardId(dashboardId);
-      await axiosInstance.delete(`/dashboards/${isDashboardId}`)
-    }catch(error){
-      console.error(error)
-    }finally{
-      router.push("/dashboard")
+    try {
+      await axiosInstance.delete(`/dashboards/${isDashboardId}`);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -34,11 +35,11 @@ export default function DeleteContainer({
     <>
       {isModal && (
         <CheckModal
-        dashboard={"dashboard"}
-        isModal={isModal}
-        setIsModal={setIsModal}
-        isMessage={isMessage}
-        deleteDashboard={deleteDashboard}
+          dashboard={"dashboard"}
+          isModal={isModal}
+          setIsModal={setIsModal}
+          isMessage={isMessage}
+          deleteDashboard={deleteDashboard}
         />
       )}
       <Button onClick={handleShowModal} $half="half">
