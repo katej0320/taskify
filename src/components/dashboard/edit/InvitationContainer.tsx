@@ -42,7 +42,7 @@ const PaginationButton = styled(Button)<ArrowButton>`
   }
 `;
 
-export default function InvitationContainer({dashboardId}: {dashboardId:number}) {
+export default function InvitationContainer({dashboardId}: {dashboardId:string | string[] | undefined}) {
   const [isInvitationsData, setIsInvitationsData] = useState<InviteItem[]>();
   const [isTotalCount, setIsTotalCount] = useState(1);
   const [isModal, setIsModal] = useState<boolean>(false);

@@ -31,7 +31,7 @@ const ButtonContainer = styled(Button)`
   }
 `;
 
-export function InviteButton({ dashboardId }: { dashboardId: number }) {
+export function InviteButton({ dashboardId }: { dashboardId: string | string[] | undefined }) {
   const [isUpdate, setIsUpdate] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [isValue, setIsValue] = useState("");
