@@ -61,6 +61,48 @@ export async function getCards(size: number = 10, columnId: number) {
   });
 }
 
+export async function addCards(
+  columnId: number,
+  cardData: {
+    assigneeUserId: number;
+    dashboardId: number;
+    columnId: number;
+    title: string;
+    description: string;
+    dueDate: string;
+    tags: string[];
+    imageUrl: string;
+  }
+) {
+  try {
+    const response = await fetchWithAuth(`/card`, {
+      method: "POST",
+      body: JSON.stringify({
+        assigneeUserId: cardData.assigneeUserId,
+        dashboardId: cardData.dashboardId,
+        columnId: cardData.columnId,
+        title: cardData.title,
+        description: cardData.description,
+        dueDate: cardData.dueDate,
+        tags: cardData.tags,
+        imageUrl: cardData.imageUrl,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add card");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding card:", error);
+    throw error;
+  }
+}
+
 export const updateColumnTitle = async (columnId: number, newTitle: string) => {
   try {
     const response = await axiosInstance.put(`/columns/${columnId}`, {

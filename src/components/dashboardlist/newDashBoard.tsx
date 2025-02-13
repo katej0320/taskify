@@ -95,7 +95,13 @@ export default function NewDashboard() {
 
       {isModalOpen && (
         <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-          <CreateBoard onClose={closeModal} onDashboardCreate={handleDashboardCreate} />
+
+          {/* ✅ CreateBoard에서 handleDashboardCreate 호출하도록 전달 */}
+          <CreateBoard
+            onClose={closeModal}
+            onDashboardCreate={handleDashboardCreate}
+          />
+
         </CustomModal>
       )}
     </>

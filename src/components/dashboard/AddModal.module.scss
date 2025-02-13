@@ -1,0 +1,89 @@
+@use "/styles/color.scss" as *;
+
+.modalContent {
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  h2 {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    margin-bottom: 24px;
+  }
+  label {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21.48px;
+  }
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid $gray3;
+  border-radius: 6px;
+  height: 50px;
+
+  font-family: Pretendard;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0%;
+}
+
+.input,
+.textarea::placeholder {
+  color: $black2;
+}
+
+.input {
+  margin-bottom: 24px;
+}
+
+.textarea {
+  min-height: 80px;
+  resize: none;
+  margin-bottom: 24px;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: #e0e0e0;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.imageUpload input {
+  display: block;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.cancelButton {
+  background: #e0e0e0;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.createButton {
+  background: #6a3bef;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
