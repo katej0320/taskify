@@ -1,5 +1,4 @@
 @use "/styles/color.scss" as *;
-
 .contents {
   display: flex;
   flex-direction: column;
@@ -25,7 +24,6 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-
 }
 
 .dashboard {
@@ -57,24 +55,21 @@
   }
 }
 
-
-.listcardandpagination{
- 
+.listcardandpagination {
   flex-wrap: wrap;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-    width: 1200px;
+  width: 1200px;
 }
-.pagination{
+.pagination {
   display: flex;
   justify-content: flex-end;
   margin: 10px 0;
   width: 990px;
-
 }
 
-.listcard{
+.listcard {
   display: flex;
   flex-wrap: wrap;
 }

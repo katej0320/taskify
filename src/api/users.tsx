@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosTest";
+import axiosInstance from "./axios";
 
 // ✅ 사용자 정보 가져오기
 export const getUserInfo = async (teamId: string) => {

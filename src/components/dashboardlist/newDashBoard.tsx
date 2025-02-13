@@ -30,15 +30,18 @@ export default function NewDashboard() {
     try {
       setLoading(true);
       const response = await axiosInstance.get("/dashboards", {
-        params: { 
+        params: {
           navigationMethod: "pagination",
           page: 1,
-          size: 10, 
+          size: 10,
         },
       });
 
       if (response.data && Array.isArray(response.data.dashboards)) {
-        console.log("✅ 대시보드 목록 업데이트 중...", response.data.dashboards);
+        console.log(
+          "✅ 대시보드 목록 업데이트 중...",
+          response.data.dashboards
+        );
         setDashboards([...response.data.dashboards]); // ✅ 상태 변경 강제 트리거
       } else {
         console.error("❌ 예상치 못한 응답 구조:", response.data);
@@ -84,24 +87,21 @@ export default function NewDashboard() {
       </ListCard>
 
       {/* ✅ DashboardList에 페이지네이션 props 추가 */}
-     
-        <DashboardList 
-          dashboards={dashboards} 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={setCurrentPage} 
-        />
-      
+
+      <DashboardList
+        dashboards={dashboards}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       {isModalOpen && (
         <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-
           {/* ✅ CreateBoard에서 handleDashboardCreate 호출하도록 전달 */}
           <CreateBoard
             onClose={closeModal}
             onDashboardCreate={handleDashboardCreate}
           />
-
         </CustomModal>
       )}
     </>

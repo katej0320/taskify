@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import axiosInstance from "../api/axiosTest";
+import axiosInstance from "../api/axios";
 import { useEditPagination } from "../hooks/useEditPagination";
 
 const EditContext = createContext({
