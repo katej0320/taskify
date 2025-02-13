@@ -5,7 +5,7 @@ import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
 import { InviteItem } from "@/src/types/EditComponent";
 import { ArrowButton } from "@/src/types/EditPagination";
-import { CheckModal } from "./modal/CheckModal";
+import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 import { InviteButton } from "./InviteButton";
 
@@ -42,7 +42,11 @@ const PaginationButton = styled(Button)<ArrowButton>`
   }
 `;
 
-export default function InvitationContainer({dashboardId}: {dashboardId:string | string[] | undefined}) {
+export default function InvitationContainer({
+  dashboardId,
+}: {
+  dashboardId: string | string[] | undefined;
+}) {
   const [isInvitationsData, setIsInvitationsData] = useState<InviteItem[]>();
   const [isTotalCount, setIsTotalCount] = useState(1);
   const [isModal, setIsModal] = useState<boolean>(false);

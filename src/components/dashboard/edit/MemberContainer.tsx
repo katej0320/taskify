@@ -5,7 +5,7 @@ import { Button } from "../../button/CustomButton2";
 import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import { MemberItem } from "@/src/types/EditComponent";
 import { ArrowButton } from "@/src/types/EditPagination";
-import { CheckModal } from "./modal/CheckModal";
+import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 
 const EmptyData = styled.div`

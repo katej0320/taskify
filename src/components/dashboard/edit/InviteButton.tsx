@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Button } from "../../button/CustomButton2";
 import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
 import { useEffect, useState } from "react";
-import { InviteModal } from "./modal/InviteModal";
+import { InviteModal } from "./modal/Invite";
 import axiosInstance from "@/src/api/axios";
 import axios from "axios";
 import { useEdit } from "@/src/contexts/EditDashboardProvider";
@@ -31,7 +31,11 @@ const ButtonContainer = styled(Button)`
   }
 `;
 
-export function InviteButton({ dashboardId }: { dashboardId: string | string[] | undefined }) {
+export function InviteButton({
+  dashboardId,
+}: {
+  dashboardId: string | string[] | undefined;
+}) {
   const [isUpdate, setIsUpdate] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [isValue, setIsValue] = useState("");
@@ -51,14 +55,23 @@ export function InviteButton({ dashboardId }: { dashboardId: string | string[] |
       getInvitations();
       setIsUpdate(true);
     } catch (error) {
-      if (axios.isAxiosError(error)) setIsErrorMessage(error.message);
+      if (axios.isAxiosError(error)) {
+        if (error.response)
+          if (error.response.status === 400) {
+            setIsErrorMessage("이메일 형식이 올바르지 않습니다.");
+          } else if (error.response.status === 403) {
+            setIsErrorMessage("대시보드 초대 권한이 없습니다.");
+          } else if (error.response.status === 409) {
+            setIsErrorMessage("이미 대시보드에 초대된 멤버입니다.");
+          }
+      }
     }
   }
 
-  // 모달 비활성화 시 초대 API 리스폰스 에러 메세지 초기화
+  // input 입력 및 모달 비활성화 시 초대 API 리스폰스 에러 메세지 초기화
   useEffect(() => {
     setIsErrorMessage("");
-  }, [isModal]);
+  }, [isModal, isValue]);
 
   // 초대 API 전송 성공 시 모달 비활성화
   useEffect(() => {
@@ -71,6 +84,7 @@ export function InviteButton({ dashboardId }: { dashboardId: string | string[] |
         <InviteModal
           isModal={isModal}
           setIsModal={setIsModal}
+          isValue={isValue}
           setIsValue={setIsValue}
           isErrorMessage={isErrorMessage}
           postInvitation={postInvitation}

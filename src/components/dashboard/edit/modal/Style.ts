@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 type Props = {
   $confirm?: string;
+  disabled?: boolean;
 };
 
 // 공통
@@ -31,6 +32,11 @@ export const Button = styled.div<Props>`
     css`
       background: #5534da;
       color: #fff;
+    `}
+  ${(props) =>
+    props.disabled &&
+    css`
+      background: #9fa6b2;
     `}
 `;
 
