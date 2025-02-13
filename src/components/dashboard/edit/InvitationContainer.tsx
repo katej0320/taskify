@@ -9,6 +9,13 @@ import { ArrowButton } from "@/src/types/EditPagination";
 import { CheckModal } from "./modal/CheckModal";
 import axiosInstance from "@/src/api/axios";
 
+const EmptyData = styled.div`
+  padding: 40px 0;
+  font-size: 14px;
+  color: #9fa6b2;
+  text-align: center;
+`;
+
 const PaginationButton = styled(Button)<ArrowButton>`
   width: 40px;
   height: 40px;
@@ -74,7 +81,7 @@ export default function InvitationContainer() {
     getInvitations,
     handlePrevClick,
     handleNextClick,
-    setInvitePage
+    setInvitePage,
   } = useEdit();
 
   // 모달 출력
@@ -160,27 +167,35 @@ export default function InvitationContainer() {
           </div>
         </div>
         <div className={styles.contents}>
-          <p className={styles.title}>이메일</p>
-          <ul className={styles.memberList}>
-            {isInvitationsData &&
-              isInvitationsData.map((item) => {
-                const { invitee, dashboard, id: invitationId } = item;
-                const { id: dashboardId } = dashboard;
-                return (
-                  <li key={item.id} className={styles.tile}>
-                    <div className={styles.profileCover}>
-                      <p className={styles.email}>{invitee.email}</p>
-                    </div>
-                    <Button
-                      onClick={() => handleShowModal(dashboardId, invitationId)}
-                      $sub="sub"
-                    >
-                      취소
-                    </Button>
-                  </li>
-                );
-              })}
-          </ul>
+          {isInvitationsData?.length !== 0 ? (
+            <>
+              <p className={styles.title}>이메일</p>
+              <ul className={styles.memberList}>
+                {isInvitationsData &&
+                  isInvitationsData.map((item) => {
+                    const { invitee, dashboard, id: invitationId } = item;
+                    const { id: dashboardId } = dashboard;
+                    return (
+                      <li key={item.id} className={styles.tile}>
+                        <div className={styles.profileCover}>
+                          <p className={styles.email}>{invitee.email}</p>
+                        </div>
+                        <Button
+                          onClick={() =>
+                            handleShowModal(dashboardId, invitationId)
+                          }
+                          $sub="sub"
+                        >
+                          취소
+                        </Button>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </>
+          ) : (
+            <EmptyData>초대한 이메일이 없습니다</EmptyData>
+          )}
         </div>
       </div>
     </>
