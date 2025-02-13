@@ -53,10 +53,10 @@ export default function createBoard({ onClose, onDashboardCreate  }: CreateBoard
         console.log("🎉 대시보드 생성 성공:", response.data);
         // setIsModalOpen(false);
         
-        setTimeout(()=>{
+        
           onDashboardCreate(response.data);
           onClose();
-        }, 0);
+      
 
       } else {
         console.error("❌ Failed to create dashboard: Unexpected response status", response.status);

@@ -17,6 +17,10 @@ export default function NewDashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // ✅ 한 페이지당 5개 표시
+
+  const totalPages = Math.ceil(dashboards.length / itemsPerPage);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -25,46 +29,38 @@ export default function NewDashboard() {
   const fetchDashboards = async () => {
     try {
       setLoading(true);
-      
-      // ✅ API 요청 보내기
       const response = await axiosInstance.get("/dashboards", {
         params: { 
           navigationMethod: "pagination",
           page: 1,
-          size: 10, //
-      }});
+          size: 10, 
+        },
+      });
 
-     
-
-      // ✅ 응답이 배열인지 확인 후 저장
-      if (response.data && Array.isArray(response.data)) {
-        setDashboards(response.data);
-        localStorage.setItem("dashboards", JSON.stringify(response.data)); // ✅ 로컬 스토리지 저장
-      } }catch (error) {
+      if (response.data && Array.isArray(response.data.dashboards)) {
+        console.log("✅ 대시보드 목록 업데이트 중...", response.data.dashboards);
+        setDashboards([...response.data.dashboards]); // ✅ 상태 변경 강제 트리거
+      } else {
+        console.error("❌ 예상치 못한 응답 구조:", response.data);
+      }
+    } catch (error) {
       console.error("❌ 대시보드 불러오기 실패:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ 새로고침해도 데이터 유지: 로컬 스토리지 사용
   useEffect(() => {
-    const savedDashboards = localStorage.getItem("dashboards");
-    if (savedDashboards) {
-      setDashboards(JSON.parse(savedDashboards)); // ✅ 로컬 스토리지 데이터 로드
-    }
-    
-    fetchDashboards(); // ✅ 항상 API 호출
+    fetchDashboards();
   }, []);
 
   // ✅ 새로운 대시보드를 추가하는 함수
   const handleDashboardCreate = async (newDashboard: Dashboard) => {
-    const updatedDashboards = [...dashboards, newDashboard];
-    setDashboards(updatedDashboards);
-    localStorage.setItem("dashboards", JSON.stringify(updatedDashboards)); // ✅ 로컬 스토리지 업데이트
+    console.log("📢 새로운 대시보드 추가 요청:", newDashboard);
 
     try {
-      await fetchDashboards(); // ✅ 최신 데이터 반영
+      await fetchDashboards(); // ✅ 최신 데이터 다시 불러오기
+      console.log("✅ 최신 대시보드 데이터를 다시 불러옴!");
     } catch (error) {
       console.error("❌ 대시보드 생성 후 데이터 갱신 실패:", error);
     }
@@ -87,8 +83,16 @@ export default function NewDashboard() {
         />
       </ListCard>
 
+      {/* ✅ DashboardList에 페이지네이션 props 추가 */}
+     
+        <DashboardList 
+          dashboards={dashboards} 
+          currentPage={currentPage} 
+          totalPages={totalPages} 
+          onPageChange={setCurrentPage} 
+        />
+      
 
-      {/* ✅ 모달 */}
       {isModalOpen && (
         <CustomModal isOpen={isModalOpen} onClose={closeModal}>
           <CreateBoard onClose={closeModal} onDashboardCreate={handleDashboardCreate} />

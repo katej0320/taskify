@@ -25,6 +25,8 @@ export default function DashboardList({ dashboards }: DashboardListProps) {
   const currentDashboards = dashboards.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(dashboards.length / itemsPerPage);
 
+  console.log("📢 DashboardList 렌더링됨!", dashboards);
+  
   return (
     <>
       {currentDashboards.map((dashboard) => (
