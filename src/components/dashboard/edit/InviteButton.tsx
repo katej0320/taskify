@@ -63,6 +63,8 @@ export function InviteButton({
             setIsErrorMessage("대시보드 초대 권한이 없습니다.");
           } else if (error.response.status === 409) {
             setIsErrorMessage("이미 대시보드에 초대된 멤버입니다.");
+          } else {
+            setIsErrorMessage("이메일을 확인해주세요.");
           }
       }
     }
