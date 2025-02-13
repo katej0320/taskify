@@ -7,10 +7,11 @@ interface PaginationProps{
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  
 }
 
 
-export default function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
+export default function Pagination({currentPage, totalPages,  onPageChange}: PaginationProps) {
   //이전페이지로 이동
   const handlePrev = () => {
     if(currentPage >1 ){

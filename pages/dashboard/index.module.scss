@@ -25,6 +25,7 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+
 }
 
 .dashboard {
@@ -54,4 +55,26 @@
     font-weight: 700;
     line-height: 32px;
   }
+}
+
+
+.listcardandpagination{
+ 
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+    width: 1200px;
+}
+.pagination{
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+  width: 990px;
+
+}
+
+.listcard{
+  display: flex;
+  flex-wrap: wrap;
 }
