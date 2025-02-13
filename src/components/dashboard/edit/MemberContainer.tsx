@@ -9,7 +9,7 @@ import { CheckModal } from "./modal/CheckModal";
 import axiosInstance from "@/src/api/axios";
 
 const EmptyData = styled.div`
-  padding:40px 0;
+  padding: 40px 0;
   font-size: 14px;
   color: #9fa6b2;
   text-align: center;

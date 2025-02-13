@@ -16,6 +16,11 @@ export const Button = styled.button<Container>`
   text-align: center;
   background: ${(props) => (props.disabled ? "#9FA6B2" : "#5534da")};
   cursor: ${(props) => (props.disabled ? "auto" : "pointer")};
+  transition: 0.3s;
+
+  &:hover {
+    background: ${(props) => !props.disabled && "#434190"};
+  }
   ${(props) =>
     props.$signature
       ? css`
@@ -33,11 +38,19 @@ export const Button = styled.button<Container>`
           color: #5534da;
           font-weight: 500;
           font-size: 14px;
+
+          &:hover {
+            background: #e2e8f0;
+          }
         `
       : props.$half
       ? css`
           width: 50%;
-          background: #fafafa;
+          background: #f0f0f0;
+
+          &:hover {
+            background: #f4f4f4;
+          }
         `
-      : ""};
+      : css``};
 `;
