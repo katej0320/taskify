@@ -14,7 +14,7 @@ import { EditProvider } from "@/src/contexts/EditDashboardProvider";
 const Contents = styled.div`
   width: calc(100vw * 375 / 1200);
   min-width: 600px;
-
+  padding-bottom: calc(env(safe-area-inset-bottom) + 50px);
   @media (max-width: 1300px) {
     width: 100%;
     min-width: 100%;
@@ -39,7 +39,7 @@ export default function EditPage() {
               <BackLocation />
               <BebridgeContainer dashboardId={dashboardId} />
               <MemberContainer />
-              <InvitationContainer dashboardId={dashboardId}/>
+              <InvitationContainer dashboardId={dashboardId} />
               <DeleteContainer dashboardId={dashboardId} />
             </EditProvider>
           </Contents>
