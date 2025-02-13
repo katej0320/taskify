@@ -1,6 +1,6 @@
 import React from "react";
 import CustomModal from "@/src/components/modal/CustomModal";
-import { Button, ButtonContainer, Contents, MessageText } from "./Style";
+import { Button, ButtonContainer, Contents, MessageText } from "./style";
 
 export const CheckModal = ({
   isModal,

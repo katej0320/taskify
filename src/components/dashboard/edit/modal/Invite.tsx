@@ -10,7 +10,7 @@ import {
   Label,
   ModalHead,
   ModalTitle,
-} from "./Style";
+} from "./style";
 import { ChangeEvent } from "react";
 
 export function InviteModal({
@@ -24,7 +24,7 @@ export function InviteModal({
 }: {
   isModal: boolean;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
-  isValue:string;
+  isValue: string;
   setIsValue: React.Dispatch<React.SetStateAction<string>>;
   isErrorMessage: string;
   setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -66,7 +66,8 @@ export function InviteModal({
         </InputContainer>
         <ButtonContainer>
           <Button onClick={closeModal}>취소</Button>
-          <Button disabled={isValue === '' ? true : false}
+          <Button
+            disabled={isValue === "" ? true : false}
             $confirm={"confirm"}
             onClick={() => {
               setIsUpdate(false);
