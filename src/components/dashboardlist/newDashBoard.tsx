@@ -87,8 +87,6 @@ export default function NewDashboard() {
         />
       </ListCard>
 
-      {/* ✅ 로딩 상태 표시 */}
-      {loading ? <p>⏳ 대시보드를 불러오는 중...</p> : <DashboardList dashboards={dashboards} />}
 
       {/* ✅ 모달 */}
       {isModalOpen && (
