@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
-import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
 import { InviteItem } from "@/src/types/EditComponent";
 import { ArrowButton } from "@/src/types/EditPagination";
 import { CheckModal } from "./modal/CheckModal";
 import axiosInstance from "@/src/api/axios";
+import { InviteButton } from "./InviteButton";
 
 const EmptyData = styled.div`
   padding: 40px 0;
@@ -42,36 +42,11 @@ const PaginationButton = styled(Button)<ArrowButton>`
   }
 `;
 
-const InviteButton = styled(Button)`
-  width: fit-content;
-  padding: 0 15px;
-  margin-left: 16px;
-  height: 32px;
-  line-height: 32px;
-  background: #5534da;
-  color: #fff;
-  font-weight: 500;
-  font-size: 14px;
-  cursor: pointer;
-
-  svg {
-    padding-top: 2px;
-    margin-right: 3px;
-  }
-
-  @media (max-width: 768px) {
-    position: absolute;
-    top: 79px;
-    right: 28px;
-  }
-`;
-
-export default function InvitationContainer() {
+export default function InvitationContainer({dashboardId}: {dashboardId:number}) {
   const [isInvitationsData, setIsInvitationsData] = useState<InviteItem[]>();
   const [isTotalCount, setIsTotalCount] = useState(1);
   const [isModal, setIsModal] = useState<boolean>(false);
   const isMessage = "선택된 초대를 취소하시겠습니까?";
-  const [isDashboardId, setIsDashboardId] = useState<number>();
   const [isInvitationId, setIsInvitationId] = useState<number>();
   const [isUpdate, setIsUpdate] = useState(false);
 
@@ -85,9 +60,8 @@ export default function InvitationContainer() {
   } = useEdit();
 
   // 모달 출력
-  const handleShowModal = (dashboardId: number, invitationId: number) => {
+  const handleShowModal = (invitationId: number) => {
     setIsModal(true);
-    setIsDashboardId(dashboardId);
     setIsInvitationId(invitationId);
   };
 
@@ -96,7 +70,7 @@ export default function InvitationContainer() {
     try {
       setIsUpdate(true);
       await axiosInstance.delete(
-        `/dashboards/${isDashboardId}/invitations/${isInvitationId}`
+        `/dashboards/${dashboardId}/invitations/${isInvitationId}`
       );
     } catch (error) {
       console.error(error);
@@ -160,10 +134,7 @@ export default function InvitationContainer() {
                 />
               </div>
             </div>
-            <InviteButton>
-              <IconAdd />
-              초대하기
-            </InviteButton>
+            <InviteButton dashboardId={dashboardId} />
           </div>
         </div>
         <div className={styles.contents}>
@@ -173,17 +144,14 @@ export default function InvitationContainer() {
               <ul className={styles.memberList}>
                 {isInvitationsData &&
                   isInvitationsData.map((item) => {
-                    const { invitee, dashboard, id: invitationId } = item;
-                    const { id: dashboardId } = dashboard;
+                    const { invitee, id: invitationId } = item;
                     return (
                       <li key={item.id} className={styles.tile}>
                         <div className={styles.profileCover}>
                           <p className={styles.email}>{invitee.email}</p>
                         </div>
                         <Button
-                          onClick={() =>
-                            handleShowModal(dashboardId, invitationId)
-                          }
+                          onClick={() => handleShowModal(invitationId)}
                           $sub="sub"
                         >
                           취소

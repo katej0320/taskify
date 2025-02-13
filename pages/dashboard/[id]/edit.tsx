@@ -39,7 +39,7 @@ export default function EditPage() {
               <BackLocation />
               <BebridgeContainer dashboardId={dashboardId} />
               <MemberContainer />
-              <InvitationContainer />
+              <InvitationContainer dashboardId={dashboardId}/>
               <DeleteContainer dashboardId={dashboardId} />
             </EditProvider>
           </Contents>
