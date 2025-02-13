@@ -88,7 +88,7 @@ export default function InvitationContainer() {
   async function deleteInvitation() {
     try {
       setIsUpdate(true);
-      const res = await axiosInstance.delete(
+      await axiosInstance.delete(
         `/dashboards/${isDashboardId}/invitations/${isInvitationId}`
       );
     } catch (error) {
