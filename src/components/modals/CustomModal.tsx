@@ -1,29 +1,27 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import styles from "./CustomModal.module.scss";
+import styles from "./CustomModal.style.module.scss";
 
 interface ModalProps {
-  isOpen?: boolean;
-  onClose?: () => void;
+  isOpen: boolean;
+  onClose: () => void;
   children: React.ReactNode;
   className?: string;
-  width?: string; // 🔹 width 추가
 }
 
 export default function CustomModal({
   isOpen,
   onClose,
   children,
-  className,
-  width = "584px",
+  className = "",
 }: ModalProps) {
   if (!isOpen) return null;
+  if (typeof window === "undefined") return null; // Next.js SSR 체크
 
   return createPortal(
-    <div className={`${styles.modalOverlay} ${className}`} onClick={onClose}>
+    <div className={`${styles.modalOverlay}`} onClick={onClose}>
       <div
         className={`${styles.modalContent} ${className}`}
-        style={{ width }} // 🔹 props로 width 조정 가능
         onClick={(e) => e.stopPropagation()}
       >
         {children}

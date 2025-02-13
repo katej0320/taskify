@@ -1,7 +1,8 @@
 "use Client";
 import { useState } from "react";
-import styles from "./createBoard.module.scss";
-import axiosInstance from "@/src/api/axios";
+import styles from "./Board.module.scss";
+import axios from "axios";
+import axiosInstance from "@/src/api/axiosTest";
 
 interface Dashboard {
   id: string;

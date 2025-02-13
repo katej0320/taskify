@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import CustomModal from "@/src/components/modal/CustomModal";
+import CustomModal from "@/src/components/modals/CustomModal";
 import ListCard from "@/src/components/dashboardlist/card/ListCard";
 import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard";
 import styles from "../../../pages/dashboard/index.module.scss";
