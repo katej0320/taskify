@@ -1,102 +1,121 @@
-"use Client";
-import { useState } from "react";
-import styles from "./createBoard.module.scss";
-import axiosInstance from "@/src/api/axios";
+import React, { useState } from "react";
+import CustomModal from "../modal/CustomModal";
+import styles from "./AddModal.module.scss";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-interface Dashboard {
-  id: string;
-  title: string;
-  color: string;
+interface AddModalProps {
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-interface CreateBoardProps {
-  onClose: () => void; // ✅ 부모에서 모달을 닫을 수 있도록 콜백 추가
-  onDashboardCreate: (newDashboard: Dashboard) => void; // ✅ 새로운 대시보드를 부모에 전달하는 함수 추가
-}
+const AddModal: React.FC<AddModalProps> = ({ isOpen, onClose }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState<Date | null>(null);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
+  const [image, setImage] = useState<File | null>(null);
 
-export default function createBoard({
-  onClose,
-  onDashboardCreate,
-}: CreateBoardProps) {
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [dashboardName, setDashboardName] = useState("");
-  const [selectedColor, setSelectedColor] = useState(""); // 색상 상태 추가
-
-  const closeModal = () => setIsModalOpen(false);
-
-  const handleCreate = async () => {
-    if (!dashboardName.trim()) {
-      alert("대시보드 이름을 입력해주세요.");
-      return;
-    }
-
-    if (!selectedColor) {
-      alert("색상을 선택해주세요.");
-      return;
-    }
-
-    try {
-      const response = await axiosInstance.post(
-        "/dashboards",
-        { title: dashboardName, color: selectedColor },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("✅ Response Data:", response.data);
-      console.log("✅ Response Status:", response.status);
-
-      // ✅ 상태 코드 200 또는 201인 경우 정상 처리
-      if (response.status === 200 || response.status === 201) {
-        console.log("🎉 대시보드 생성 성공:", response.data);
-        // setIsModalOpen(false);
-
-        setTimeout(() => {
-          onDashboardCreate(response.data);
-          onClose();
-        }, 0);
-      } else {
-        console.error(
-          "❌ Failed to create dashboard: Unexpected response status",
-          response.status
-        );
-      }
-      closeModal();
-    } catch (error: any) {
-      console.error("❌ Axios Error:", error.response?.data || error.message);
-      alert(
-        `🚨 API 오류: ${
-          error.response?.data?.message || "서버에서 오류가 발생했습니다."
-        }`
-      );
+  // ✅ 태그 입력
+  const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && tagInput.trim()) {
+      setTags([...tags, tagInput.trim()]);
+      setTagInput("");
+      e.preventDefault();
     }
   };
 
-  // isModalOpen이 false일 경우 모달을 렌더링하지 않음
-  if (!isModalOpen) return null;
+  // ✅ 태그 삭제
+  const handleRemoveTag = (index: number) => {
+    setTags(tags.filter((_, i) => i !== index));
+  };
+
+  // ✅ 이미지 업로드
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setImage(e.target.files[0]);
+    }
+  };
 
   return (
-    <div className={styles.modalContent}>
-      <h1>할 일 생성</h1>
-      <div className={styles.modalTitle}>대시보드이름</div>
-      <input
-        placeholder="대시보드 이름을 입력해주세요"
-        className={styles.modalInput}
-        value={dashboardName}
-        onChange={(e) => setDashboardName(e.target.value)}
-      />
+    <CustomModal isOpen={isOpen} onClose={onClose}>
+      <div className={styles.modalContent}>
+        <h2>할 일 생성</h2>
 
-      <div className={styles.buttonGroup}>
-        <button className={styles.cancle} onClick={onClose}>
-          취소
-        </button>
-        <button className={styles.create} onClick={handleCreate}>
-          생성
-        </button>
+        {/* 담당자 선택 */}
+        <label>담당자</label>
+        <select className={styles.input}>
+          <option value="">이름을 입력해 주세요</option>
+        </select>
+
+        {/* 제목 입력 */}
+        <label>제목 *</label>
+        <input
+          type="text"
+          className={styles.input}
+          placeholder="제목을 입력해 주세요"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+
+        {/* 설명 입력 */}
+        <label>설명 *</label>
+        <textarea
+          className={styles.textarea}
+          placeholder="설명을 입력해 주세요"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+
+        {/* 마감일  */}
+        <label>마감일</label>
+        <DatePicker
+          selected={dueDate}
+          onChange={(date) => setDueDate(date)}
+          dateFormat="yyyy-MM-dd HH:mm"
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={10}
+          placeholderText="날짜를 입력해 주세요"
+        />
+        {/* 태그 입력 */}
+        <label>태그</label>
+        <input
+          type="text"
+          className={styles.input}
+          placeholder="입력 후 Enter"
+          value={tagInput}
+          onChange={(e) => setTagInput(e.target.value)}
+          onKeyPress={handleTagKeyPress}
+        />
+        <div className={styles.tags}>
+          {tags.map((tag, index) => (
+            <span key={index} className={styles.tag}>
+              {tag} <button onClick={() => handleRemoveTag(index)}>✕</button>
+            </span>
+          ))}
+        </div>
+
+        {/* 이미지 업로드 */}
+        <label>이미지</label>
+        <div className={styles.imageUpload}>
+          <input type="file" onChange={handleImageUpload} />
+          {image && <p>{image.name}</p>}
+        </div>
+
+        {/* 버튼 */}
+        <div className={styles.buttonGroup}>
+          <button className={styles.cancelButton} onClick={onClose}>
+            취소
+          </button>
+          <button className={styles.createButton}>생성</button>
+        </div>
       </div>
-    </div>
+    </CustomModal>
   );
-}
+};
+
+export default AddModal;

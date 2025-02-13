@@ -5,7 +5,6 @@ import TaskCard from "./TaskCard";
 import ListCard from "../dashboardlist/card/ListCard";
 import Image from "next/image";
 import CustomModal from "../modal/CustomModal";
-
 import styles from "./Column.module.scss";
 import {
   getCards,
@@ -13,6 +12,7 @@ import {
   deleteColumn,
   addCards, // 새로운 카드 추가 API 함수 필요
 } from "@/src/api/dashboardApi";
+import AddModal from "./AddModal";
 
 export default function Column({ column, onDelete }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -144,9 +144,11 @@ export default function Column({ column, onDelete }: any) {
             </div>
           </div>
         )}
-
-        {modalContent === "add-column" && <div>sdlk</div>}
       </CustomModal>
+
+      {modalContent === "add-column" && (
+        <AddModal isOpen={isModalOpen} onClose={closeModal} />
+      )}
     </div>
   );
 }
