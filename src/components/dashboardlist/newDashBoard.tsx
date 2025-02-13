@@ -5,7 +5,7 @@ import ListCard from "@/src/components/dashboardlist/card/ListCard";
 import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard";
 import styles from "../../../pages/dashboard/index.module.scss";
 import DashboardList from "@/src/components/dashboardlist/DashBoardList";
-import { getDashboard } from "@/src/api/dashboardApi";
+import axiosInstance from "@/src/api/axios";
 
 interface Dashboard {
   id: string;
@@ -27,23 +27,20 @@ export default function NewDashboard() {
       setLoading(true);
       
       // ✅ API 요청 보내기
-      const response = await getDashboard({
-        navigationMethod: "pagination",
-        teamId: "12-1",
-        page: 1,
-        size: 4,
-      });
+      const response = await axiosInstance.get("/dashboards", {
+        params: { 
+          navigationMethod: "pagination",
+          page: 1,
+          size: 10, //
+      }});
 
-      console.log("📢 API 응답 데이터:", response); // ✅ 응답 데이터 확인
+     
 
       // ✅ 응답이 배열인지 확인 후 저장
-      if (response && Array.isArray(response)) {
-        setDashboards(response);
-        localStorage.setItem("dashboards", JSON.stringify(response)); // ✅ 로컬 스토리지 저장
-      } else {
-        console.error("❌ 예상치 못한 응답 구조:", response);
-      }
-    } catch (error) {
+      if (response.data && Array.isArray(response.data)) {
+        setDashboards(response.data);
+        localStorage.setItem("dashboards", JSON.stringify(response.data)); // ✅ 로컬 스토리지 저장
+      } }catch (error) {
       console.error("❌ 대시보드 불러오기 실패:", error);
     } finally {
       setLoading(false);
@@ -55,9 +52,9 @@ export default function NewDashboard() {
     const savedDashboards = localStorage.getItem("dashboards");
     if (savedDashboards) {
       setDashboards(JSON.parse(savedDashboards)); // ✅ 로컬 스토리지 데이터 로드
-    } else {
-      fetchDashboards(); // ✅ API 호출 (로컬에 데이터 없을 경우)
     }
+    
+    fetchDashboards(); // ✅ 항상 API 호출
   }, []);
 
   // ✅ 새로운 대시보드를 추가하는 함수
