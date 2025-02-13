@@ -5,11 +5,13 @@ import TaskCard from "./TaskCard";
 import ListCard from "../dashboardlist/card/ListCard";
 import Image from "next/image";
 import CustomModal from "../modal/CustomModal";
+
 import styles from "./Column.module.scss";
 import {
   getCards,
   updateColumnTitle,
   deleteColumn,
+  addCards, // 새로운 카드 추가 API 함수 필요
 } from "@/src/api/dashboardApi";
 
 export default function Column({ column, onDelete }: any) {
@@ -64,6 +66,15 @@ export default function Column({ column, onDelete }: any) {
       } catch (error) {
         console.error("Error deleting column:", error);
       }
+    }
+  };
+
+  const handleAddCard = async (cardTitle: string) => {
+    try {
+      await addCards(column.id, column.idcardTitle); // 새 카드 추가 API 호출
+      fetchCards(); // 카드 목록을 새로 고침
+    } catch (error) {
+      console.error("Error adding card:", error);
     }
   };
 
@@ -134,7 +145,7 @@ export default function Column({ column, onDelete }: any) {
           </div>
         )}
 
-        {modalContent === "add-column" && <div>새 컬럼 추가 모달</div>}
+        {modalContent === "add-column" && <div>sdlk</div>}
       </CustomModal>
     </div>
   );
