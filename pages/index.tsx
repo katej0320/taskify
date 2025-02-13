@@ -2,7 +2,8 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import LandingMain from "@/src/components/landing/LandingMain";
 import LandingHeader from "@/src/components/landing/LandingHeader";
-
+import LandingFooter
+ from "@/src/components/landing/Footer";
 export default function Home() {
   return (
     <>
@@ -14,7 +15,7 @@ export default function Home() {
       </Head>
       <LandingHeader />
       <LandingMain />
-
+      <LandingFooter />
       <footer className={styles.footer}></footer>
     </>
   );

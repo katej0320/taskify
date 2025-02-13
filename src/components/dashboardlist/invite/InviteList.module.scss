@@ -1,0 +1,67 @@
+@use "/styles/color.scss" as *;
+
+.inviteTable {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.inviteHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 20px;
+  width: 800px;
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  color: $gray4;
+}
+
+.inviteRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 20px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  color: $black2;
+
+  border-bottom: 1px solid $gray2;
+}
+
+.inviteRow {
+  &:hover {
+    background: #f9f9f9;
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.accept {
+  background-color: $violet2;
+  color: $white;
+  padding: 7px 29px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.reject {
+  background-color: $white;
+  padding: 7px 29px;
+  border: 1px solid $gray3;
+  border-radius: 4px;
+  cursor: pointer;
+  color: $violet2;
+}
+
+.accept:hover {
+  background-color: #434190;
+}
+
+.reject:hover {
+  background-color: #e2e8f0;
+}

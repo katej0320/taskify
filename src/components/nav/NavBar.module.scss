@@ -1,0 +1,76 @@
+@use "/styles/color.scss" as *;
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  background-color: $white;
+  border-bottom: 1px solid $gray3;
+  padding: 20px 80px 20px 20px;
+  position: sticky;
+  top: 0px;
+  margin-left: 300px;
+
+  z-index: 1000;
+}
+
+.leftSection {
+  font-size: 20px;
+  line-height: 32px;
+  font-weight: bold;
+  color: $black2;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.navButton {
+  background: none;
+  border: 1px solid $gray3;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: $gray5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navButton:hover {
+  background-color: #eee;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #a3c4a2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.profileName {
+  font-size: 16px;
+  line-height: 26px;
+
+  color: $black2;
+}
+
+.hr {
+  border: 1px solid $gray4;
+  height: 20px;
+}
