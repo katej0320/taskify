@@ -33,7 +33,7 @@ export default function DeleteContainer({
     <>
       {isModal && (
         <CheckModal
-          dashboard={"dashboard"}
+          dashboard
           isModal={isModal}
           setIsModal={setIsModal}
           isMessage={isMessage}

@@ -18,9 +18,9 @@ export const CheckModal = ({
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
   setIsToast?: React.Dispatch<React.SetStateAction<boolean>>;
   isMessage: string;
-  member?: string;
-  invite?: string;
-  dashboard?: string;
+  member?: boolean;
+  invite?: boolean;
+  dashboard?: boolean;
   deleteMember?: () => Promise<void>;
   deleteInvitation?: () => Promise<void>;
   deleteDashboard?: () => Promise<void>;

@@ -120,7 +120,7 @@ export default function InvitationContainer({
       {isToast && <Toast setIsToast={setIsToast} invite />}
       {isModal && (
         <CheckModal
-          invite={"invite"}
+          invite
           isModal={isModal}
           setIsModal={setIsModal}
           setIsToast={setIsToast}

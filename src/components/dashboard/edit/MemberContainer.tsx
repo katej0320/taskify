@@ -114,7 +114,7 @@ export default function MemberContainer() {
       {isToast && <Toast setIsToast={setIsToast} member />}
       {isModal && (
         <CheckModal
-          member={"member"}
+          member
           isModal={isModal}
           setIsModal={setIsModal}
           setIsToast={setIsToast}
