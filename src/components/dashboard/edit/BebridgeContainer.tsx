@@ -4,7 +4,7 @@ import styles from "./EditPage.style.module.scss";
 import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import { Button } from "../../button/CustomButton2";
 import IconCheck from "@/public/images/dashboard/edit/ic_check.svg";
-import { CheckModal } from "./modal/CheckModal";
+import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 
 const COLOR_PALETTE = ["#7ac555", "#760dde", "#ffa500", "#76a5ea", "#e876ea"];

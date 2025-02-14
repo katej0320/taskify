@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../button/CustomButton2";
-import { CheckModal } from "./modal/CheckModal";
+import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 import { useRouter } from "next/router";
 
