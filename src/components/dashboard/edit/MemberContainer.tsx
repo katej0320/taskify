@@ -5,8 +5,15 @@ import { Button } from "../../button/CustomButton2";
 import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import { MemberItem } from "@/src/types/EditComponent";
 import { ArrowButton } from "@/src/types/EditPagination";
-import { CheckModal } from "./modal/CheckModal";
+import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
+
+const EmptyData = styled.div`
+  padding: 40px 0;
+  font-size: 14px;
+  color: #9fa6b2;
+  text-align: center;
+`;
 
 const PaginationButton = styled(Button)<ArrowButton>`
   width: 40px;
@@ -128,24 +135,30 @@ export default function MemberContainer() {
           </div>
         </div>
         <div className={styles.contents}>
-          <p className={styles.title}>이름</p>
-          <ul className={styles.memberList}>
-            {isMembersData &&
-              isMembersData?.map((item) => {
-                const { id } = item;
-                return (
-                  <li key={id} className={styles.tile}>
-                    <div className={styles.profileCover}>
-                      <div className={styles.thumbnail}></div>
-                      <p className={styles.nickname}>{item.nickname}</p>
-                    </div>
-                    <Button onClick={() => handleShowModal(id)} $sub="sub">
-                      삭제
-                    </Button>
-                  </li>
-                );
-              })}
-          </ul>
+          {isMembersData?.length !== 0 ? (
+            <>
+              <p className={styles.title}>이름</p>
+              <ul className={styles.memberList}>
+                {isMembersData &&
+                  isMembersData?.map((item) => {
+                    const { id } = item;
+                    return (
+                      <li key={id} className={styles.tile}>
+                        <div className={styles.profileCover}>
+                          <div className={styles.thumbnail}></div>
+                          <p className={styles.nickname}>{item.nickname}</p>
+                        </div>
+                        <Button onClick={() => handleShowModal(id)} $sub="sub">
+                          삭제
+                        </Button>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </>
+          ) : (
+            <EmptyData>구성원이 없습니다</EmptyData>
+          )}
         </div>
       </div>
     </>
