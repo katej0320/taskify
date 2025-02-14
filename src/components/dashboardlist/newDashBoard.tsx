@@ -6,6 +6,7 @@ import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard"
 import styles from "../../../pages/dashboard/index.module.scss";
 import DashboardList from "@/src/components/dashboardlist/DashBoardList";
 import axiosInstance from "@/src/api/axios";
+import { useCreateBoard } from "@/src/hooks/useCreateBoard"; // ✅ 훅 추가
 
 interface Dashboard {
   id: string;
@@ -18,7 +19,7 @@ export default function NewDashboard() {
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // ✅ 한 페이지당 5개 표시
+  const itemsPerPage = 5;
 
   const totalPages = Math.ceil(dashboards.length / itemsPerPage);
 
@@ -42,7 +43,7 @@ export default function NewDashboard() {
           "✅ 대시보드 목록 업데이트 중...",
           response.data.dashboards
         );
-        setDashboards([...response.data.dashboards]); // ✅ 상태 변경 강제 트리거
+        setDashboards([...response.data.dashboards]);
       } else {
         console.error("❌ 예상치 못한 응답 구조:", response.data);
       }
@@ -57,19 +58,18 @@ export default function NewDashboard() {
     fetchDashboards();
   }, []);
 
-  // ✅ 새로운 대시보드를 추가하는 함수
-  const handleDashboardCreate = async (newDashboard: Dashboard) => {
-    console.log("📢 새로운 대시보드 추가 요청:", newDashboard);
+  // ✅ useCreateBoard 훅 사용
+  const { dashboardName, setDashboardName, selectedColor, setSelectedColor, handleCreate } =
+    useCreateBoard(closeModal, async (newDashboard) => {
+      console.log("📢 새로운 대시보드 추가 요청:", newDashboard);
 
-    try {
-      await fetchDashboards(); // ✅ 최신 데이터 다시 불러오기
-      console.log("✅ 최신 대시보드 데이터를 다시 불러옴!");
-    } catch (error) {
-      console.error("❌ 대시보드 생성 후 데이터 갱신 실패:", error);
-    }
-
-    closeModal();
-  };
+      try {
+        await fetchDashboards(); // ✅ 최신 데이터 다시 불러오기
+        console.log("✅ 최신 대시보드 데이터를 다시 불러옴!");
+      } catch (error) {
+        console.error("❌ 대시보드 생성 후 데이터 갱신 실패:", error);
+      }
+    });
 
   return (
     <>
@@ -86,8 +86,6 @@ export default function NewDashboard() {
         />
       </ListCard>
 
-      {/* ✅ DashboardList에 페이지네이션 props 추가 */}
-
       <DashboardList
         dashboards={dashboards}
         currentPage={currentPage}
@@ -97,10 +95,13 @@ export default function NewDashboard() {
 
       {isModalOpen && (
         <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-          {/* ✅ CreateBoard에서 handleDashboardCreate 호출하도록 전달 */}
           <CreateBoard
+            dashboardName={dashboardName}
+            setDashboardName={setDashboardName}
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}
+            handleCreate={handleCreate} // ✅ 이벤트 핸들러 직접 전달
             onClose={closeModal}
-            onDashboardCreate={handleDashboardCreate}
           />
         </CustomModal>
       )}
