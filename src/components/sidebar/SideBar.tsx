@@ -6,6 +6,7 @@ import CustomModal from "../modal/CustomModal";
 import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard";
 
 import { useState } from "react";
+import None from "../dashboardlist/invite/none";
 
 export default function SideBar() {
   const { dashboards } = useDashboard(); // context에서 dashboards 데이터를 가져옴
@@ -14,6 +15,8 @@ export default function SideBar() {
   const openModal = () => setIsModalOpen(true); // 모달을 여는 함수
   const closeModal = () => setIsModalOpen(false); // 모달을 닫는 함수
 
+
+  
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarcontent}>
@@ -40,7 +43,7 @@ export default function SideBar() {
             />
             {isModalOpen && (
               <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-                <CreateBoard onClose={() => setIsModalOpen(false)} />
+                <CreateBoard  onClose={() => setIsModalOpen(false)} />
               </CustomModal>
             )}
           </div>
