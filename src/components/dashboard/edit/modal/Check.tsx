@@ -37,7 +37,7 @@ export const CheckModal = ({
               <Button onClick={closeModal}>닫기</Button>
             )}
             <Button
-              $confirm={"confirm"}
+              $confirm
               onClick={() => {
                 closeModal();
                 (member || invite) && setIsToast?.(true);

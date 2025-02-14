@@ -139,13 +139,13 @@ export default function InvitationContainer({
               <div className={styles.buttonContainer}>
                 <PaginationButton
                   disabled={invitePage === 1 ? true : false}
-                  $left={"left"}
+                  $left
                   name="invite"
                   onClick={(e) => handlePrevClick(e)}
                 />
                 <PaginationButton
                   disabled={isTotalCount === invitePage || isTotalCount <= 1}
-                  $right={"right"}
+                  $right
                   name="invite"
                   onClick={(e) => handleNextClick(e)}
                 />
@@ -169,7 +169,7 @@ export default function InvitationContainer({
                         </div>
                         <Button
                           onClick={() => handleShowModal(invitationId)}
-                          $sub="sub"
+                          $sub
                         >
                           취소
                         </Button>

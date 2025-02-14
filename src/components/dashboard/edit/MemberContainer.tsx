@@ -133,13 +133,13 @@ export default function MemberContainer() {
               <div className={styles.buttonContainer}>
                 <PaginationButton
                   disabled={memberPage === 1 ? true : false}
-                  $left={"left"}
+                  $left
                   name="member"
                   onClick={(e) => handlePrevClick(e)}
                 />
                 <PaginationButton
                   disabled={isTotalCount === memberPage || isTotalCount <= 1}
-                  $right={"right"}
+                  $right
                   name="member"
                   onClick={(e) => handleNextClick(e)}
                 />
@@ -161,7 +161,7 @@ export default function MemberContainer() {
                           <div className={styles.thumbnail}></div>
                           <p className={styles.nickname}>{item.nickname}</p>
                         </div>
-                        <Button onClick={() => handleShowModal(id)} $sub="sub">
+                        <Button onClick={() => handleShowModal(id)} $sub>
                           삭제
                         </Button>
                       </li>

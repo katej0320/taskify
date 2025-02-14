@@ -134,8 +134,8 @@ export default function BebridgeContainer({
             })}
           </ul>
           <Button
+            $signature
             disabled={isDisabled}
-            $signature="signature"
             onClick={handleShowModal}
           >
             변경

@@ -40,7 +40,7 @@ export default function DeleteContainer({
           deleteDashboard={deleteDashboard}
         />
       )}
-      <Button onClick={handleShowModal} $half="half">
+      <Button onClick={handleShowModal} $half>
         대시보드 삭제하기
       </Button>
     </>

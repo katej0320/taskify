@@ -1,4 +1,4 @@
 export type ArrowButton = {
-  $right?: string;
-  $left?: string;
+  $right?: boolean;
+  $left?: boolean;
 };
