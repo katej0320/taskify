@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
 import styles from "./index.module.scss";
-import { getDasboards, getInviteList } from "@/src/api/dashboardApi";
+import { getDashboards, getInviteList } from "@/src/api/dashboardApi";
 import None from "@/src/components/dashboardlist/invite/none";
 import InviteDashboardList from "@/src/components/dashboardlist/invite/InviteList";
 import NewDashboardCard from "@/src/components/dashboardlist/newDashBoard";
@@ -17,7 +17,7 @@ export default function MyDashboardPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { dashboards = [] } = await getDasboards();
+        const { dashboards = [] } = await getDashboards();
         const { invitations = [] } = await getInviteList();
         setDashboards(dashboards);
         setInvitations(invitations);
@@ -43,9 +43,9 @@ export default function MyDashboardPage() {
           </div>
 
           {/* 페이지네이션 버튼
-          <div className={styles.pagination}>
-            <Pagination />
-          </div> */}
+          // <div className={styles.pagination}>
+          //   <Pagination />
+          // </div> */}
         </div>
 
         {/* 초대받은 대시보드 */}

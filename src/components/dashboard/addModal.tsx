@@ -3,7 +3,9 @@ import CustomModal from "../modal/CustomModal";
 import styles from "./AddModal.module.scss";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { addCards } from "../../api/dashboardApi"; // API 함수 import
+import { addCards } from "../../api/dashboardApi";
+import Image from "next/image";
+import ImageUpload from "./addModal/ImageUpload";
 
 interface AddModalProps {
   isOpen: boolean;
@@ -24,10 +26,10 @@ const AddModal: React.FC<AddModalProps> = ({
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false); // 로딩 상태
-  const [error, setError] = useState<string | null>(null); // 에러 상태
+  const [imagePreview, setImagePreview] = useState<String | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // ✅ 태그 입력
   const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim()) {
       setTags([...tags, tagInput.trim()]);
@@ -36,19 +38,27 @@ const AddModal: React.FC<AddModalProps> = ({
     }
   };
 
-  // ✅ 태그 삭제
   const handleRemoveTag = (index: number) => {
     setTags(tags.filter((_, i) => i !== index));
   };
 
-  // ✅ 이미지 업로드
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setImage(e.target.files[0]);
+      const file = e.target.files[0];
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  // ✅ 카드 생성
+  const handleRemoveImage = () => {
+    setImage(null);
+    setImagePreview(null);
+  };
+
   const handleCreateCard = async () => {
     if (!title || !description || !dueDate) {
       setError("제목, 설명, 마감일은 필수 입력 항목입니다.");
@@ -95,7 +105,6 @@ const AddModal: React.FC<AddModalProps> = ({
     }
   };
 
-  // ✅ 이미지 업로드 함수 (임시)
   const uploadImage = async (formData: FormData) => {
     try {
       // 실제 이미지 업로드 API 호출 필요
@@ -112,7 +121,6 @@ const AddModal: React.FC<AddModalProps> = ({
       <div className={styles.modalContent}>
         <h2>할 일 생성</h2>
 
-        {/* 담당자 선택 */}
         <label>담당자</label>
         <select className={styles.input}>
           <option value="">이름을 입력해 주세요</option>
@@ -140,7 +148,7 @@ const AddModal: React.FC<AddModalProps> = ({
         />
 
         {/* 마감일  */}
-        <label>마감일</label>
+        <label>마감일 *</label>
         <DatePicker
           className={styles.date}
           selected={dueDate}
@@ -159,7 +167,7 @@ const AddModal: React.FC<AddModalProps> = ({
           placeholder="입력 후 Enter"
           value={tagInput}
           onChange={(e) => setTagInput(e.target.value)}
-          onKeyPress={handleTagKeyPress}
+          onKeyDown={handleTagKeyPress}
         />
         <div className={styles.tags}>
           {tags.map((tag, index) => (
@@ -169,27 +177,19 @@ const AddModal: React.FC<AddModalProps> = ({
           ))}
         </div>
 
-        {/* 이미지 업로드 */}
         <label>이미지</label>
         <div className={styles.imageUpload}>
-          <input type="file" onChange={handleImageUpload} />
-          {image && <p>{image.name}</p>}
+          <ImageUpload />
         </div>
 
-        {/* 에러 메시지 */}
         {error && <p className={styles.error}>{error}</p>}
 
-        {/* 버튼 */}
         <div className={styles.buttonGroup}>
-          <button className={styles.cancelButton} onClick={onClose}>
+          <button className={styles.cancle} onClick={onClose}>
             취소
           </button>
-          <button
-            className={styles.createButton}
-            onClick={handleCreateCard}
-            disabled={loading}
-          >
-            {loading ? "생성 중..." : "생성"}
+          <button className={styles.create} onClick={handleCreateCard}>
+            생성
           </button>
         </div>
       </div>

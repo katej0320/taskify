@@ -1,24 +1,55 @@
+"use client";
+
 import { useDashboard } from "@/src/contexts/DashBoardContext";
 import styles from "./SideBar.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 import CustomModal from "../modal/CustomModal";
 import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard";
-import { useState } from "react";
-import { useCreateBoard } from "@/src/hooks/useCreateBoard"; // ✅ 훅 추가
-import None from "../dashboardlist/invite/none";
+import { useEffect, useState } from "react";
+import { useCreateBoard } from "@/src/hooks/useCreateBoard";
+import { getDashboard } from "@/src/api/dashboardApi";
 
 export default function SideBar() {
-  const { dashboards } = useDashboard(); // context에서 dashboards 데이터를 가져옴
+  const { dashboards } = useDashboard();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [createdByMe, setcreatedByMe] = useState<{
+    [key: number]: boolean;
+  }>({}); // Store createdByMe for each dashboard
 
-  const openModal = () => setIsModalOpen(true); // 모달을 여는 함수
-  const closeModal = () => setIsModalOpen(false); // 모달을 닫는 함수
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
-  // ✅ useCreateBoard 사용
-  const { dashboardName, setDashboardName, selectedColor, setSelectedColor, handleCreate } = useCreateBoard(closeModal, (newDashboard) => {
+  const {
+    dashboardName,
+    setDashboardName,
+    selectedColor,
+    setSelectedColor,
+    handleCreate,
+  } = useCreateBoard(closeModal, (newDashboard) => {
     console.log("새로운 대시보드:", newDashboard);
   });
+
+  useEffect(() => {
+    // Fetch the createdByMe value for each dashboard
+    const fetchDashboardDetails = async () => {
+      try {
+        for (const dashboard of dashboards) {
+          const fetchedDashboard = await getDashboard(dashboard.id); // Use dashboard.id here
+          setcreatedByMe((prevData) => ({
+            ...prevData,
+            [dashboard.id]: fetchedDashboard.createdByMe, // Store createdByMe based on dashboard.id
+          }));
+        }
+      } catch (error) {
+        console.error("대시보드 상세 불러오기 실패:", error);
+      }
+    };
+
+    if (dashboards.length > 0) {
+      fetchDashboardDetails();
+    }
+  }, [dashboards]); // Re-run when dashboards list changes
 
   return (
     <div className={styles.sidebar}>
@@ -58,6 +89,7 @@ export default function SideBar() {
             )}
           </div>
         </div>
+
         {dashboards.map((dashboard) => (
           <Link key={dashboard.id} href={`/dashboard/${dashboard.id}`}>
             <div className={styles.dashboardlist}>
@@ -66,6 +98,14 @@ export default function SideBar() {
                 style={{ backgroundColor: dashboard.color }}
               ></div>
               <div>{dashboard.title}</div>
+              {createdByMe[dashboard.id] && (
+                <Image
+                  src="/icons/crown.svg"
+                  alt="Crown"
+                  width={16}
+                  height={16}
+                />
+              )}
             </div>
           </Link>
         ))}

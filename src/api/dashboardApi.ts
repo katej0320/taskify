@@ -21,7 +21,7 @@ async function fetchWithAuth(url: string, params?: object) {
   }
 }
 
-export async function getDasboards({
+export async function getDashboards({
   navigationMethod = "pagination",
   teamId = "12-1",
   ...params
@@ -29,8 +29,8 @@ export async function getDasboards({
   return fetchWithAuth("/dashboards", { navigationMethod, teamId, ...params });
 }
 
-export async function getDashboard(dashboardId: number = 0) {
-  return fetchWithAuth("/dashboards/", { dashboardId });
+export async function getDashboard(dashboardId: number) {
+  return fetchWithAuth(`/dashboards/${dashboardId}`);
 }
 
 export async function getInviteList({

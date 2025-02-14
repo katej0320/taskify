@@ -2,8 +2,6 @@
 import styles from "./createBoard.module.scss";
 import { useCreateBoard } from "@/src/hooks/useCreateBoard";
 
-
-
 interface CreateBoardProps {
   dashboardName: string;
   setDashboardName: (name: string) => void;
@@ -13,12 +11,14 @@ interface CreateBoardProps {
   onClose: () => void;
 }
 
-export default function CreateBoard({ onClose, onDashboardCreate }: CreateBoardProps) {
-  const { dashboardName, setDashboardName, selectedColor, setSelectedColor, handleCreate } = useCreateBoard(
-    onClose,
-    onDashboardCreate
-  );
-
+export default function CreateBoard({ onClose }: CreateBoardProps) {
+  const {
+    dashboardName,
+    setDashboardName,
+    selectedColor,
+    setSelectedColor,
+    handleCreate,
+  } = useCreateBoard(onClose);
 
   return (
     <div className={styles.modalContent}>

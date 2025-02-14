@@ -5,6 +5,7 @@ import Pagination from "@/src/components/pagination/Pagination"; // ✅ 추가
 import styles from "../../../pages/dashboard/index.module.scss";
 import { useEffect, useState } from "react";
 import { getDashboard } from "@/src/api/dashboardApi";
+import { useDashboard } from "@/src/contexts/DashBoardContext";
 
 interface Dashboard {
   id: string;
@@ -13,34 +14,58 @@ interface Dashboard {
 }
 
 interface DashboardListProps {
-  dashboards: Dashboard[];
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
 export default function DashboardList({
-  dashboards,
   currentPage,
   totalPages,
   onPageChange,
 }: DashboardListProps) {
+  const { dashboards } = useDashboard();
   const itemsPerPage = 6;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentDashboards = dashboards.slice(indexOfFirstItem, indexOfLastItem);
   const [dashboard, setDashboard] = useState<any[]>([]);
+  const [createdByMe, setcreatedByMe] = useState<{
+    [key: number]: boolean;
+  }>({}); // Store createdByMe for each dashboard
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const { dashboard = [] } = await getDashboard();
+  //       setDashboard(dashboard);
+  //     } catch (error) {
+  //       console.error("Failed to fetch dashboard:", error);
+  //     }
+  //   }
+  // });
 
   useEffect(() => {
-    async function fetchData() {
+    // Fetch the createdByMe value for each dashboard
+    const fetchDashboardDetails = async () => {
       try {
-        const { dashboard = [] } = await getDashboard();
         setDashboard(dashboard);
+        for (const dashboard of dashboards) {
+          const fetchedDashboard = await getDashboard(dashboard.id);
+          setcreatedByMe((prevData) => ({
+            ...prevData,
+            [dashboard.id]: fetchedDashboard.createdByMe,
+          }));
+        }
       } catch (error) {
-        console.error("Failed to fetch dashboard:", error);
+        console.error("대시보드 상세 불러오기 실패:", error);
       }
+    };
+
+    if (dashboards.length > 0) {
+      fetchDashboardDetails();
     }
-  });
+  }, [dashboards]); // Re-run when dashboards list changes
 
   return (
     <>
@@ -54,6 +79,14 @@ export default function DashboardList({
                   style={{ backgroundColor: dashboard.color }}
                 ></div>
                 <div>{dashboard.title}</div>
+                {createdByMe[dashboard.id] && (
+                  <Image
+                    src="/icons/crown.svg"
+                    alt="Crown"
+                    width={16}
+                    height={16}
+                  />
+                )}
                 <Image
                   src="/icons/arrow.svg"
                   width={22}

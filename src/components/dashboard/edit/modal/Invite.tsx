@@ -10,7 +10,7 @@ import {
   Label,
   ModalHead,
   ModalTitle,
-} from "./style";
+} from "./Style";
 import { ChangeEvent } from "react";
 
 export function InviteModal({
