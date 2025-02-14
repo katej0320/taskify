@@ -7,6 +7,7 @@ import { MemberItem } from "@/src/types/EditComponent";
 import { ArrowButton } from "@/src/types/EditPagination";
 import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
+import { Toast } from "./toast/Toast";
 
 const EmptyData = styled.div`
   padding: 40px 0;
@@ -48,6 +49,7 @@ export default function MemberContainer() {
   const isMessage = "선택된 구성원을 삭제하시겠습니까?";
   const [isDeleteId, setIsDeleteId] = useState<number>();
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isToast, setIsToast] = useState(false);
 
   const {
     memberPage,
@@ -98,13 +100,24 @@ export default function MemberContainer() {
     }
   }, [isMembersData]);
 
+  // Toast 비활성화
+  useEffect(() => {
+    if (isToast) {
+      setTimeout(() => {
+        setIsToast(false);
+      }, 3000);
+    }
+  }, [isToast]);
+
   return (
     <>
+      {isToast && <Toast setIsToast={setIsToast} member />}
       {isModal && (
         <CheckModal
           member={"member"}
           isModal={isModal}
           setIsModal={setIsModal}
+          setIsToast={setIsToast}
           isMessage={isMessage}
           deleteMember={deleteMember}
         />

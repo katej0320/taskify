@@ -8,6 +8,7 @@ import { ArrowButton } from "@/src/types/EditPagination";
 import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 import { InviteButton } from "./InviteButton";
+import { Toast } from "./toast/Toast";
 
 const EmptyData = styled.div`
   padding: 40px 0;
@@ -53,6 +54,7 @@ export default function InvitationContainer({
   const isMessage = "선택된 초대를 취소하시겠습니까?";
   const [isInvitationId, setIsInvitationId] = useState<number>();
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isToast, setIsToast] = useState(false);
 
   const {
     invitePage,
@@ -104,13 +106,24 @@ export default function InvitationContainer({
     }
   }, [isInvitationsData]);
 
+  // Toast 비활성화
+  useEffect(() => {
+    if (isToast) {
+      setTimeout(() => {
+        setIsToast(false);
+      }, 3000);
+    }
+  }, [isToast]);
+
   return (
     <>
+      {isToast && <Toast setIsToast={setIsToast} invite />}
       {isModal && (
         <CheckModal
           invite={"invite"}
           isModal={isModal}
           setIsModal={setIsModal}
+          setIsToast={setIsToast}
           isMessage={isMessage}
           deleteInvitation={deleteInvitation}
         />
