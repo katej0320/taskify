@@ -1,15 +1,15 @@
-import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
+import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 import { Button } from "../../button/CustomButton2";
-import { InviteItem } from "@/src/types/EditComponent";
-import { ArrowButton } from "@/src/types/EditPagination";
+import { InviteItem } from "@/src/types/dashboard/edit/EditComponent";
+import { ArrowButton } from "@/src/types/dashboard/edit/EditPagination";
 import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 import { InviteButton } from "./InviteButton";
 import { Toast } from "./toast/Toast";
-import { useEditToast } from "@/src/hooks/useEditToast";
+import { useEditToast } from "@/src/hooks/dashboard/edit/useEditToast";
 
 const EmptyData = styled.div`
   padding: 40px 0;

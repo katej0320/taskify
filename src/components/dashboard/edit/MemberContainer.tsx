@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
-import { useEdit } from "@/src/contexts/EditDashboardProvider";
-import { MemberItem } from "@/src/types/EditComponent";
-import { ArrowButton } from "@/src/types/EditPagination";
+import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
+import { MemberItem } from "@/src/types/dashboard/edit/EditComponent";
+import { ArrowButton } from "@/src/types/dashboard/edit/EditPagination";
 import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 import { Toast } from "./toast/Toast";
-import { useEditToast } from "@/src/hooks/useEditToast";
+import { useEditToast } from "@/src/hooks/dashboard/edit/useEditToast";
 
 const EmptyData = styled.div`
   padding: 40px 0;
@@ -60,7 +60,7 @@ export default function MemberContainer() {
     setMemberPage,
   } = useEdit();
 
-  const {isToast, setIsToast} = useEditToast();
+  const { isToast, setIsToast } = useEditToast();
 
   // 모달 출력
   const handleShowModal = (userId: number) => {

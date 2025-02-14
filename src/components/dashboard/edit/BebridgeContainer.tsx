@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import styles from "./EditPage.style.module.scss";
-import { useEdit } from "@/src/contexts/EditDashboardProvider";
+import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 import { Button } from "../../button/CustomButton2";
 import IconCheck from "@/public/images/dashboard/edit/ic_check.svg";
 import { CheckModal } from "./modal/Check";
