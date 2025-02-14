@@ -7,8 +7,20 @@ import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard"
 import { useState } from "react";
 import { useCreateBoard } from "@/src/hooks/useCreateBoard"; // ✅ 훅 추가
 import None from "../dashboardlist/invite/none";
+import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 
 export default function SideBar() {
+  
+  interface Dashboard {
+    id: number;
+    title: string;
+    color: string;
+    createdAt: string;
+    updatedAt: string;
+    createdByMe: boolean;
+    userId: number;
+  }
+  
   const { dashboards } = useDashboard(); // context에서 dashboards 데이터를 가져옴
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -19,6 +31,20 @@ export default function SideBar() {
   const { dashboardName, setDashboardName, selectedColor, setSelectedColor, handleCreate } = useCreateBoard(closeModal, (newDashboard) => {
     console.log("새로운 대시보드:", newDashboard);
   });
+
+
+  //무한스크롤롤
+  const { items, isLoading, hasMore, observerRef } = useInfiniteScroll<Dashboard>({
+    endpoint: '/dashboards',
+    queryParams: { navigationMethod: "infiniteScroll" , size:20},
+    extractItems: (data) => data.dashboards ?? [],
+    extractCursor: (data) =>{
+      if(!data.cursorId) return null;
+      return data.cursorId
+    },
+  });
+
+
 
   return (
     <div className={styles.sidebar}>
@@ -58,7 +84,8 @@ export default function SideBar() {
             )}
           </div>
         </div>
-        {dashboards.map((dashboard) => (
+        <div className={styles.scroll}>
+        {items?.map((dashboard) => (
           <Link key={dashboard.id} href={`/dashboard/${dashboard.id}`}>
             <div className={styles.dashboardlist}>
               <div
@@ -69,6 +96,14 @@ export default function SideBar() {
             </div>
           </Link>
         ))}
+        </div>
+      
+
+
+        {/* ✅ Intersection Observer 추가 */}
+        <div ref={observerRef} style={{ height: "50px", background: "red" }} />
+        {isLoading && <p>Loading...</p>}
+        {!hasMore && <p>No more dashboards</p>}
       </div>
     </div>
   );

@@ -7,11 +7,15 @@
   top: 0;
   left: 0;
   z-index: 1000;
+  padding-bottom: 50px;
 }
 
 .sidebarcontent {
   padding-top: 20px;
   padding-left: 24px;
+  padding-bottom: 20px;
+ 
+
 }
 
 .subtitles {
@@ -57,4 +61,12 @@
   line-height: 26px;
   text-align: left;
   color: $gray5;
+  
+
+}
+
+.scroll{
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  padding-bottom: 95px;
 }
