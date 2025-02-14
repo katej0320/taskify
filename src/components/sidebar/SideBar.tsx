@@ -1,6 +1,5 @@
 "use client";
 
-import { useDashboard } from "@/src/contexts/DashBoardContext";
 import styles from "./SideBar.module.scss";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,19 +11,9 @@ import { getDashboard } from "@/src/api/dashboardApi";
 
 import None from "../dashboardlist/invite/none";
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
+import { Dashboard } from "@/src/types/dashboard";
 
 export default function SideBar() {
-  interface Dashboard {
-    id: number;
-    title: string;
-    color: string;
-    createdAt: string;
-    updatedAt: string;
-    createdByMe: boolean;
-    userId: number;
-  }
-
-  const { dashboards } = useDashboard(); // context에서 dashboards 데이터를 가져옴
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [createdByMe, setcreatedByMe] = useState<{
     [key: number]: boolean;
@@ -43,26 +32,7 @@ export default function SideBar() {
     console.log("새로운 대시보드:", newDashboard);
   });
 
-  useEffect(() => {
-    // Fetch the createdByMe value for each dashboard
-    const fetchDashboardDetails = async () => {
-      try {
-        for (const dashboard of dashboards) {
-          const fetchedDashboard = await getDashboard(dashboard.id); // Use dashboard.id here
-          setcreatedByMe((prevData) => ({
-            ...prevData,
-            [dashboard.id]: fetchedDashboard.createdByMe, // Store createdByMe based on dashboard.id
-          }));
-        }
-      } catch (error) {
-        console.error("대시보드 상세 불러오기 실패:", error);
-      }
-    };
-
-    if (dashboards.length > 0) {
-      fetchDashboardDetails();
-    }
-  }, [dashboards]); // Re-run when dashboards list changes
+  //전체리스트 조회
 
   //무한스크롤롤
   const { items, isLoading, hasMore, observerRef } =

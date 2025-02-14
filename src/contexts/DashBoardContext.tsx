@@ -30,7 +30,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
       try {
         setLoading(true);
         const data = await getDashboards({
-          navigationMethod,
+          navigationMethod: "pagination",
           size: 100,
         });
         if (data) {
@@ -43,7 +43,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     fetchDashboards();
-  }, [navigationMethod]);
+  }, []);
 
   return (
     <DashboardContext.Provider

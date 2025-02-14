@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { Droppable } from "@hello-pangea/dnd";
 import TaskCard from "./TaskCard";
@@ -10,9 +11,11 @@ import {
   getCards,
   updateColumnTitle,
   deleteColumn,
-  addCards, // 새로운 카드 추가 API 함수 필요
+  addCards,
 } from "@/src/api/dashboardApi";
 import AddModal from "./addModal";
+import { useRouter } from "next/router";
+import axiosInstance from "@/src/api/axios";
 
 export default function Column({ column, onDelete }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,16 +26,18 @@ export default function Column({ column, onDelete }: any) {
 
   useEffect(() => {
     fetchCards();
-  }, [column.id]);
+  }, []);
 
   const fetchCards = async () => {
     try {
-      const response = await getCards(10, column.id);
-      const { cards, totalCount } = response;
-      if (response) {
-        setCards(cards);
-        setTotalCount(totalCount);
-      }
+      12 - 1;
+      const response = await axiosInstance.get("/cards", {
+        params: { columnId: column.id },
+      });
+
+      console.log("res", response);
+      setCards(response.data.cards);
+      setTotalCount(response.data.totalCount);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -69,15 +74,6 @@ export default function Column({ column, onDelete }: any) {
     }
   };
 
-  const handleAddCard = async (cardTitle: string) => {
-    try {
-      await addCards(column.id, column.idcardTitle); // 새 카드 추가 API 호출
-      fetchCards(); // 카드 목록을 새로 고침
-    } catch (error) {
-      console.error("Error adding card:", error);
-    }
-  };
-
   return (
     <div className={styles.columnWrapper}>
       <div className={styles.columnTitle}>
@@ -107,7 +103,7 @@ export default function Column({ column, onDelete }: any) {
                 style={{ cursor: "pointer" }}
               />
             </ListCard>
-            {cards.map((card) => (
+            {cards?.map((card) => (
               <TaskCard
                 key={card.id}
                 card={card}
@@ -151,7 +147,7 @@ export default function Column({ column, onDelete }: any) {
           isOpen={isModalOpen}
           onClose={closeModal}
           columnId={column.id}
-          dashboardId={13416}
+          fetchCards={fetchCards}
         />
       )}
     </div>

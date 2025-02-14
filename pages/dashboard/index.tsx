@@ -7,8 +7,7 @@ import styles from "./index.module.scss";
 import { getDashboards, getInviteList } from "@/src/api/dashboardApi";
 import None from "@/src/components/dashboardlist/invite/none";
 import InviteDashboardList from "@/src/components/dashboardlist/invite/InviteList";
-import NewDashboardCard from "@/src/components/dashboardlist/newDashBoard";
-import DashboardList from "@/src/components/dashboardlist/DashBoardList";
+import DashboardList from "@/src/components/dashboardlist/DashBoardList"; // 이 부분을 다시 활성화 가능
 
 export default function MyDashboardPage() {
   const [dashboards, setDashboards] = useState<any[]>([]);
@@ -28,6 +27,13 @@ export default function MyDashboardPage() {
     fetchData();
   }, []);
 
+  // 초대 수락 후 대시보드 추가 처리
+  const handleAddDashboard = (dashboardId: number) => {
+    // 대시보드 추가 로직
+    const newDashboard = { id: dashboardId, title: "새로운 대시보드" };
+    setDashboards((prevDashboards) => [...prevDashboards, newDashboard]);
+  };
+
   return (
     <div className={styles.contents}>
       <SideBar />
@@ -36,23 +42,23 @@ export default function MyDashboardPage() {
         <div>
           <div className={styles.dashboard}>
             {/* 새로운 대시보드 컴포넌트 */}
-            <NewDashboardCard />
-
-            {/* 대시보드 리스트 컴포넌트 */}
-            {/* <DashboardList dashboards={dashboards} /> */}
           </div>
+          <DashboardList />
 
-          {/* 페이지네이션 버튼
-          // <div className={styles.pagination}>
-          //   <Pagination />
-          // </div> */}
+          {/* 페이지네이션 버튼 */}
+          {/* <div className={styles.pagination}>
+            <Pagination />
+          </div> */}
         </div>
 
         {/* 초대받은 대시보드 */}
         <div className={styles.inviteContent}>
           <h2>초대받은 대시보드</h2>
           {invitations.length > 0 ? (
-            <InviteDashboardList invitations={invitations} />
+            <InviteDashboardList
+              invitations={invitations}
+              onAcceptInvite={handleAddDashboard} // 초대 수락 후 대시보드 목록에 추가하는 함수 전달
+            />
           ) : (
             <None />
           )}
