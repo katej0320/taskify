@@ -1,6 +1,7 @@
-import {
+import React, {
   createContext,
   ReactNode,
+  SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -12,8 +13,13 @@ const EditContext = createContext({
   isBebridge: null,
   isMembers: null,
   isInvitations: null,
-  memberPage: 0,
-  invitePage: 0,
+  memberPage: 1,
+  invitePage: 1,
+  setMemberPage: (value: SetStateAction<number>) => {},
+  setInvitePage: (value: SetStateAction<number>) => {},
+  getDashboardDetail: () => {},
+  getMembers: () => {},
+  getInvitations: () => {},
   handlePrevClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
   handleNextClick: (e: React.MouseEvent<HTMLButtonElement>) => {},
 });
@@ -31,8 +37,21 @@ export function EditProvider({
     isInvitations: null,
   });
 
-  const { memberPage, invitePage, handlePrevClick, handleNextClick } =
-    useEditPagination();
+  const {
+    memberPage,
+    invitePage,
+    setMemberPage,
+    setInvitePage,
+    handlePrevClick,
+    handleNextClick,
+  }: {
+    memberPage: number;
+    invitePage: number;
+    setMemberPage: (value: SetStateAction<number>) => void;
+    setInvitePage: (value: SetStateAction<number>) => void;
+    handlePrevClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    handleNextClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  } = useEditPagination();
 
   async function getDashboardDetail() {
     const res = await axiosInstance.get(`/dashboards/${dashboardId}`);
@@ -84,6 +103,11 @@ export function EditProvider({
         isInvitations: values.isInvitations,
         memberPage,
         invitePage,
+        setMemberPage,
+        setInvitePage,
+        getDashboardDetail,
+        getMembers,
+        getInvitations,
         handlePrevClick,
         handleNextClick,
       }}

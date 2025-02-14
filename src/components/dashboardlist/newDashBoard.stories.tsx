@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import NewDashBoard from './newDashBoard';
+import NewDashBoard from "./newDashBoard";
 
 const meta = {
   component: NewDashBoard,

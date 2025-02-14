@@ -12,7 +12,7 @@ import {
   deleteColumn,
   addCards, // 새로운 카드 추가 API 함수 필요
 } from "@/src/api/dashboardApi";
-import AddModal from "./AddModal";
+import AddModal from "./addModal";
 
 export default function Column({ column, onDelete }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
