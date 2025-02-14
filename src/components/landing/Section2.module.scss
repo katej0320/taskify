@@ -1,5 +1,4 @@
 @use "/styles/color.scss" as *;
-
 .container {
   display: flex;
   flex-direction: column;
@@ -22,7 +21,6 @@
   margin-top: 50px;
 }
 
-
 .text {
   flex: 1;
 }
@@ -37,7 +35,7 @@
   text-decoration-skip-ink: none;
   color: $black1;
 }
-.point1{
+.point1 {
   position: relative;
   top: -75px;
   left: 55px;
@@ -61,19 +59,18 @@
   position: relative; // 애니메이션이 부모 기준으로 움직이도록 함
 }
 
-.point2{
+.point2 {
   margin-left: 100px;
   position: relative;
   top: -49px;
-  
 }
 
-.img2{
+.img2 {
   position: relative;
   bottom: -40px;
 }
 
-.img1{
+.img1 {
   position: relative;
   bottom: -40px;
   right: 13px;

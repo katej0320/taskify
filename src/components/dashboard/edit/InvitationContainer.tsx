@@ -1,5 +1,5 @@
 import { useEdit } from "@/src/contexts/EditDashboardProvider";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { Button } from "../../button/CustomButton2";
@@ -7,6 +7,7 @@ import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
 import { InviteItem } from "@/src/types/EditComponent";
 import { ArrowButton } from "@/src/types/EditPagination";
 import { CheckModal } from "./modal/CheckModal";
+import axiosInstance from "@/src/api/axios";
 
 const PaginationButton = styled(Button)<ArrowButton>`
   width: 40px;
@@ -63,16 +64,46 @@ export default function InvitationContainer() {
   const [isTotalCount, setIsTotalCount] = useState(1);
   const [isModal, setIsModal] = useState<boolean>(false);
   const isMessage = "선택된 초대를 취소하시겠습니까?";
-  const [isCancelId, setIsCancelId] = useState<number>();
+  const [isDashboardId, setIsDashboardId] = useState<number>();
+  const [isInvitationId, setIsInvitationId] = useState<number>();
+  const [isUpdate, setIsUpdate] = useState(false);
 
-  const { invitePage, isInvitations, handlePrevClick, handleNextClick } =
-    useEdit();
+  const {
+    invitePage,
+    isInvitations,
+    getInvitations,
+    handlePrevClick,
+    handleNextClick,
+    setInvitePage
+  } = useEdit();
 
-  const handleShowModal = (id: number) => {
+  // 모달 출력
+  const handleShowModal = (dashboardId: number, invitationId: number) => {
     setIsModal(true);
-    setIsCancelId(id);
+    setIsDashboardId(dashboardId);
+    setIsInvitationId(invitationId);
   };
 
+  // 초대 취소 API 호출
+  async function deleteInvitation() {
+    try {
+      setIsUpdate(true);
+      await axiosInstance.delete(
+        `/dashboards/${isDashboardId}/invitations/${isInvitationId}`
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUpdate(false);
+    }
+  }
+
+  // 초대 취소 후 내역 업데이트
+  useEffect(() => {
+    if (isInvitations) getInvitations();
+  }, [isUpdate]);
+
+  // 렌더링 시 데이터 화면 출력
   useEffect(() => {
     if (isInvitations) {
       const { invitations, totalCount } = isInvitations;
@@ -80,6 +111,13 @@ export default function InvitationContainer() {
       setIsTotalCount(Math.ceil(totalCount / 4));
     }
   }, [isInvitations]);
+
+  // 초대 취소 진행 시 빈 내역이 되면 이전 데이터를 출력
+  useEffect(() => {
+    if (isInvitationsData?.length === 0 && isTotalCount >= 1) {
+      setInvitePage((prevPage) => (prevPage -= 1));
+    }
+  }, [isInvitationsData]);
 
   return (
     <>
@@ -89,6 +127,7 @@ export default function InvitationContainer() {
           isModal={isModal}
           setIsModal={setIsModal}
           isMessage={isMessage}
+          deleteInvitation={deleteInvitation}
         />
       )}
       <div className={`${styles.container} ${styles.section3}`}>
@@ -125,13 +164,17 @@ export default function InvitationContainer() {
           <ul className={styles.memberList}>
             {isInvitationsData &&
               isInvitationsData.map((item) => {
-                const { invitee, id } = item;
+                const { invitee, dashboard, id: invitationId } = item;
+                const { id: dashboardId } = dashboard;
                 return (
                   <li key={item.id} className={styles.tile}>
                     <div className={styles.profileCover}>
                       <p className={styles.email}>{invitee.email}</p>
                     </div>
-                    <Button onClick={() => handleShowModal(id)} $sub="sub">
+                    <Button
+                      onClick={() => handleShowModal(dashboardId, invitationId)}
+                      $sub="sub"
+                    >
                       취소
                     </Button>
                   </li>

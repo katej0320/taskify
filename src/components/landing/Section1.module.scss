@@ -1,5 +1,4 @@
 @use "/styles/color.scss" as *;
-
 .container {
   display: flex;
   flex-direction: column;
@@ -11,7 +10,7 @@
   margin: -100px 0px;
 }
 
-.img{
+.img {
   position: relative;
 }
 
@@ -27,8 +26,6 @@
   text-decoration-skip-ink: none;
   display: flex;
   gap: 17px;
- 
-
 }
 
 .taskify {
