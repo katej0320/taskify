@@ -9,6 +9,7 @@ import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 import { InviteButton } from "./InviteButton";
 import { Toast } from "./toast/Toast";
+import { useEditToast } from "@/src/hooks/useEditToast";
 
 const EmptyData = styled.div`
   padding: 40px 0;
@@ -54,7 +55,6 @@ export default function InvitationContainer({
   const isMessage = "선택된 초대를 취소하시겠습니까?";
   const [isInvitationId, setIsInvitationId] = useState<number>();
   const [isUpdate, setIsUpdate] = useState(false);
-  const [isToast, setIsToast] = useState(false);
 
   const {
     invitePage,
@@ -64,6 +64,8 @@ export default function InvitationContainer({
     handleNextClick,
     setInvitePage,
   } = useEdit();
+
+  const { isToast, setIsToast } = useEditToast();
 
   // 모달 출력
   const handleShowModal = (invitationId: number) => {
@@ -105,15 +107,6 @@ export default function InvitationContainer({
       setInvitePage((prevPage) => (prevPage -= 1));
     }
   }, [isInvitationsData]);
-
-  // Toast 비활성화
-  useEffect(() => {
-    if (isToast) {
-      setTimeout(() => {
-        setIsToast(false);
-      }, 3000);
-    }
-  }, [isToast]);
 
   return (
     <>

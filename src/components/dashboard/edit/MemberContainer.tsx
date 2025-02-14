@@ -8,6 +8,7 @@ import { ArrowButton } from "@/src/types/EditPagination";
 import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 import { Toast } from "./toast/Toast";
+import { useEditToast } from "@/src/hooks/useEditToast";
 
 const EmptyData = styled.div`
   padding: 40px 0;
@@ -49,7 +50,6 @@ export default function MemberContainer() {
   const isMessage = "선택된 구성원을 삭제하시겠습니까?";
   const [isDeleteId, setIsDeleteId] = useState<number>();
   const [isUpdate, setIsUpdate] = useState(false);
-  const [isToast, setIsToast] = useState(false);
 
   const {
     memberPage,
@@ -59,6 +59,8 @@ export default function MemberContainer() {
     handleNextClick,
     setMemberPage,
   } = useEdit();
+
+  const {isToast, setIsToast} = useEditToast();
 
   // 모달 출력
   const handleShowModal = (userId: number) => {
@@ -99,15 +101,6 @@ export default function MemberContainer() {
       setMemberPage((prevPage) => (prevPage -= 1));
     }
   }, [isMembersData]);
-
-  // Toast 비활성화
-  useEffect(() => {
-    if (isToast) {
-      setTimeout(() => {
-        setIsToast(false);
-      }, 3000);
-    }
-  }, [isToast]);
 
   return (
     <>
