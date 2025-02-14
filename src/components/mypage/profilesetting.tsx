@@ -1,47 +1,57 @@
-// src/components/mypage/profilesetting.tsx
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/pages/mypage/mypage.module.scss";
 import ProfileCard from "./profilecard";
 import PasswordCard from "./passwordcard";
-import { updateProfile } from "@/src/api/userApi"; // API 함수 임포트
-import { User } from "@/src/types/users"; // User 타입 임포트
+import { updateProfile } from "@/src/api/userApi"; 
+import { User } from "@/src/types/users"; 
 
-// ProfileSettingsProps 타입 정의
 interface ProfileSettingsProps {
-  user: User; // user를 User 타입으로 받음
+  user: User; 
 }
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
   const router = useRouter();
-  
-  // 상태 관리
-  const [nickname, setNickname] = useState(user.nickname); // 기본값을 user.nickname으로 설정
+
+  const [nickname, setNickname] = useState(user.nickname); 
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false); // 로딩 상태 관리
   const [error, setError] = useState<string | null>(null); // 오류 상태 관리
 
+  // 프로필 업데이트 함수 (비동기)
   const handleSaveChanges = async () => {
-    setLoading(true); // 로딩 상태 시작
-    setError(null); // 이전 오류 초기화
+    setLoading(true);
+    setError(null);
 
     try {
-      // API 호출
+      // API 호출 (nickname과 profileImage를 업데이트)
       const result = await updateProfile(nickname, profileImage);
       console.log("프로필 수정 완료:", result);
-
-      // 성공 시, 다른 페이지로 이동하거나 알림 표시
-      router.push("/mypage"); // 마이페이지로 리다이렉트
+  
+      // 성공 시 마이페이지로 리다이렉트
+      router.push("/mypage");
     } catch (error) {
-      setError("프로필 업데이트에 실패했습니다."); // 오류 처리
       console.error("프로필 업데이트 오류:", error);
+  
+      // 오류 메시지 설정 (에러 유형에 따라 메시지 다르게 설정 가능)
+      if (error instanceof Error) {
+        setError(error.message || "프로필 업데이트에 실패했습니다.");
+      } else {
+        setError("알 수 없는 오류가 발생했습니다.");
+      }
     } finally {
-      setLoading(false); // 로딩 상태 종료
+      // 로딩 상태 해제
+      setLoading(false);
     }
   };
+
+  // useEffect에서 프로필 업데이트 처리
+  useEffect(() => {
+    // 컴포넌트가 렌더링되었을 때 한 번만 호출
+    handleSaveChanges();
+  }, [nickname, profileImage]); // nickname 또는 profileImage가 변경될 때마다 호출
 
   return (
     <div className={styles.global}>
@@ -50,25 +60,18 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
           &lt; 돌아가기
         </button>
 
-        <h2>프로필 수정</h2>
-
         <ProfileCard
           nickname={nickname}
+          email={user.email}
           setNickname={setNickname}
           profileImage={profileImage}
           setProfileImage={setProfileImage}
         />
         
         <PasswordCard />
-        
-        {/* 저장 버튼 */}
-        <button
-          className={styles.saveButton}
-          onClick={handleSaveChanges}
-          disabled={loading} // 로딩 중에는 버튼 비활성화
-        >
-          {loading ? "저장 중..." : "저장"}
-        </button>
+
+        {/* 로딩 중일 때 표시 */}
+        {loading && <p>저장 중...</p>}
 
         {/* 오류 메시지 표시 */}
         {error && <p className={styles.error}>{error}</p>}
