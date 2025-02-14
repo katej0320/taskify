@@ -3,6 +3,8 @@ import Image from "next/image";
 import ListCard from "@/src/components/dashboardlist/card/ListCard";
 import Pagination from "@/src/components/pagination/Pagination"; // ✅ 추가
 import styles from "../../../pages/dashboard/index.module.scss";
+import { useEffect, useState } from "react";
+import { getDashboard } from "@/src/api/dashboardApi";
 
 interface Dashboard {
   id: string;
@@ -27,6 +29,18 @@ export default function DashboardList({
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentDashboards = dashboards.slice(indexOfFirstItem, indexOfLastItem);
+  const [dashboard, setDashboard] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { dashboard = [] } = await getDashboard();
+        setDashboard(dashboard);
+      } catch (error) {
+        console.error("Failed to fetch dashboard:", error);
+      }
+    }
+  });
 
   return (
     <>

@@ -5,7 +5,7 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import { getDashboard } from "@/src/api/dashboardApi"; // API 호출 함수 import
+import { getDasboards } from "@/src/api/dashboardApi"; // API 호출 함수 import
 
 interface DashboardContextType {
   dashboards: any[];
@@ -29,7 +29,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
     async function fetchDashboards() {
       try {
         setLoading(true);
-        const data = await getDashboard({
+        const data = await getDasboards({
           navigationMethod,
           size: 100,
         });

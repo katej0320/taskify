@@ -21,12 +21,16 @@ async function fetchWithAuth(url: string, params?: object) {
   }
 }
 
-export async function getDashboard({
+export async function getDasboards({
   navigationMethod = "pagination",
   teamId = "12-1",
   ...params
 }: IDashboardParams = {}) {
   return fetchWithAuth("/dashboards", { navigationMethod, teamId, ...params });
+}
+
+export async function getDashboard(dashboardId: number = 0) {
+  return fetchWithAuth("/dashboards/", { dashboardId });
 }
 
 export async function getInviteList({

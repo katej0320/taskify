@@ -147,7 +147,12 @@ export default function Column({ column, onDelete }: any) {
       </CustomModal>
 
       {modalContent === "add-column" && (
-        <AddModal isOpen={isModalOpen} onClose={closeModal} />
+        <AddModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          columnId={column.id}
+          dashboardId={13416}
+        />
       )}
     </div>
   );

@@ -18,7 +18,7 @@ export default function NewDashboard() {
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // ✅ 한 페이지당 5개 표시
+  const itemsPerPage = 5; 
 
   const totalPages = Math.ceil(dashboards.length / itemsPerPage);
 
@@ -42,7 +42,7 @@ export default function NewDashboard() {
           "✅ 대시보드 목록 업데이트 중...",
           response.data.dashboards
         );
-        setDashboards([...response.data.dashboards]); // ✅ 상태 변경 강제 트리거
+        setDashboards([...response.data.dashboards]); 
       } else {
         console.error("❌ 예상치 못한 응답 구조:", response.data);
       }

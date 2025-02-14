@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import Manager from './manager';
+import NewDashBoard from './newDashBoard';
 
 const meta = {
-  component: Manager,
-} satisfies Meta<typeof Manager>;
+  component: NewDashBoard,
+} satisfies Meta<typeof NewDashBoard>;
 
 export default meta;
 
