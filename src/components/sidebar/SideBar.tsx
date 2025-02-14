@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomModal from "../modal/CustomModal";
 import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard";
-
 import { useState } from "react";
+import { useCreateBoard } from "@/src/hooks/useCreateBoard"; // ✅ 훅 추가
 import None from "../dashboardlist/invite/none";
 
 export default function SideBar() {
@@ -15,8 +15,11 @@ export default function SideBar() {
   const openModal = () => setIsModalOpen(true); // 모달을 여는 함수
   const closeModal = () => setIsModalOpen(false); // 모달을 닫는 함수
 
+  // ✅ useCreateBoard 사용
+  const { dashboardName, setDashboardName, selectedColor, setSelectedColor, handleCreate } = useCreateBoard(closeModal, (newDashboard) => {
+    console.log("새로운 대시보드:", newDashboard);
+  });
 
-  
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarcontent}>
@@ -43,7 +46,14 @@ export default function SideBar() {
             />
             {isModalOpen && (
               <CustomModal isOpen={isModalOpen} onClose={closeModal}>
-                <CreateBoard  onClose={() => setIsModalOpen(false)} />
+                <CreateBoard
+                  dashboardName={dashboardName}
+                  setDashboardName={setDashboardName}
+                  selectedColor={selectedColor}
+                  setSelectedColor={setSelectedColor}
+                  handleCreate={handleCreate} // ✅ 이벤트 핸들러 직접 전달
+                  onClose={closeModal}
+                />
               </CustomModal>
             )}
           </div>
