@@ -68,7 +68,7 @@ export function InviteModal({
           <Button onClick={closeModal}>취소</Button>
           <Button
             disabled={isValue === "" ? true : false}
-            $confirm={"confirm"}
+            $confirm
             onClick={() => {
               setIsUpdate(false);
               postInvitation?.();

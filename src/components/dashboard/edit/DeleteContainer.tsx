@@ -33,14 +33,14 @@ export default function DeleteContainer({
     <>
       {isModal && (
         <CheckModal
-          dashboard={"dashboard"}
+          dashboard
           isModal={isModal}
           setIsModal={setIsModal}
           isMessage={isMessage}
           deleteDashboard={deleteDashboard}
         />
       )}
-      <Button onClick={handleShowModal} $half="half">
+      <Button onClick={handleShowModal} $half>
         대시보드 삭제하기
       </Button>
     </>

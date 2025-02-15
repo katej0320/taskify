@@ -6,8 +6,8 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import axiosInstance from "../api/axios";
-import { useEditPagination } from "../hooks/useEditPagination";
+import axiosInstance from "../../../api/axios";
+import { useEditPagination } from "../../../hooks/dashboard/edit/useEditPagination";
 
 const EditContext = createContext({
   isBebridge: null,

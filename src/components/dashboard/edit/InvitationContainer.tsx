@@ -1,46 +1,14 @@
-import { useEdit } from "@/src/contexts/EditDashboardProvider";
 import React, { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
-import { Button } from "../../button/CustomButton2";
-import { InviteItem } from "@/src/types/EditComponent";
-import { ArrowButton } from "@/src/types/EditPagination";
+import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
+import { InviteItem } from "@/src/types/dashboard/edit/EditComponent";
 import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 import { InviteButton } from "./InviteButton";
-
-const EmptyData = styled.div`
-  padding: 40px 0;
-  font-size: 14px;
-  color: #9fa6b2;
-  text-align: center;
-`;
-
-const PaginationButton = styled(Button)<ArrowButton>`
-  width: 40px;
-  height: 40px;
-  line-height: 43px;
-  ${(props) =>
-    props.$left
-      ? css`
-          border-radius: 4px 0 0 4px;
-          background: url("/images/dashboard/edit/ic_prevArrow.svg") center
-            center no-repeat #fff;
-        `
-      : props.$right
-      ? css`
-          border-radius: 0 4px 4px 0;
-          background: url("/images/dashboard/edit/ic_nextArrow.svg") center
-            center no-repeat #fff;
-        `
-      : ""}
-  background-color:${(props) => (props.disabled ? "#f9f9f9" : "")};
-  @media (min-width: 769px) and (max-width: 840px) {
-    width: 30px;
-    height: 30px;
-    line-height: 33px;
-  }
-`;
+import { Toast } from "./toast/Toast";
+import { useEditToast } from "@/src/hooks/dashboard/edit/useEditToast";
+import { InvitationList } from "./InvitationList";
+import { PaginationButton } from "./PaginationButton";
 
 export default function InvitationContainer({
   dashboardId,
@@ -62,6 +30,8 @@ export default function InvitationContainer({
     handleNextClick,
     setInvitePage,
   } = useEdit();
+
+  const { isToast, setIsToast } = useEditToast();
 
   // 모달 출력
   const handleShowModal = (invitationId: number) => {
@@ -106,11 +76,13 @@ export default function InvitationContainer({
 
   return (
     <>
+      {isToast && <Toast setIsToast={setIsToast} invite />}
       {isModal && (
         <CheckModal
-          invite={"invite"}
+          invite
           isModal={isModal}
           setIsModal={setIsModal}
+          setIsToast={setIsToast}
           isMessage={isMessage}
           deleteInvitation={deleteInvitation}
         />
@@ -126,13 +98,13 @@ export default function InvitationContainer({
               <div className={styles.buttonContainer}>
                 <PaginationButton
                   disabled={invitePage === 1 ? true : false}
-                  $left={"left"}
+                  $left
                   name="invite"
                   onClick={(e) => handlePrevClick(e)}
                 />
                 <PaginationButton
                   disabled={isTotalCount === invitePage || isTotalCount <= 1}
-                  $right={"right"}
+                  $right
                   name="invite"
                   onClick={(e) => handleNextClick(e)}
                 />
@@ -142,32 +114,10 @@ export default function InvitationContainer({
           </div>
         </div>
         <div className={styles.contents}>
-          {isInvitationsData?.length !== 0 ? (
-            <>
-              <p className={styles.title}>이메일</p>
-              <ul className={styles.memberList}>
-                {isInvitationsData &&
-                  isInvitationsData.map((item) => {
-                    const { invitee, id: invitationId } = item;
-                    return (
-                      <li key={item.id} className={styles.tile}>
-                        <div className={styles.profileCover}>
-                          <p className={styles.email}>{invitee.email}</p>
-                        </div>
-                        <Button
-                          onClick={() => handleShowModal(invitationId)}
-                          $sub="sub"
-                        >
-                          취소
-                        </Button>
-                      </li>
-                    );
-                  })}
-              </ul>
-            </>
-          ) : (
-            <EmptyData>초대한 이메일이 없습니다</EmptyData>
-          )}
+          <InvitationList
+            isInvitationsData={isInvitationsData}
+            handleShowModal={handleShowModal}
+          ></InvitationList>
         </div>
       </div>
     </>
