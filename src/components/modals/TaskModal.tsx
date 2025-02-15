@@ -2,6 +2,8 @@ import React from "react";
 import { createPortal } from "react-dom";
 import styles from "./TaskModal.style.module.scss";
 
+
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;

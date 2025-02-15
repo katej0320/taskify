@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../button/CustomButton2";
-import { CheckModal } from "./modal/CheckModal";
+import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 import { useRouter } from "next/router";
 
@@ -33,14 +33,14 @@ export default function DeleteContainer({
     <>
       {isModal && (
         <CheckModal
-          dashboard={"dashboard"}
+          dashboard
           isModal={isModal}
           setIsModal={setIsModal}
           isMessage={isMessage}
           deleteDashboard={deleteDashboard}
         />
       )}
-      <Button onClick={handleShowModal} $half="half">
+      <Button onClick={handleShowModal} $half>
         대시보드 삭제하기
       </Button>
     </>

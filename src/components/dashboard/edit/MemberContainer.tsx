@@ -1,42 +1,17 @@
 import { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
 import styles from "./EditPage.style.module.scss";
-import { Button } from "../../button/CustomButton2";
-import { useEdit } from "@/src/contexts/EditDashboardProvider";
-import { MemberItem } from "@/src/types/EditComponent";
-import { ArrowButton } from "@/src/types/EditPagination";
-import { CheckModal } from "./modal/CheckModal";
+import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
+import { MemberItem } from "@/src/types/dashboard/edit/EditComponent";
+import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
-
-const PaginationButton = styled(Button)<ArrowButton>`
-  width: 40px;
-  height: 40px;
-  line-height: 43px;
-  ${(props) =>
-    props.$left
-      ? css`
-          border-radius: 4px 0 0 4px;
-          background: url("/images/dashboard/edit/ic_prevArrow.svg") center
-            center no-repeat #fff;
-        `
-      : props.$right
-      ? css`
-          border-radius: 0 4px 4px 0;
-          background: url("/images/dashboard/edit/ic_nextArrow.svg") center
-            center no-repeat #fff;
-        `
-      : ""}
-  background-color:${(props) => (props.disabled ? "#f9f9f9" : "")};
-  @media (min-width: 769px) and (max-width: 840px) {
-    width: 30px;
-    height: 30px;
-    line-height: 33px;
-  }
-`;
+import { Toast } from "./toast/Toast";
+import { useEditToast } from "@/src/hooks/dashboard/edit/useEditToast";
+import { MemberList } from "./MemberList";
+import { PaginationButton } from "./PaginationButton";
 
 export default function MemberContainer() {
   const [isMembersData, isSetMemberData] = useState<MemberItem[]>();
-  const [isTotalCount, setIsTotalCount] = useState(0);
+  const [isTotalCount, setIsTotalCount] = useState(1);
   const [isModal, setIsModal] = useState<boolean>(false);
   const isMessage = "선택된 구성원을 삭제하시겠습니까?";
   const [isDeleteId, setIsDeleteId] = useState<number>();
@@ -50,6 +25,8 @@ export default function MemberContainer() {
     handleNextClick,
     setMemberPage,
   } = useEdit();
+
+  const { isToast, setIsToast } = useEditToast();
 
   // 모달 출력
   const handleShowModal = (userId: number) => {
@@ -93,11 +70,13 @@ export default function MemberContainer() {
 
   return (
     <>
+      {isToast && <Toast setIsToast={setIsToast} member />}
       {isModal && (
         <CheckModal
-          member={"member"}
+          member
           isModal={isModal}
           setIsModal={setIsModal}
+          setIsToast={setIsToast}
           isMessage={isMessage}
           deleteMember={deleteMember}
         />
@@ -113,13 +92,13 @@ export default function MemberContainer() {
               <div className={styles.buttonContainer}>
                 <PaginationButton
                   disabled={memberPage === 1 ? true : false}
-                  $left={"left"}
+                  $left
                   name="member"
                   onClick={(e) => handlePrevClick(e)}
                 />
                 <PaginationButton
                   disabled={isTotalCount === memberPage || isTotalCount <= 1}
-                  $right={"right"}
+                  $right
                   name="member"
                   onClick={(e) => handleNextClick(e)}
                 />
@@ -128,24 +107,10 @@ export default function MemberContainer() {
           </div>
         </div>
         <div className={styles.contents}>
-          <p className={styles.title}>이름</p>
-          <ul className={styles.memberList}>
-            {isMembersData &&
-              isMembersData?.map((item) => {
-                const { id } = item;
-                return (
-                  <li key={id} className={styles.tile}>
-                    <div className={styles.profileCover}>
-                      <div className={styles.thumbnail}></div>
-                      <p className={styles.nickname}>{item.nickname}</p>
-                    </div>
-                    <Button onClick={() => handleShowModal(id)} $sub="sub">
-                      삭제
-                    </Button>
-                  </li>
-                );
-              })}
-          </ul>
+          <MemberList
+            isMembersData={isMembersData}
+            handleShowModal={handleShowModal}
+          ></MemberList>
         </div>
       </div>
     </>

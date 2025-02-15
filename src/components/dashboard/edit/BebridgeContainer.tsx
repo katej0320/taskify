@@ -1,10 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 import styles from "./EditPage.style.module.scss";
-import { useEdit } from "@/src/contexts/EditDashboardProvider";
+import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 import { Button } from "../../button/CustomButton2";
 import IconCheck from "@/public/images/dashboard/edit/ic_check.svg";
-import { CheckModal } from "./modal/CheckModal";
+import { CheckModal } from "./modal/Check";
 import axiosInstance from "@/src/api/axios";
 
 const COLOR_PALETTE = ["#7ac555", "#760dde", "#ffa500", "#76a5ea", "#e876ea"];
@@ -134,8 +134,8 @@ export default function BebridgeContainer({
             })}
           </ul>
           <Button
+            $signature
             disabled={isDisabled}
-            $signature="signature"
             onClick={handleShowModal}
           >
             변경
