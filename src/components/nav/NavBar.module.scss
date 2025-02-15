@@ -73,3 +73,10 @@
   border: 1px solid $gray4;
   height: 20px;
 }
+
+.dashboardTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}

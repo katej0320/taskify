@@ -2,8 +2,8 @@
 
 import React from "react";
 import useSWR from "swr";
-import { getUser } from "@/src/api/userApi"; 
-import { User } from "@/src/types/users"; 
+import { getUser } from "@/src/api/userApi";
+import { User } from "@/src/types/users";
 import styles from "./mypage.module.scss";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
@@ -24,5 +24,3 @@ export default function MyPage() {
     </div>
   );
 }
-
-

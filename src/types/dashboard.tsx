@@ -6,6 +6,22 @@ export interface IDashboardParams {
   size?: number;
 }
 
+export interface Dashboard {
+  id: number;
+  title: string;
+  color: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  createdByMe: boolean;
+}
+
+export interface DashBoardResponse {
+  dashboards: Dashboard[];
+  totalCount: number;
+  cursorId: number | null;
+}
+
 export interface IInviteParams {
   teamId?: string;
   size?: number;

@@ -24,7 +24,7 @@ export default function TaskCard({ card, index, columnTitle }: any) {
           <div onClick={openModal}>
             <Image
               className={styles.taskImg}
-              src={card.image}
+              src={card.imageUrl}
               width={274}
               height={160}
               alt="카드 이미지"
