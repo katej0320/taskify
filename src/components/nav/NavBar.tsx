@@ -8,8 +8,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { getMe } from "@/src/api/meApi";
 import { InviteButton } from "../dashboard/edit/InviteButton";
-import { useEditToast } from "@/src/hooks/dashboard/edit/useEditToast";
-import { Toast } from "../dashboard/edit/toast/Toast";
 
 export default function NavBar() {
   const router = useRouter();
