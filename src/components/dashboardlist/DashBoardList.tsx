@@ -4,49 +4,63 @@ import ListCard from "@/src/components/dashboardlist/card/ListCard";
 import Pagination from "@/src/components/pagination/Pagination"; // ✅ 추가
 import styles from "../../../pages/dashboard/index.module.scss";
 import { useEffect, useState } from "react";
-import { getDashboard } from "@/src/api/dashboardApi";
 
-interface Dashboard {
-  id: string;
-  title: string;
-  color: string;
-}
+import { DashBoardResponse, Dashboard } from "@/src/types/dashboard";
+import axiosInstance from "@/src/api/axios";
+import CustomModal from "../modal/CustomModal";
+import CreateBoard from "./createDashboard/createDashboard";
 
 interface DashboardListProps {
-  dashboards: Dashboard[];
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
-export default function DashboardList({
-  dashboards,
-  currentPage,
-  totalPages,
-  onPageChange,
-}: DashboardListProps) {
-  const itemsPerPage = 6;
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentDashboards = dashboards.slice(indexOfFirstItem, indexOfLastItem);
-  const [dashboard, setDashboard] = useState<any[]>([]);
+export default function DashboardList() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(6);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const { dashboard = [] } = await getDashboard();
-        setDashboard(dashboard);
-      } catch (error) {
-        console.error("Failed to fetch dashboard:", error);
-      }
-    }
-  });
+    const test = async () => {
+      const res = await axiosInstance.get("/dashboards", {
+        params: { navigationMethod: "pagination", page, size },
+      });
+      setDashboards(res.data.dashboards);
+      setTotal(res.data.totalCount);
+    };
+    test();
+  }, [page, size]);
 
+  const handleDashboardCreate = (newDashboard: Dashboard) => {
+    setDashboards((prev) => [newDashboard, ...prev].slice(0, size));
+    setTotal((prev) => prev + 1);
+    closeModal();
+  };
   return (
     <>
       <div className={styles.listcardandpagination}>
+        <ListCard>
+          <button className={styles.addCard} onClick={openModal}>
+            <div>새로운 대쉬보드</div>
+            <Image
+              src="/icons/chip.svg"
+              width={22}
+              height={22}
+              alt="chip.svg"
+              priority
+              onClick={openModal}
+              style={{ cursor: "pointer" }}
+            />
+          </button>
+        </ListCard>
         <div className={styles.listcard}>
-          {currentDashboards.map((dashboard) => (
+          {dashboards?.map((dashboard) => (
             <Link key={dashboard.id} href={`/dashboard/${dashboard.id}`}>
               <ListCard>
                 <div
@@ -54,6 +68,14 @@ export default function DashboardList({
                   style={{ backgroundColor: dashboard.color }}
                 ></div>
                 <div>{dashboard.title}</div>
+                {dashboard.createdByMe && (
+                  <Image
+                    src="/icons/crown.svg"
+                    alt="Crown"
+                    width={16}
+                    height={16}
+                  />
+                )}
                 <Image
                   src="/icons/arrow.svg"
                   width={22}
@@ -66,15 +88,37 @@ export default function DashboardList({
           ))}
         </div>
 
+        {isModalOpen && (
+          <CustomModal
+            className={styles.modal}
+            isOpen={isModalOpen}
+            onClose={closeModal}
+          >
+            <CreateBoard
+              onClose={closeModal}
+              onDashboardCreate={handleDashboardCreate}
+              dashboardName={""}
+              setDashboardName={function (name: string): void {
+                throw new Error("Function not implemented.");
+              }}
+              selectedColor={""}
+              setSelectedColor={function (color: string): void {
+                throw new Error("Function not implemented.");
+              }}
+              handleCreate={function (): Promise<void> {
+                throw new Error("Function not implemented.");
+              }}
+            />
+          </CustomModal>
+        )}
+
         {/* ✅ 페이지네이션 추가 */}
         <div className={styles.pagination}>
-          {totalPages > 0 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={onPageChange}
-            />
-          )}
+          <Pagination
+            currentPage={page}
+            totalPages={Math.floor(total / size)}
+            onPageChange={setPage}
+          />
         </div>
       </div>
     </>

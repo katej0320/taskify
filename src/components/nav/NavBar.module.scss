@@ -26,7 +26,6 @@
   align-items: center;
   gap: 36px;
 }
-
 .navButton {
   background: none;
   border: 1px solid $gray3;
@@ -72,4 +71,11 @@
 .hr {
   border: 1px solid $gray4;
   height: 20px;
+}
+
+.dashboardTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }

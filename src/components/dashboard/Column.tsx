@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { Droppable } from "@hello-pangea/dnd";
 import TaskCard from "./TaskCard";
@@ -6,13 +7,9 @@ import ListCard from "../dashboardlist/card/ListCard";
 import Image from "next/image";
 import CustomModal from "../modal/CustomModal";
 import styles from "./Column.module.scss";
-import {
-  getCards,
-  updateColumnTitle,
-  deleteColumn,
-  addCards, // 새로운 카드 추가 API 함수 필요
-} from "@/src/api/dashboardApi";
+import { updateColumnTitle, deleteColumn } from "@/src/api/dashboardApi";
 import AddModal from "./addModal";
+import axiosInstance from "@/src/api/axios";
 
 export default function Column({ column, onDelete }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,16 +20,18 @@ export default function Column({ column, onDelete }: any) {
 
   useEffect(() => {
     fetchCards();
-  }, [column.id]);
+  }, []);
 
   const fetchCards = async () => {
     try {
-      const response = await getCards(10, column.id);
-      const { cards, totalCount } = response;
-      if (response) {
-        setCards(cards);
-        setTotalCount(totalCount);
-      }
+      12 - 1;
+      const response = await axiosInstance.get("/cards", {
+        params: { columnId: column.id },
+      });
+
+      console.log("res", response);
+      setCards(response.data.cards);
+      setTotalCount(response.data.totalCount);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -69,13 +68,8 @@ export default function Column({ column, onDelete }: any) {
     }
   };
 
-  const handleAddCard = async (cardTitle: string) => {
-    try {
-      await addCards(column.id, column.idcardTitle); // 새 카드 추가 API 호출
-      fetchCards(); // 카드 목록을 새로 고침
-    } catch (error) {
-      console.error("Error adding card:", error);
-    }
+  const handleCardDelete = (cardId: string) => {
+    setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
   };
 
   return (
@@ -107,12 +101,13 @@ export default function Column({ column, onDelete }: any) {
                 style={{ cursor: "pointer" }}
               />
             </ListCard>
-            {cards.map((card) => (
+            {cards?.map((card) => (
               <TaskCard
                 key={card.id}
                 card={card}
                 className={styles.taskCard}
                 columnTitle={columnTitle}
+                onCardDelete={handleCardDelete}
               />
             ))}
             {provided.placeholder}
@@ -151,7 +146,7 @@ export default function Column({ column, onDelete }: any) {
           isOpen={isModalOpen}
           onClose={closeModal}
           columnId={column.id}
-          dashboardId={13416}
+          fetchCards={fetchCards}
         />
       )}
     </div>

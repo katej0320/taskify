@@ -38,3 +38,21 @@
   font-weight: 500;
   line-height: 18px;
 }
+
+.name {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #a3c4a2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

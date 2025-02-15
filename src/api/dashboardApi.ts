@@ -21,7 +21,28 @@ async function fetchWithAuth(url: string, params?: object) {
   }
 }
 
-export async function getDasboards({
+async function PUThWithAuth(url: string, params?: any) {
+  try {
+    if (typeof window === "undefined") return null;
+
+    // 세션 스토리지에서 토큰 가져오기
+    const accessToken = sessionStorage.getItem("accessToken");
+    if (!accessToken) {
+      console.error("Token not found in sessionStorage");
+      return null;
+    }
+
+    console.log("params", params);
+    const res = await axiosInstance.put(url, { ...params?.body });
+
+    return res.data;
+  } catch (error) {
+    console.error(`Error fetching ${url}:`, error);
+    return null; // 오류 발생 시 기본값 반환
+  }
+}
+
+export async function getDashboards({
   navigationMethod = "pagination",
   teamId = "12-1",
   ...params
@@ -29,8 +50,8 @@ export async function getDasboards({
   return fetchWithAuth("/dashboards", { navigationMethod, teamId, ...params });
 }
 
-export async function getDashboard(dashboardId: number = 0) {
-  return fetchWithAuth("/dashboards/", { dashboardId });
+export async function getDashboard(dashboardId: number) {
+  return fetchWithAuth(`/dashboards/${dashboardId}`);
 }
 
 export async function getInviteList({
@@ -38,6 +59,16 @@ export async function getInviteList({
   ...params
 }: IInviteParams = {}) {
   return fetchWithAuth("/invitations", { teamId, ...params });
+}
+
+export async function acceptInvite(invitationId: number) {
+  return PUThWithAuth(`/invitations/${invitationId}`, {
+    method: "PUT",
+    body: { invitationId, inviteAccepted: true },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }
 
 export async function getColumns(dashboardId: number) {
@@ -55,42 +86,29 @@ export async function getCards(size: number = 10, columnId: number) {
   return fetchWithAuth("/cards", { size, columnId });
 }
 
-export async function addCards(
-  columnId: number,
-  cardData: {
-    assigneeUserId: number;
-    dashboardId: number;
-    columnId: number;
-    title: string;
-    description: string;
-    dueDate: string;
-    tags: string[];
-    imageUrl: string;
-  }
-) {
+export async function addCards(cardData: {
+  assigneeUserId: number;
+  dashboardId: number;
+  columnId: number;
+  title: string;
+  description: string;
+  dueDate: string;
+  tags: string[];
+  imageUrl: string;
+}) {
   try {
-    const response = await fetchWithAuth(`/card`, {
-      method: "POST",
-      body: JSON.stringify({
-        assigneeUserId: cardData.assigneeUserId,
-        dashboardId: cardData.dashboardId,
-        columnId: cardData.columnId,
-        title: cardData.title,
-        description: cardData.description,
-        dueDate: cardData.dueDate,
-        tags: cardData.tags,
-        imageUrl: cardData.imageUrl,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await axiosInstance.post(`/cards`, {
+      assigneeUserId: cardData.assigneeUserId,
+      dashboardId: cardData.dashboardId,
+      columnId: cardData.columnId,
+      title: cardData.title,
+      description: cardData.description,
+      dueDate: cardData.dueDate,
+      tags: cardData.tags,
+      imageUrl: cardData.imageUrl,
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to add card");
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error("Error adding card:", error);
     throw error;
@@ -112,6 +130,16 @@ export const updateColumnTitle = async (columnId: number, newTitle: string) => {
 export const deleteColumn = async (columnId: number) => {
   try {
     const response = await axiosInstance.delete(`/columns/${columnId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting column:", error);
+    throw error;
+  }
+};
+
+export const deleteCard = async (cardId: number) => {
+  try {
+    const response = await axiosInstance.delete(`/cards/${cardId}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting column:", error);

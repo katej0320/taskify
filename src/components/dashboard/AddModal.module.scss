@@ -38,7 +38,8 @@
   color: $black2;
 }
 
-.input {
+.input,
+.date {
   margin-bottom: 24px;
 }
 
@@ -65,25 +66,30 @@
   display: block;
 }
 
-.buttonGroup {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
+.cancle {
+  background-color: $white;
+  color: $violet2;
+  padding: 14px 26px;
+  border: 1px solid $gray3;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 50%;
 }
 
-.cancelButton {
-  background: #e0e0e0;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
+.create {
+  background-color: $violet2;
+  padding: 14px 26px;
+  border: 1px solid $gray3;
+  border-radius: 4px;
   cursor: pointer;
+  color: $white;
+  width: 50%;
 }
 
-.createButton {
-  background: #6a3bef;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+.cancle:hover {
+  background-color: $gray2;
+}
+
+.create:hover {
+  background-color: $violet2;
 }

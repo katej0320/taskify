@@ -71,7 +71,23 @@
   width: 990px;
 }
 
-.listcard {
+.listcard,
+.addCard {
   display: flex;
   flex-wrap: wrap;
+}
+
+.addCard {
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  padding-left: 75px;
+  font-family: Pretendard;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.dashboardlist {
+  overflow-y: auto;
 }
