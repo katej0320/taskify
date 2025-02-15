@@ -7,7 +7,7 @@ import ListCard from "../dashboardlist/card/ListCard";
 import Image from "next/image";
 import CustomModal from "../modal/CustomModal";
 import { useRouter } from "next/router";
-import { addColumns, getColumns } from "@/src/api/dashboardApi";
+import { getColumns } from "@/src/api/dashboardApi";
 import styles from "./Board.module.scss";
 import axiosInstance from "@/src/api/axios";
 

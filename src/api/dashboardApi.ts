@@ -75,13 +75,6 @@ export async function getColumns(dashboardId: number) {
   return fetchWithAuth("/columns", { dashboardId });
 }
 
-export async function addColumns(dashboardId: number, title: string) {
-  return fetchWithAuth(`/columns`, {
-    method: "POST",
-    data: { title, dashboardId },
-  });
-}
-
 export async function getCards(size: number = 10, columnId: number) {
   return fetchWithAuth("/cards", { size, columnId });
 }

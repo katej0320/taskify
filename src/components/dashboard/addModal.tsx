@@ -33,7 +33,7 @@ const AddModal: React.FC<AddModalProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const [members, setMembers] = useState<any>([]);
-  const [selectedAssignee, setSelectedAssignee] = useState<any>({});
+  const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -50,6 +50,10 @@ const AddModal: React.FC<AddModalProps> = ({
     fetchMembers();
   }, []);
 
+  const changeUser = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedAssignee(Number(e.target.value));
+  };
+
   const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim()) {
       setTags([...tags, tagInput.trim()]);
@@ -63,14 +67,14 @@ const AddModal: React.FC<AddModalProps> = ({
   };
 
   const handleCreateCard = async () => {
-    if (!title || !description || !dueDate) {
+    if (!title || !description || !dueDate || selectedAssignee === null) {
       setError("제목, 설명, 마감일은 필수 입력 항목입니다.");
       return;
     }
     setError(null);
 
     const cardData = {
-      assigneeUserId: 0,
+      assigneeUserId: selectedAssignee,
       dashboardId,
       columnId,
       title,
@@ -114,11 +118,7 @@ const AddModal: React.FC<AddModalProps> = ({
     setTags([]);
     setTagInput("");
     setImage(null);
-    setSelectedAssignee({});
-  };
-
-  const changeUser = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedAssignee(e.target.value);
+    setSelectedAssignee(null);
   };
 
   return (
