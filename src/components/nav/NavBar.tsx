@@ -7,6 +7,9 @@ import { useDashboard } from "@/src/contexts/DashBoardContext"; // 예제
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getMe } from "@/src/api/meApi";
+import { InviteButton } from "../dashboard/edit/InviteButton";
+import { useEditToast } from "@/src/hooks/dashboard/edit/useEditToast";
+import { Toast } from "../dashboard/edit/toast/Toast";
 
 export default function NavBar() {
   const router = useRouter();
@@ -48,33 +51,40 @@ export default function NavBar() {
   }, [pathname, params, dashboards]);
 
   return (
-    <nav className={styles.navbar}>
-      <div className={styles.leftSection}>
-        <span className={styles.dashboardTitle}>{headerTitle}</span>
-      </div>
-      <div className={styles.rightSection}>
-        <button className={styles.navButton}>
-          <Image src="/icons/settings.svg" width={20} height={20} alt="설정" />
-          관리
-        </button>
-        <button className={styles.navButton}>
-          <Image src="/icons/add_box.svg" width={20} height={20} alt="초대" />
-          초대하기
-        </button>
-        <div>
-          <hr className={styles.hr} />
+    <>
+      <nav className={styles.navbar}>
+        <div className={styles.leftSection}>
+          <span className={styles.dashboardTitle}>{headerTitle}</span>
         </div>
-        <Link href="/mypage">
-          <div className={styles.profile}>
-            <span className={styles.profileIcon}>
-              {userData ? userData.email[0] : "?"}
-            </span>
-            <span className={styles.profileName}>
-              {userData ? userData.nickname : "로딩중..."}
-            </span>
+        <div className={styles.rightSection}>
+          <button className={styles.navButton}>
+            <Image
+              src="/icons/settings.svg"
+              width={20}
+              height={20}
+              alt="설정"
+            />
+            관리
+          </button>
+          <InviteButton $nav dashboardId={params}>
+            <Image src="/icons/add_box.svg" width={20} height={20} alt="초대" />
+            초대하기
+          </InviteButton>
+          <div>
+            <hr className={styles.hr} />
           </div>
-        </Link>
-      </div>
-    </nav>
+          <Link href="/mypage">
+            <div className={styles.profile}>
+              <span className={styles.profileIcon}>
+                {userData ? userData.email[0] : "?"}
+              </span>
+              <span className={styles.profileName}>
+                {userData ? userData.nickname : "로딩중..."}
+              </span>
+            </div>
+          </Link>
+        </div>
+      </nav>
+    </>
   );
 }
