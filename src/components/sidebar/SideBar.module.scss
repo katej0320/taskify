@@ -14,14 +14,13 @@
   padding-top: 20px;
   padding-left: 24px;
   padding-bottom: 20px;
- 
-
 }
 
 .subtitles {
   margin-top: 56px;
   display: flex;
-  gap: 161px;
+  justify-content: space-between;
+  width: 90%;
 }
 
 .subtitle {
@@ -53,20 +52,42 @@
   justify-content: flex-start;
   align-items: center;
   gap: 16px;
-  margin: 16px 0;
-  padding: 8px;
+  margin: 20px;
+  padding-bottom: 12px;
 
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
   text-align: left;
   color: $gray5;
-  
-
 }
 
-.scroll{
+.scroll {
   max-height: calc(100vh - 20px);
   overflow-y: auto;
   padding-bottom: 95px;
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+  .sidebar {
+    width: 160px;
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    width: 60px;
+  }
+  .subtitle {
+    display: none;
+  }
+
+  .showNone {
+    display: none;
+  }
+
+  .dashboardlist {
+    margin: 20px 5px;
+    padding-bottom: 20px;
+  }
 }

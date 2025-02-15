@@ -43,7 +43,7 @@ const InviteDashboardList: React.FC<InviteDashboardListProps> = ({
   };
 
   return (
-    <div>
+    <div style={{ width: "90%" }}>
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       <div className={styles.inviteTable}>

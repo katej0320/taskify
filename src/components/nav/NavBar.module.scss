@@ -1,4 +1,5 @@
 @use "/styles/color.scss" as *;
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -10,7 +11,6 @@
   position: sticky;
   top: 0px;
   margin-left: 300px;
-
   z-index: 1000;
 }
 
@@ -26,6 +26,7 @@
   align-items: center;
   gap: 36px;
 }
+
 .navButton {
   background: none;
   border: 1px solid $gray3;
@@ -61,13 +62,6 @@
   font-weight: bold;
 }
 
-.profileName {
-  font-size: 16px;
-  line-height: 26px;
-
-  color: $black2;
-}
-
 .hr {
   border: 1px solid $gray4;
   height: 20px;
@@ -78,4 +72,82 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
+}
+
+/* Mobile and Tablet Styles */
+@media (max-width: 1199px) {
+  .navbar {
+    padding: 15px 40px;
+    margin-left: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 160px;
+  }
+
+  .leftSection {
+    font-size: 18px;
+  }
+
+  .rightSection {
+    gap: 24px;
+    display: flex;
+    align-items: center;
+  }
+
+  .navButton {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .profileIcon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .profileName {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navbar {
+    padding: 10px 20px;
+    flex-direction: row;
+    align-items: center;
+    height: auto;
+    margin-left: 60px;
+  }
+
+  .leftSection {
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  .rightSection {
+    gap: 16px;
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .navButton {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .profileIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .profileName {
+    display: none; /* Hide profile name on mobile */
+  }
+
+  .hr {
+    display: none;
+  }
 }

@@ -43,7 +43,7 @@
 }
 
 .inviteContent {
-  width: 1022px;
+  width: 80%;
   max-height: 750px;
   background-color: $white;
   border-radius: 8px;
@@ -58,23 +58,25 @@
 }
 
 .listcardandpagination {
-  flex-wrap: wrap;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 1200px;
+  width: 80%; /* Use full width */
 }
+
 .pagination {
   display: flex;
   justify-content: flex-end;
   margin: 10px 0;
-  width: 990px;
+  width: 100%; /* Ensure pagination takes full width */
 }
 
 .listcard,
 .addCard {
   display: flex;
+  gap: 16px;
   flex-wrap: wrap;
+  justify-content: space-between; /* Ensures even spacing */
 }
 
 .addCard {
@@ -90,4 +92,41 @@
 
 .dashboardlist {
   overflow-y: auto;
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+  .content {
+    margin-left: 160px;
+    padding: 20px;
+    background-color: $gray2;
+  }
+}
+
+@media (max-width: 767px) {
+  .content {
+    margin-left: 60px;
+    padding: 20px;
+    background-color: $gray2;
+  }
+
+  .listcardandpagination {
+    width: 100%;
+  }
+
+  .listcard {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    overflow-x: auto;
+  }
+
+  .listcard > a {
+    flex-shrink: 0; /* Prevent shrinking on smaller screens */
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 }
