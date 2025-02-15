@@ -1,6 +1,7 @@
+import axiosInstance from "./axios";
 import { IDashboardParams, IInviteParams } from "../types/dashboard";
-import axiosInstance from "./axiosTest";
 
+// ✅ 세션 스토리지에서 토큰을 가져오는 로직을 `fetchWithAuth`에 통합
 async function fetchWithAuth(url: string, params?: object) {
   try {
     if (typeof window === "undefined") return null;
@@ -11,11 +12,8 @@ async function fetchWithAuth(url: string, params?: object) {
       console.error("Token not found in sessionStorage");
       return null;
     }
-    const headers = accessToken
-      ? { Authorization: `Bearer ${accessToken}` }
-      : {};
 
-    const res = await axiosInstance.get(url, { params, headers });
+    const res = await axiosInstance.get(url, { params });
     return res.data;
   } catch (error) {
     console.error(`Error fetching ${url}:`, error);
@@ -39,11 +37,7 @@ export async function getInviteList({
 }
 
 export async function getColumns(dashboardId: number) {
-  const url = "/columns";
-
-  return fetchWithAuth(url, {
-    dashboardId,
-  });
+  return fetchWithAuth("/columns", { dashboardId });
 }
 
 export async function addColumns(dashboardId: number, title: string) {
@@ -54,11 +48,49 @@ export async function addColumns(dashboardId: number, title: string) {
 }
 
 export async function getCards(size: number = 10, columnId: number) {
-  const url = "/cards";
-  return fetchWithAuth(url, {
-    size,
-    columnId,
-  });
+  return fetchWithAuth("/cards", { size, columnId });
+}
+
+export async function addCards(
+  columnId: number,
+  cardData: {
+    assigneeUserId: number;
+    dashboardId: number;
+    columnId: number;
+    title: string;
+    description: string;
+    dueDate: string;
+    tags: string[];
+    imageUrl: string;
+  }
+) {
+  try {
+    const response = await fetchWithAuth(`/card`, {
+      method: "POST",
+      body: JSON.stringify({
+        assigneeUserId: cardData.assigneeUserId,
+        dashboardId: cardData.dashboardId,
+        columnId: cardData.columnId,
+        title: cardData.title,
+        description: cardData.description,
+        dueDate: cardData.dueDate,
+        tags: cardData.tags,
+        imageUrl: cardData.imageUrl,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add card");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding card:", error);
+    throw error;
+  }
 }
 
 export const updateColumnTitle = async (columnId: number, newTitle: string) => {

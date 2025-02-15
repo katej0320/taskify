@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axiosinstance from "../../src/api/axiosTest";
+import axiosinstance from "../../src/api/axios";
 import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import loginlogo from "@/public/icons/loginlogo.png";

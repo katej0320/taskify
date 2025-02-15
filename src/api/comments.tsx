@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosTest";
+import axiosInstance from "./axios";
 
 // 댓글 목록 조회 (GET)
 export const getComments = async (

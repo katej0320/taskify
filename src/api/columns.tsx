@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosTest";
+import axiosInstance from "./axios";
 
 // ✅ 특정 대시보드의 컬럼 목록 조회
 export const getColumns = async (teamId: string, dashboardId: number) => {
