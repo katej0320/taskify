@@ -53,10 +53,10 @@ export default function InvitationContainer({
     }
   }
 
-  // 초대 취소 후 내역 업데이트
+  // 초대 생성 및 취소 후 내역 업데이트
   useEffect(() => {
     if (isInvitations) getInvitations();
-  }, [isUpdate]);
+  }, [isUpdate, isInvitations]);
 
   // 렌더링 시 데이터 화면 출력
   useEffect(() => {

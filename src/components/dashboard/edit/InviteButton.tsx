@@ -113,7 +113,10 @@ export function InviteButton({
 
   // 초대 API 전송 성공 시 모달 비활성화
   useEffect(() => {
-    if (isUpdate) setIsModal(false);
+    if (isUpdate) {
+      setIsModal(false);
+      getInvitations();
+    }
   }, [isUpdate]);
 
   return (
