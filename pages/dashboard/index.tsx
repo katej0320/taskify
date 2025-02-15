@@ -8,8 +8,11 @@ import { getDashboards, getInviteList } from "@/src/api/dashboardApi";
 import None from "@/src/components/dashboardlist/invite/none";
 import InviteDashboardList from "@/src/components/dashboardlist/invite/InviteList";
 import DashboardList from "@/src/components/dashboardlist/DashBoardList"; // 이 부분을 다시 활성화 가능
+import useRequireAuth from "@/src/hooks/useRequireAuth";
 
 export default function MyDashboardPage() {
+  useRequireAuth(); 
+
   const [dashboards, setDashboards] = useState<any[]>([]);
   const [invitations, setInvitations] = useState<any[]>([]);
 
