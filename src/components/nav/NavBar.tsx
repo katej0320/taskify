@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { getMe } from "@/src/api/meApi";
 import { getDashboard } from "@/src/api/dashboardApi";
-import Dropdown from "@/src/components/nav/dropdown/DropDown";
+import Dropdown from "@/src/components/nav/dropdown/Dropdown";
 import { isDocumentDefined } from "swr/_internal";
 
 export default function NavBar() {
@@ -45,7 +45,7 @@ export default function NavBar() {
         try {
           const dashboard = await getDashboard(dashboardId);
           setHeaderTitle(dashboard.title);
-          setCreateByMe(dashboard.createdByMe); 
+          setCreateByMe(dashboard.createdByMe);
         } catch (error) {
           console.error("대시보드 상세 불러오기 실패:", error);
           setHeaderTitle("잘못된 상세 페이지");
@@ -81,11 +81,11 @@ export default function NavBar() {
         <div>
           <hr className={styles.hr} />
         </div>
-        <div 
+        <div
           className={styles["profile-container"]}
-          onMouseEnter={()=> setIsDropDownOpen(true)}
-          onMouseLeave={()=>setIsDropDownOpen(false)}
-          >
+          onMouseEnter={() => setIsDropDownOpen(true)}
+          onMouseLeave={() => setIsDropDownOpen(false)}
+        >
           <div className={styles.profile}>
             <span className={styles.profileIcon}>
               {userData ? userData.email[0] : "?"}
@@ -93,12 +93,9 @@ export default function NavBar() {
             <span className={styles.profileName}>
               {userData ? userData.nickname : "로딩중..."}
             </span>
-            
           </div>
           {isDropDownOpen && <Dropdown />}
-          </div>
-        
-        
+        </div>
       </div>
     </nav>
   );
