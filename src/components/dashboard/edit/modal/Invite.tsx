@@ -54,6 +54,7 @@ export function InviteModal({
         onSubmit={(e) => {
           e.preventDefault();
           postInvitation?.();
+          setIsValue("");
         }}
       >
         <InputContainer>
@@ -72,6 +73,7 @@ export function InviteModal({
             onClick={() => {
               setIsUpdate(false);
               postInvitation?.();
+              setIsValue("");
             }}
           >
             생성
