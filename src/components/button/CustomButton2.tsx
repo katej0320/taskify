@@ -1,9 +1,9 @@
 import styled, { css } from "styled-components";
 
 interface Container {
-  $half?: string;
-  $signature?: string;
-  $sub?: string;
+  $half?: boolean;
+  $signature?: boolean;
+  $sub?: boolean;
   disabled?: boolean;
 }
 

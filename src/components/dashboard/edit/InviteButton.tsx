@@ -1,11 +1,11 @@
+import { useEffect, useState } from "react";
+import axiosInstance from "@/src/api/axios";
+import axios from "axios";
 import styled from "styled-components";
 import { Button } from "../../button/CustomButton2";
 import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
-import { useEffect, useState } from "react";
 import { InviteModal } from "./modal/Invite";
-import axiosInstance from "@/src/api/axios";
-import axios from "axios";
-import { useEdit } from "@/src/contexts/EditDashboardProvider";
+import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 
 const ButtonContainer = styled(Button)`
   width: fit-content;
