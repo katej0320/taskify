@@ -8,6 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { getMe } from "@/src/api/meApi";
 import { getDashboard } from "@/src/api/dashboardApi";
+import Dropdown from "@/src/components/nav/dropdown/DropDown";
+import { isDocumentDefined } from "swr/_internal";
 
 export default function NavBar() {
   const router = useRouter();
@@ -17,6 +19,7 @@ export default function NavBar() {
   const [headerTitle, setHeaderTitle] = useState("내 대시보드");
   const [userData, setUserData] = useState<any>(null);
   const [createByMe, setCreateByMe] = useState(false);
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -78,7 +81,11 @@ export default function NavBar() {
         <div>
           <hr className={styles.hr} />
         </div>
-        <Link href="/mypage">
+        <div 
+          className={styles["profile-container"]}
+          onMouseEnter={()=> setIsDropDownOpen(true)}
+          onMouseLeave={()=>setIsDropDownOpen(false)}
+          >
           <div className={styles.profile}>
             <span className={styles.profileIcon}>
               {userData ? userData.email[0] : "?"}
@@ -86,8 +93,12 @@ export default function NavBar() {
             <span className={styles.profileName}>
               {userData ? userData.nickname : "로딩중..."}
             </span>
+            
           </div>
-        </Link>
+          {isDropDownOpen && <Dropdown />}
+          </div>
+        
+        
       </div>
     </nav>
   );
