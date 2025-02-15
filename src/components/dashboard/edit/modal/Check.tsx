@@ -5,6 +5,7 @@ import { Button, ButtonContainer, Contents, MessageText } from "./style";
 export const CheckModal = ({
   isModal,
   setIsModal,
+  setIsToast,
   isMessage,
   member,
   invite,
@@ -15,10 +16,11 @@ export const CheckModal = ({
 }: {
   isModal: boolean;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsToast?: React.Dispatch<React.SetStateAction<boolean>>;
   isMessage: string;
-  member?: string;
-  invite?: string;
-  dashboard?: string;
+  member?: boolean;
+  invite?: boolean;
+  dashboard?: boolean;
   deleteMember?: () => Promise<void>;
   deleteInvitation?: () => Promise<void>;
   deleteDashboard?: () => Promise<void>;
@@ -35,9 +37,10 @@ export const CheckModal = ({
               <Button onClick={closeModal}>닫기</Button>
             )}
             <Button
-              $confirm={"confirm"}
+              $confirm
               onClick={() => {
                 closeModal();
+                (member || invite) && setIsToast?.(true);
                 member && deleteMember?.();
                 invite && deleteInvitation?.();
                 dashboard && deleteDashboard?.();

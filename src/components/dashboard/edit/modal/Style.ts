@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 type Props = {
-  $confirm?: string;
+  $confirm?: boolean;
   disabled?: boolean;
 };
 

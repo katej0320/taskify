@@ -9,7 +9,7 @@ import BebridgeContainer from "@/src/components/dashboard/edit/BebridgeContainer
 import DeleteContainer from "@/src/components/dashboard/edit/DeleteContainer";
 import InvitationContainer from "@/src/components/dashboard/edit/InvitationContainer";
 import MemberContainer from "@/src/components/dashboard/edit/MemberContainer";
-import { EditProvider } from "@/src/contexts/EditDashboardProvider";
+import { EditProvider } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 
 const Contents = styled.div`
   width: calc(100vw * 375 / 1200);
