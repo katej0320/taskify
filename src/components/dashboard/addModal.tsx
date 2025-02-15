@@ -85,7 +85,6 @@ const AddModal: React.FC<AddModalProps> = ({
     };
 
     try {
-      // 이미지 파일이 있으면 FormData로 전송
       const formData = new FormData();
       if (image) {
         formData.append("file", image);
@@ -100,13 +99,22 @@ const AddModal: React.FC<AddModalProps> = ({
       //   const uploadResult = await uploadImage(formData);
       //   cardData.imageUrl = uploadResult.url; // 이미지 업로드 후 URL 저장
       // }
-
-      // 카드 추가 성공 시 모달 닫기
+      resetForm();
       onClose();
     } catch (error) {
       console.error("Error adding card:", error);
       setError("카드를 추가하는 중 오류가 발생했습니다.");
     }
+  };
+
+  const resetForm = () => {
+    setTitle("");
+    setDescription("");
+    setDueDate(null);
+    setTags([]);
+    setTagInput("");
+    setImage(null);
+    setSelectedAssignee({});
   };
 
   const changeUser = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -127,7 +135,9 @@ const AddModal: React.FC<AddModalProps> = ({
               </option>
             );
           })}
-          <option>test</option>
+          <option disabled hidden selected>
+            담당자를 선택하세요
+          </option>
         </select>
 
         {/* 제목 입력 */}

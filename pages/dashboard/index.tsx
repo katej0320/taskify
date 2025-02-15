@@ -40,15 +40,8 @@ export default function MyDashboardPage() {
       <NavBar />
       <div className={styles.content}>
         <div>
-          <div className={styles.dashboard}>
-            {/* 새로운 대시보드 컴포넌트 */}
-          </div>
+          <div className={styles.dashboard}></div>
           <DashboardList />
-
-          {/* 페이지네이션 버튼 */}
-          {/* <div className={styles.pagination}>
-            <Pagination />
-          </div> */}
         </div>
 
         {/* 초대받은 대시보드 */}

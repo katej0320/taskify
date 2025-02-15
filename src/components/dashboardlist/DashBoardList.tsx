@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { DashBoardResponse, Dashboard } from "@/src/types/dashboard";
 import axiosInstance from "@/src/api/axios";
 import CustomModal from "../modal/CustomModal";
-import CreateBoard from "./createBoard/createBoard";
+import CreateBoard from "./createDashboard/createDashboard";
 
 interface DashboardListProps {
   currentPage: number;
@@ -26,9 +26,6 @@ export default function DashboardList() {
   const [size, setSize] = useState(6);
   const [total, setTotal] = useState(0);
 
-  const [createdByMe, setcreatedByMe] = useState<{
-    [key: number]: boolean;
-  }>({});
   useEffect(() => {
     const test = async () => {
       const res = await axiosInstance.get("/dashboards", {
@@ -36,15 +33,31 @@ export default function DashboardList() {
       });
       setDashboards(res.data.dashboards);
       setTotal(res.data.totalCount);
-      console.log(dashboards);
     };
     test();
   }, [page, size]);
+
+  const handleDashboardCreate = (newDashboard: Dashboard) => {
+    setDashboards((prev) => [newDashboard, ...prev].slice(0, size));
+    setTotal((prev) => prev + 1);
+    closeModal();
+  };
   return (
     <>
       <div className={styles.listcardandpagination}>
         <ListCard>
-          <button onClick={openModal}>tofhdns</button>
+          <button className={styles.addCard} onClick={openModal}>
+            <div>새로운 대쉬보드</div>
+            <Image
+              src="/icons/chip.svg"
+              width={22}
+              height={22}
+              alt="chip.svg"
+              priority
+              onClick={openModal}
+              style={{ cursor: "pointer" }}
+            />
+          </button>
         </ListCard>
         <div className={styles.listcard}>
           {dashboards?.map((dashboard) => (
@@ -55,7 +68,7 @@ export default function DashboardList() {
                   style={{ backgroundColor: dashboard.color }}
                 ></div>
                 <div>{dashboard.title}</div>
-                {createdByMe[dashboard.id] && (
+                {dashboard.createdByMe && (
                   <Image
                     src="/icons/crown.svg"
                     alt="Crown"
@@ -80,9 +93,22 @@ export default function DashboardList() {
             className={styles.modal}
             isOpen={isModalOpen}
             onClose={closeModal}
-            width="766px"
           >
-            <CreateBoard onClose={closeModal} />
+            <CreateBoard
+              onClose={closeModal}
+              onDashboardCreate={handleDashboardCreate}
+              dashboardName={""}
+              setDashboardName={function (name: string): void {
+                throw new Error("Function not implemented.");
+              }}
+              selectedColor={""}
+              setSelectedColor={function (color: string): void {
+                throw new Error("Function not implemented.");
+              }}
+              handleCreate={function (): Promise<void> {
+                throw new Error("Function not implemented.");
+              }}
+            />
           </CustomModal>
         )}
 
@@ -90,7 +116,7 @@ export default function DashboardList() {
         <div className={styles.pagination}>
           <Pagination
             currentPage={page}
-            totalPages={total}
+            totalPages={Math.floor(total / size)}
             onPageChange={setPage}
           />
         </div>

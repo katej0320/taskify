@@ -42,7 +42,7 @@ export default function NavBar() {
         try {
           const dashboard = await getDashboard(dashboardId);
           setHeaderTitle(dashboard.title);
-          setCreateByMe(dashboard.createdByMe); // ✅ createdByMe 값 설정
+          setCreateByMe(dashboard.createdByMe); 
         } catch (error) {
           console.error("대시보드 상세 불러오기 실패:", error);
           setHeaderTitle("잘못된 상세 페이지");
