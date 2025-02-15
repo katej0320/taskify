@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import styles from "./NavBar.module.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getMe } from "@/src/api/meApi";
 import { getDashboard } from "@/src/api/dashboardApi";
-import Dropdown from "@/src/components/nav/dropdown/DropDown";
+import Dropdown from "@/src/components/nav/dropdown/Dropdown";
 import { isDocumentDefined } from "swr/_internal";
 
 export default function NavBar() {
@@ -20,6 +20,31 @@ export default function NavBar() {
   const [userData, setUserData] = useState<any>(null);
   const [createByMe, setCreateByMe] = useState(false);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const toggleDropdown = () => {
+    setIsDropDownOpen((prev) => !prev); // 🔄 클릭할 때마다 열고 닫기
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropDownOpen(false);
+      }
+    }
+
+    if (isDropDownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropDownOpen]);
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -82,11 +107,8 @@ export default function NavBar() {
           <hr className={styles.hr} />
         </div>
         <div 
-          className={styles["profile-container"]}
-          onMouseEnter={()=> setIsDropDownOpen(true)}
-          onMouseLeave={()=>setIsDropDownOpen(false)}
-          >
-          <div className={styles.profile}>
+          className={styles["profile-container"]} ref={dropdownRef} >
+          <div className={styles.profile} onClick={toggleDropdown}>
             <span className={styles.profileIcon}>
               {userData ? userData.email[0] : "?"}
             </span>
@@ -95,7 +117,11 @@ export default function NavBar() {
             </span>
             
           </div>
-          {isDropDownOpen && <Dropdown />}
+          {isDropDownOpen && (
+          <div>
+            <Dropdown />
+          </div>
+        )}
           </div>
         
         
