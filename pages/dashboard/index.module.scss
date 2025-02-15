@@ -1,9 +1,9 @@
 @use "/styles/color.scss" as *;
-
 .contents {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .content {
@@ -11,8 +11,9 @@
   padding: 20px;
   background-color: #f0f0f0;
   flex-grow: 1;
-
   gap: 20px;
+  // 스크롤이 되지 않는 이슈가 발생되어 추가하였습니다. 02.14_혜림
+  overflow-y: auto;
 }
 
 .listCard {
@@ -43,14 +44,34 @@
 
 .inviteContent {
   width: 1022px;
-  min-height: 390px;
+  max-height: 750px;
   background-color: $white;
   border-radius: 8px;
   padding: 32px 28px;
+  overflow-y: auto;
 
   h2 {
     font-size: 24px;
     font-weight: 700;
     line-height: 32px;
   }
+}
+
+.listcardandpagination {
+  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 1200px;
+}
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+  width: 990px;
+}
+
+.listcard {
+  display: flex;
+  flex-wrap: wrap;
 }

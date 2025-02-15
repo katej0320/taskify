@@ -1,5 +1,4 @@
 @use "/styles/color.scss" as *;
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -7,7 +6,7 @@
   height: 60px;
   background-color: $white;
   border-bottom: 1px solid $gray3;
-  padding: 0 20px 0 80px;
+  padding: 20px 80px 20px 20px;
   position: sticky;
   top: 0px;
   margin-left: 300px;
@@ -25,7 +24,7 @@
 .rightSection {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 36px;
 }
 
 .navButton {
@@ -65,5 +64,12 @@
 
 .profileName {
   font-size: 16px;
+  line-height: 26px;
+
   color: $black2;
+}
+
+.hr {
+  border: 1px solid $gray4;
+  height: 20px;
 }

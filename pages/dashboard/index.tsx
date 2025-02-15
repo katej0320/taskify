@@ -1,11 +1,8 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
 import styles from "./index.module.scss";
 import { getDashboard, getInviteList } from "@/src/api/dashboardApi";
-import Pagination from "@/src/components/pagination/Pagination";
 import None from "@/src/components/dashboardlist/invite/none";
 import InviteDashboardList from "@/src/components/dashboardlist/invite/InviteList";
 import NewDashboardCard from "@/src/components/dashboardlist/newDashBoard";
@@ -43,10 +40,10 @@ export default function MyDashboardPage() {
             <DashboardList dashboards={dashboards} />
           </div>
 
-          {/* 페이지네이션 버튼 */}
+          {/* 페이지네이션 버튼
           <div className={styles.pagination}>
             <Pagination />
-          </div>
+          </div> */}
         </div>
 
         {/* 초대받은 대시보드 */}

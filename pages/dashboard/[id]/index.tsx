@@ -1,71 +1,74 @@
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import SideBar from "@/src/components/sidebar/SideBar";
 import NavBar from "@/src/components/nav/NavBar";
-import styled from "styled-components";
+import Board from "@/src/components/dashboard/Board";
 import TaskCardModal from "@/src/components/modals/cards/TaskCardModal";
+import styles from "./index.module.scss";
 
-const Contents = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-`;
+export default function Page() {
+  const router = useRouter();
+  const { id } = router.query; // ✅ URL에서 id 가져오기
 
-const Container = styled.div`
-  margin-left: 300px;
-  padding: 20px;
-  background-color: #f0f0f0;
-  flex-grow: 1;
-  gap: 20px;
-`;
+  // 새로운 dashboardId 적용
+  const dashboardId: number | null =
+    id && typeof id === "string"
+      ? Number(id)
+      : Array.isArray(id)
+      ? Number(id[0])
+      : null;
 
-export default function Page({ dashboards }: { dashboards: any[] }) {
+  // 모달 상태 관리
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState<any | null>(null); // ✅ 카드 전체 정보를 저장
 
-  // ✅ 클릭한 카드 정보를 저장하도록 수정
-  const openModal = (card: any) => {
-    console.log("✅ openModal 호출됨, card 정보:", card); // 디버깅용 로그
-    setSelectedCard(card);
-    setIsModalOpen(true);
-  };
+  // 선택한 카드 데이터 (새로운 columnId, cardId 적용)
+  const [selectedCard, setSelectedCard] = useState({
+    teamId: "12-1",
+    dashboardId: 13426, // ✅ 변환된 숫자 id 사용
+    columnId: 45359, // ✅ 새로운 columnId 적용
+    cardId: 11657, // ✅ 새로운 cardId 적용
+  });
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedCard(null); // 모달을 닫을 때 초기화
-  };
+  // id 값이 변경될 때 selectedCard 업데이트
+  useEffect(() => {
+    if (dashboardId !== null) {
+      setSelectedCard((prev) => ({
+        ...prev,
+        dashboardId: dashboardId,
+      }));
+    }
+  }, [dashboardId]);
 
   return (
     <>
       <SideBar />
       <NavBar />
+      <div className={styles.Contents}>
+        <div className={styles.Container}>
+          <Board />
 
-      <Contents>
-        <Container>
-          {/* ✅ 카드 정보를 직접 전달해야 함 */}
+          {/* 모달을 여는 버튼 추가 */}
           <button
-            onClick={() =>
-              openModal({ cardId: 11575, columnId: 44887, dashboardId: 13289 })
-            }
+            className={styles.ModalButton}
+            onClick={() => setIsModalOpen(true)}
           >
-            할일 모달 열기
+            할 일 카드 모달 열기
           </button>
 
-          {/* ✅ 수정됨 */}
-          {isModalOpen && selectedCard && (
+          {/* 모달 추가 (버튼을 누르면 활성화됨) */}
+          {isModalOpen && selectedCard.dashboardId !== null && (
             <TaskCardModal
               isOpen={isModalOpen}
-              onClose={closeModal}
-              onOpenEditModal={() =>
-                console.log("할 일 수정 모달 열기(구현필요)")
-              }
-              teamId="12-1"
-              cardId={selectedCard.cardId} // 동적으로 cardId를 전달
-              columnId={selectedCard.columnId} // ✅ columnId 추가
-              dashboardId={selectedCard.dashboardId} // ✅ dashboardId 추가
+              onClose={() => setIsModalOpen(false)}
+              onOpenEditModal={() => console.log("편집 모달 열기")}
+              teamId={selectedCard.teamId}
+              cardId={selectedCard.cardId}
+              columnId={selectedCard.columnId}
+              dashboardId={selectedCard.dashboardId} // URL에서 받은 id 사용
             />
           )}
-        </Container>
-      </Contents>
+        </div>
+      </div>
     </>
   );
 }

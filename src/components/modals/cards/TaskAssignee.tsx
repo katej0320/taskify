@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 interface TaskAssigneeProps {
   assignee?: {
     nickname?: string;
@@ -11,8 +13,8 @@ const TaskAssignee: React.FC<TaskAssigneeProps> = ({ assignee, dueDate }) => {
   const firstLetter = assignee?.nickname ? assignee.nickname[0] : "?";
 
   return (
-    <div className="task-assignee">
-      <div className="profile-icon">
+    <AssigneeContainer>
+      <ProfileIcon>
         {profileImage ? (
           <img
             src={profileImage}
@@ -22,13 +24,59 @@ const TaskAssignee: React.FC<TaskAssigneeProps> = ({ assignee, dueDate }) => {
         ) : (
           <span className="profile-placeholder">{firstLetter}</span>
         )}
-      </div>
-      <div className="assignee-info">
+      </ProfileIcon>
+      <AssigneeInfo>
         <p className="assignee-name">{assignee?.nickname || "미정"}</p>
         <p className="due-date">마감일: {dueDate || "없음"}</p>
-      </div>
-    </div>
+      </AssigneeInfo>
+    </AssigneeContainer>
   );
 };
 
 export default TaskAssignee;
+
+const AssigneeContainer = styled.div`
+  width: 200px;
+  height: 155px;
+  border-radius: 8px;
+  padding: 13px 16px;
+  border: 1px solid #d9d9d9;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const ProfileIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+`;
+
+const AssigneeInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .assignee-name {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .due-date {
+    font-size: 12px;
+    color: #777;
+  }
+`;

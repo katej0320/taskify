@@ -1,25 +1,24 @@
-@import "../../styles/color";
+@use "/styles/color.scss" as *;
 
 .global {
-    background-color: $gray1;
+  background-color: $gray1;
 }
 
 .backButton {
-    background: none;
-    border: none;
-    color: $black2;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    margin-bottom: 16px;
-  }
+  background: none;
+  border: none;
+  color: $black2;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
 
 .profileSettings {
   margin-top: 20px;
   margin-left: 320px;
-
 
   .profileCard {
     width: 672px;
@@ -31,7 +30,8 @@
     height: 466px;
   }
 
-  .profileCard, .passwordCard {
+  .profileCard,
+  .passwordCard {
     background: $white;
     padding: 20px;
     border-radius: 8px;
@@ -51,7 +51,7 @@
 
     .profileInfo {
       display: flex;
-      flex-direction: row;  
+      flex-direction: row;
       align-items: center;
       justify-content: flex-end;
       gap: 42px;
@@ -87,7 +87,7 @@
 
       .profileInputs {
         display: flex;
-        flex-direction: column; 
+        flex-direction: column;
         align-items: flex-end;
         gap: 16px;
       }
@@ -96,19 +96,20 @@
 
   .profileInputGroup {
     input {
-        width: 400px;
-        height: 50px;
+      width: 400px;
+      height: 50px;
     }
   }
 
   .passwordInputGroup {
     input {
-        width: 624px;
-        height: 50px;
+      width: 624px;
+      height: 50px;
     }
   }
 
-  .profileInputGroup, .passwordInputGroup {
+  .profileInputGroup,
+  .passwordInputGroup {
     margin-left: 8px;
     width: 400px;
     display: flex;
@@ -129,7 +130,7 @@
       padding-left: 16px;
     }
   }
-  
+
   .saveButton {
     width: 400px;
     height: 54px;
@@ -141,7 +142,8 @@
     margin-top: 30px;
   }
 
-  .saveButton, .changeButton {
+  .saveButton,
+  .changeButton {
     background: $violet2;
     color: $white;
     font-size: 16px;
@@ -154,19 +156,19 @@
 }
 
 .passwordInputGroup {
-    position: relative; 
-    width: 100%; 
-  }
-  
-  .errorInput {
-    border-color: red !important;
-  }
-  
-  .errorText {
-    position: absolute;
-    bottom: -17px;
-    left: 0;
-    width: 100%;
-    color: red;
-    font-size: 12px;
-  }
+  position: relative;
+  width: 100%;
+}
+
+.errorInput {
+  border-color: red !important;
+}
+
+.errorText {
+  position: absolute;
+  bottom: -17px;
+  left: 0;
+  width: 100%;
+  color: red;
+  font-size: 12px;
+}

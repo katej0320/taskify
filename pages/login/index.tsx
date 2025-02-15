@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axiosinstance from "../../src/api/axiosTest";
+import axiosinstance from "../../src/api/axios";
 import loginlogo from "@/public/icons/loginlogo.png";
 import Image from "next/image";
 import style from "./index.module.scss";
 import passwordeye from "@/public/images/passwordeye.png";
 import passwordeyeopen from "@/public/images/passwordeyeopen.png";
-import CustomModal from "@/src/components/modals/CustomModal";
+import CustomModal from "@/src/components/modal/CustomModal";
 import loginStyles from "./modal.module.scss";
 import CustomButton from "@/src/components/button/CustomButton";
 import buttonStyles from "./button.module.scss";
