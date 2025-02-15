@@ -70,7 +70,7 @@ export default function NavBar() {
         try {
           const dashboard = await getDashboard(dashboardId);
           setHeaderTitle(dashboard.title);
-          setCreateByMe(dashboard.createdByMe); 
+          setCreateByMe(dashboard.createdByMe);
         } catch (error) {
           console.error("대시보드 상세 불러오기 실패:", error);
           setHeaderTitle("잘못된 상세 페이지");
@@ -106,17 +106,19 @@ export default function NavBar() {
         <div>
           <hr className={styles.hr} />
         </div>
+
         <div 
           className={styles["profile-container"]} ref={dropdownRef} >
           <div className={styles.profile} onClick={toggleDropdown}>
+
             <span className={styles.profileIcon}>
               {userData ? userData.email[0] : "?"}
             </span>
             <span className={styles.profileName}>
               {userData ? userData.nickname : "로딩중..."}
             </span>
-            
           </div>
+
           {isDropDownOpen && (
           <div>
             <Dropdown />
@@ -125,6 +127,7 @@ export default function NavBar() {
           </div>
         
         
+
       </div>
     </nav>
   );
