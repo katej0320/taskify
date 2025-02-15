@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -21,6 +22,9 @@ const nextConfig: NextConfig = {
         pathname: "/taskify/task_image/*",
       },
     ],
+  },
+  sassOptions: {
+    includePaths: [path.join(__dirname, "styles")], // styles 폴더를 SCSS 경로로 설정
   },
 };
 

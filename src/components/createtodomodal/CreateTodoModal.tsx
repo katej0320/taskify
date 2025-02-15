@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./CreateTodomoda.module.scss";
-import CustomModal from "../modals/CustomModal";
+import CustomModal from "../modals/TaskModal";
 import { useState } from "react";
 import InputManager from "./createtodomoalcomponenets/manager";
 import InputTitle from "./createtodomoalcomponenets/title";
