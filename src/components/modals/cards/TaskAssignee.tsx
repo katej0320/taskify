@@ -26,8 +26,10 @@ const TaskAssignee: React.FC<TaskAssigneeProps> = ({ assignee, dueDate }) => {
         )}
       </ProfileIcon>
       <AssigneeInfo>
-        <p className="assignee-name">{assignee?.nickname || "미정"}</p>
-        <p className="due-date">마감일: {dueDate || "없음"}</p>
+        <p className="assignee-name">
+          담당자{assignee?.nickname || "담당자 없음"}
+        </p>
+        <p className="due-date">마감일{dueDate || "없음"}</p>
       </AssigneeInfo>
     </AssigneeContainer>
   );
@@ -35,6 +37,7 @@ const TaskAssignee: React.FC<TaskAssigneeProps> = ({ assignee, dueDate }) => {
 
 export default TaskAssignee;
 
+// ✅ 스타일 유지
 const AssigneeContainer = styled.div`
   width: 200px;
   height: 155px;

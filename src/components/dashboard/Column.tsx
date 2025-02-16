@@ -109,6 +109,8 @@ export default function Column({ column, onDelete }: any) {
                 card={card}
                 className={styles.taskCard}
                 columnTitle={columnTitle}
+                columnId={column.id} // 컬럼 ID 추가
+                dashboardId={column.dashboardId} // 대시보드 ID 추가
               />
             ))}
             {provided.placeholder}

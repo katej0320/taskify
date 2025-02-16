@@ -9,14 +9,14 @@ import TaskAssignee from "./TaskAssignee";
 import TaskComments from "./TaskComments";
 import TaskCommentInput from "./TaskCommentInput";
 import { getCardDetail } from "@/src/api/cards";
-import { getColumns } from "@/src/api/columns";
+import { getComments } from "@/src/api/comments";
 
 interface TaskCardModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenEditModal: () => void;
-  teamId: string;
   cardId: number;
+  columnTitle: string;
   columnId: number;
   dashboardId: number;
 }
@@ -25,28 +25,34 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
   isOpen,
   onClose,
   onOpenEditModal,
-  teamId,
   cardId,
+  columnTitle,
   columnId,
   dashboardId,
 }) => {
   const [cardData, setCardData] = useState<any>(null);
-  const [columnTitle, setColumnTitle] = useState<string>("");
+  const [comments, setComments] = useState<any[]>([]);
 
   useEffect(() => {
     if (isOpen) {
-      getCardDetail(teamId, cardId)
+      getCardDetail(cardId)
         .then((data) => setCardData(data))
-        .catch((error) => console.error("카드 상세 조회 실패:", error));
+        .catch((error) => console.error("❌ 카드 상세 조회 실패:", error));
 
-      getColumns(teamId, dashboardId)
-        .then((columns) => {
-          const column = columns.find((col: any) => col.id === columnId);
-          setColumnTitle(column ? column.title : "없음");
-        })
-        .catch((error) => console.error("컬럼 조회 실패:", error));
+      fetchComments();
     }
-  }, [isOpen, teamId, cardId, columnId, dashboardId]);
+  }, [isOpen, cardId]);
+
+  const fetchComments = async () => {
+    try {
+      const response = await getComments(cardId, 10, null);
+      if (response && response.comments) {
+        setComments(response.comments);
+      }
+    } catch (error) {
+      console.error("❌ 댓글 조회 실패:", error);
+    }
+  };
 
   return (
     <CustomModal isOpen={isOpen} onClose={onClose} width="730px" height="auto">
@@ -54,51 +60,47 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
         <HeaderContainer>
           <Title>{cardData?.title || "제목 없음"}</Title>
           <TaskDropdown
-            teamId={teamId}
             cardId={cardId}
             onOpenEditModal={onOpenEditModal}
             onClose={onClose}
           />
         </HeaderContainer>
 
+        <ColumnAndTagsContainer>
+          <TaskColumn columnTitle={columnTitle} />
+          <VerticalDivider />
+          <TaskTags tags={cardData?.tags || []} />
+        </ColumnAndTagsContainer>
+
         <ContentWrapper>
           <LeftContent>
-            <TaskColumn
-              teamId={teamId}
-              columnId={columnId}
-              dashboardId={dashboardId}
-              columnTitle={columnTitle}
-            />
-            <TaskTags tags={cardData?.tags || []} />
-            <TaskImage imageUrl={cardData?.imageUrl} />
             {cardData?.description && (
               <Description>{cardData.description}</Description>
             )}
+            <TaskImage imageUrl={cardData?.imageUrl} />
           </LeftContent>
 
           <RightContent>
             <TaskAssignee
-              assignee={cardData?.assignee}
-              dueDate={cardData?.dueDate}
+              assignee={cardData?.assignee ?? { nickname: "담당자 없음" }}
+              dueDate={cardData?.dueDate ?? "마감일 없음"}
             />
           </RightContent>
         </ContentWrapper>
 
         <CommentSection>
-          <CommentTitle>댓글</CommentTitle>
-          <TaskComments
-            teamId={teamId}
-            cardId={cardId}
-            columnId={columnId}
-            dashboardId={dashboardId}
-            enableInfiniteScroll={true}
-          />
           <TaskCommentInput
-            teamId={teamId}
             cardId={cardId}
             columnId={columnId}
             dashboardId={dashboardId}
-            onCommentAdded={() => {}}
+            onCommentAdded={fetchComments}
+            setComments={setComments}
+          />
+          <TaskComments
+            cardId={cardId}
+            enableInfiniteScroll={true}
+            comments={comments}
+            setComments={setComments}
           />
         </CommentSection>
       </ModalContent>
@@ -114,32 +116,48 @@ const ModalContent = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  padding: 0; // 🔹 TaskCardModal의 padding 제거
+  padding: 0;
 `;
 
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
+  padding-bottom: 12px;
 `;
 
 const Title = styled.h2`
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333236;
+`;
+
+const ColumnAndTagsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 8px;
+`;
+
+const VerticalDivider = styled.div`
+  width: 1px;
+  height: 20px;
+  background-color: #d9d9d9;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex: 1;
   overflow: hidden;
+  flex-direction: row;
 `;
 
 const LeftContent = styled.div`
   flex: 2;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  align-items: flex-start;
 `;
 
 const RightContent = styled.div`
@@ -150,11 +168,10 @@ const RightContent = styled.div`
 `;
 
 const CommentSection = styled.div`
-  border-top: 1px solid #ddd;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 250px; // 🔹 댓글 영역 크기 조정
+  max-height: 250px;
 `;
 
 const CommentTitle = styled.h3`
@@ -163,7 +180,11 @@ const CommentTitle = styled.h3`
 `;
 
 const Description = styled.p`
+  width: 470px;
+  height: 92px;
   font-size: 14px;
-  line-height: 1.5;
-  color: #555;
+  font-weight: 400;
+  color: #000000;
+  padding: 10px;
+  margin-top: 8px;
 `;
