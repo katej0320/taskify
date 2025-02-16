@@ -30,21 +30,21 @@ export default function EditPage() {
       <Head>
         <title>Taskify - 대시보드 수정</title>
       </Head>
-      <div className={styles.contents}>
-        <SideBar />
-        <NavBar />
-        <div className={styles.content}>
-          <Contents>
-            <EditProvider dashboardId={dashboardId}>
+      <EditProvider dashboardId={dashboardId}>
+        <div className={styles.contents}>
+          <SideBar />
+          <NavBar />
+          <div className={styles.content}>
+            <Contents>
               <BackLocation />
               <BebridgeContainer dashboardId={dashboardId} />
               <MemberContainer />
               <InvitationContainer dashboardId={dashboardId} />
               <DeleteContainer dashboardId={dashboardId} />
-            </EditProvider>
-          </Contents>
+            </Contents>
+          </div>
         </div>
-      </div>
+      </EditProvider>
     </>
   );
 }

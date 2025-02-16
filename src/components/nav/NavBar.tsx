@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { getMe } from "@/src/api/meApi";
 import { InviteButton } from "../dashboard/edit/InviteButton";
+import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 
 export default function NavBar() {
   const router = useRouter();
@@ -17,6 +18,10 @@ export default function NavBar() {
 
   const [headerTitle, setHeaderTitle] = useState("내 대시보드");
   const [userData, setUserData] = useState<any>(null);
+
+  // 초대하기 생성 후 초대 내역 리스트 업데이트 02.16_혜림
+  const [updateInvite, setUpdateInvite] = useState(false);
+  const { getInvitations } = useEdit();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -48,6 +53,13 @@ export default function NavBar() {
     }
   }, [pathname, params, dashboards]);
 
+  // 초대하기 생성 후 초대 내역 리스트 업데이트 02.16_혜림
+  useEffect(() => {
+    if (updateInvite) getInvitations();
+
+    setUpdateInvite(false);
+  }, [updateInvite]);
+
   return (
     <>
       <nav className={styles.navbar}>
@@ -68,7 +80,11 @@ export default function NavBar() {
             </button>
           </Link>
           {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
-          <InviteButton $nav dashboardId={params}>
+          <InviteButton
+            $nav
+            dashboardId={params}
+            setUpdateInvite={setUpdateInvite}
+          >
             <Image src="/icons/add_box.svg" width={20} height={20} alt="초대" />
             초대하기
           </InviteButton>

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, SetStateAction, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import axiosInstance from "@/src/api/axios";
 import axios from "axios";
@@ -64,10 +64,12 @@ export function InviteButton({
   $nav,
   children,
   dashboardId,
+  setUpdateInvite
 }: {
   $nav?: boolean;
   children?: ReactNode;
   dashboardId: string | string[] | undefined;
+  setUpdateInvite?:React.Dispatch<SetStateAction<boolean>>
 }) {
   const [isUpdate, setIsUpdate] = useState(false);
   const [isModal, setIsModal] = useState(false);
@@ -131,6 +133,7 @@ export function InviteButton({
           isErrorMessage={isErrorMessage}
           postInvitation={postInvitation}
           setIsUpdate={setIsUpdate}
+          setUpdateInvite={setUpdateInvite}
         />
       )}
       {$nav}
