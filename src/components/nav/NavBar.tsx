@@ -20,7 +20,7 @@ export default function NavBar() {
   const [userData, setUserData] = useState<any>(null);
   const [createByMe, setCreateByMe] = useState(false);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-  
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
@@ -29,7 +29,10 @@ export default function NavBar() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropDownOpen(false);
       }
     }
@@ -44,7 +47,6 @@ export default function NavBar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isDropDownOpen]);
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -107,10 +109,8 @@ export default function NavBar() {
           <hr className={styles.hr} />
         </div>
 
-        <div 
-          className={styles["profile-container"]} ref={dropdownRef} >
+        <div className={styles["profile-container"]} ref={dropdownRef}>
           <div className={styles.profile} onClick={toggleDropdown}>
-
             <span className={styles.profileIcon}>
               {userData ? userData.email[0] : "?"}
             </span>
@@ -120,14 +120,11 @@ export default function NavBar() {
           </div>
 
           {isDropDownOpen && (
-          <div>
-            <Dropdown />
-          </div>
-        )}
-          </div>
-        
-        
-
+            <div>
+              <Dropdown />
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );

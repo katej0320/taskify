@@ -71,15 +71,18 @@ export async function acceptInvite(invitationId: number) {
   });
 }
 
-export async function getColumns(dashboardId: number) {
-  return fetchWithAuth("/columns", { dashboardId });
+export async function rejectInvite(invitationId: number) {
+  return PUThWithAuth(`/invitations/${invitationId}`, {
+    method: "PUT",
+    body: { invitationId, inviteAccepted: false }, // Update status to false for rejection
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }
 
-export async function addColumns(dashboardId: number, title: string) {
-  return fetchWithAuth(`/columns`, {
-    method: "POST",
-    data: { title, dashboardId },
-  });
+export async function getColumns(dashboardId: number) {
+  return fetchWithAuth("/columns", { dashboardId });
 }
 
 export async function getCards(size: number = 10, columnId: number) {
