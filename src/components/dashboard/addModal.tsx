@@ -7,6 +7,7 @@ import { addCards } from "../../api/dashboardApi";
 import ImageUpload from "./addModal/ImageUpload";
 import { useRouter } from "next/router";
 import axiosInstance from "@/src/api/axios";
+import TaskTags from "../modals/cards/TaskTags";
 
 interface AddModalProps {
   isOpen: boolean;
@@ -95,7 +96,7 @@ const AddModal: React.FC<AddModalProps> = ({
       }
 
       // 카드 생성 API 호출
-      const result = await addCards(cardData);
+      await addCards(cardData);
       fetchCards();
 
       // 이미지가 있으면 업로드 후 imageUrl을 업데이트
@@ -140,7 +141,6 @@ const AddModal: React.FC<AddModalProps> = ({
           </option>
         </select>
 
-        {/* 제목 입력 */}
         <label>제목 *</label>
         <input
           type="text"
@@ -151,7 +151,6 @@ const AddModal: React.FC<AddModalProps> = ({
           required
         />
 
-        {/* 설명 입력 */}
         <label>설명 *</label>
         <textarea
           className={styles.textarea}
@@ -161,7 +160,6 @@ const AddModal: React.FC<AddModalProps> = ({
           required
         />
 
-        {/* 마감일  */}
         <label>마감일 *</label>
         <DatePicker
           className={styles.date}
@@ -173,7 +171,7 @@ const AddModal: React.FC<AddModalProps> = ({
           timeIntervals={10}
           placeholderText="날짜를 입력해 주세요"
         />
-        {/* 태그 입력 */}
+
         <label>태그</label>
         <input
           type="text"
@@ -183,13 +181,7 @@ const AddModal: React.FC<AddModalProps> = ({
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={handleTagKeyPress}
         />
-        <div className={styles.tags}>
-          {tags.map((tag, index) => (
-            <span key={index} className={styles.tag}>
-              {tag} <button onClick={() => handleRemoveTag(index)}>✕</button>
-            </span>
-          ))}
-        </div>
+        <TaskTags tags={tags} />
 
         <label>이미지</label>
         <div className={styles.imageUpload}>

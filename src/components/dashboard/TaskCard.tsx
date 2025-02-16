@@ -1,13 +1,14 @@
 import Image from "next/image";
 import styles from "./TaskCard.module.scss";
 import { useState } from "react";
-import CustomModal from "../modal/CustomModal";
-import DetailModal from "./detailModal";
+import TaskCardModal from "../modals/cards/TaskCardModal";
 
 export default function TaskCard({
   card,
   key,
   columnTitle,
+  columnId,
+  dashboardId,
   onCardDelete,
 }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,8 +56,13 @@ export default function TaskCard({
         </div>
       </div>
 
+
       {/* 모달 */}
       {isModalOpen && (
+
+      {/* 기존 모달 주석 처리 */}
+      {/* {isModalOpen && (
+
         <CustomModal
           className={styles.modal}
           isOpen={isModalOpen}
@@ -70,6 +76,18 @@ export default function TaskCard({
             onCardDelete={onCardDelete}
           />
         </CustomModal>
+      )} */}
+      {/* 새로운 TaskCardModal 적용 */}
+      {isModalOpen && (
+        <TaskCardModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onOpenEditModal={() => {}}
+          cardId={card.id}
+          columnTitle={columnTitle}
+          columnId={columnId}
+          dashboardId={dashboardId}
+        />
       )}
     </div>
   );

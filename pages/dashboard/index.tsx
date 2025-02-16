@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
