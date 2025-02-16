@@ -1,5 +1,5 @@
-import { User } from "@/src/types/users"; 
-import axios from "axios"
+import { User } from "@/src/types/users";
+import axios from "axios";
 
 // 사용자 정보 API 함수 (getUser)
 export const getUser = async (): Promise<User> => {
@@ -16,7 +16,7 @@ export const getUser = async (): Promise<User> => {
       "https://sp-taskify-api.vercel.app/12-1/users", // 사용자 정보 가져오는 URL
       {
         headers: {
-          "Authorization": `Bearer ${accessToken}`, // Authorization 헤더에 access token 추가
+          Authorization: `Bearer ${accessToken}`, // Authorization 헤더에 access token 추가
         },
       }
     );
@@ -28,7 +28,10 @@ export const getUser = async (): Promise<User> => {
 };
 
 // 사용자 프로필 수정 API 함수
-export const updateProfile = async (nickname: string, profileImage: string | null) => {
+export const updateProfile = async (
+  nickname: string,
+  profileImage: string | null
+) => {
   try {
     const accessToken = sessionStorage.getItem("accessToken");
 
@@ -49,7 +52,7 @@ export const updateProfile = async (nickname: string, profileImage: string | nul
       formData,
       {
         headers: {
-          "Authorization": `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
         },
       }

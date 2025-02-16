@@ -3,19 +3,20 @@
 import Image from "next/image";
 import styles from "./NavBar.module.scss";
 import { useEffect, useState } from "react";
-import { useDashboard } from "@/src/contexts/DashBoardContext"; // 예제
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getMe } from "@/src/api/meApi";
+import { getDashboard } from "@/src/api/dashboardApi";
 
 export default function NavBar() {
   const router = useRouter();
   const params = router.query.id;
   const pathname = router.asPath;
-  const { dashboards } = useDashboard();
 
   const [headerTitle, setHeaderTitle] = useState("내 대시보드");
   const [userData, setUserData] = useState<any>(null);
+  const [createByMe, setCreateByMe] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -31,26 +32,39 @@ export default function NavBar() {
   }, []); // 이 부분은 컴포넌트가 처음 렌더링될 때만 실행
 
   useEffect(() => {
-    if (!pathname) return; // pathname이 null이면 실행 안 함
+    if (!pathname) return;
 
-    // 대시보드 ID가 URL에서 추출된 경우
     if (pathname.startsWith("/dashboard/") && params) {
       const dashboardId = Number(params);
 
-      // 대시보드가 존재하는지 확인
-      const dashboard = dashboards.find((d) => d.id === dashboardId);
+      // ✅ API 호출하여 대시보드 상세 정보 가져오기
+      const fetchDashboard = async () => {
+        try {
+          const dashboard = await getDashboard(dashboardId);
+          setHeaderTitle(dashboard.title);
+          setCreateByMe(dashboard.createdByMe); // ✅ createdByMe 값 설정
+        } catch (error) {
+          console.error("대시보드 상세 불러오기 실패:", error);
+          setHeaderTitle("잘못된 상세 페이지");
+        }
+      };
 
-      // 대시보드가 있으면 제목을 설정하고, 없으면 잘못된 페이지라고 설정
-      setHeaderTitle(dashboard ? dashboard.title : "잘못된 상세 페이지");
+      fetchDashboard();
     } else {
       setHeaderTitle("내 대시보드");
+      setCreateByMe(false);
     }
-  }, [pathname, params, dashboards]);
+  }, [pathname, params]);
 
   return (
     <nav className={styles.navbar}>
       <div className={styles.leftSection}>
-        <span className={styles.dashboardTitle}>{headerTitle}</span>
+        <span className={styles.dashboardTitle}>
+          {headerTitle}
+          {createByMe && (
+            <Image src="/icons/crown.svg" width={20} height={20} alt="초대" />
+          )}
+        </span>
       </div>
       <div className={styles.rightSection}>
         <button className={styles.navButton}>

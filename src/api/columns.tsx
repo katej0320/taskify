@@ -1,13 +1,13 @@
 import axiosInstance from "./axios";
 
-export const getColumns = async (teamId: string, dashboardId: number) => {
+export const getColumns = async (dashboardId: number) => {
   try {
-    console.log(
-      `컬럼 목록 조회 요청: /${teamId}/columns?dashboardId=${dashboardId}`
-    );
-    const response = await axiosInstance.get(`/${teamId}/columns`, {
+    console.log(`컬럼 목록 조회 요청: /columns?dashboardId=${dashboardId}`);
+
+    const response = await axiosInstance.get(`/columns`, {
       params: { dashboardId },
     });
+
     console.log("컬럼 목록 조회 응답:", response.data);
     return response.data.data;
   } catch (error: any) {

@@ -1,30 +1,27 @@
 import axiosInstance from "./axios";
 
 export const getComments = async (
-  teamId: string,
   cardId: number | null,
   size: number = 10,
   cursorId: number | null = null
 ) => {
   try {
-    // 추가 로그로 teamId, cardId 값 확인
-    console.log("💡 getComments 요청:", { teamId, cardId, size, cursorId });
+    console.log("💡 getComments 요청:", { cardId, size, cursorId });
 
-    // cardId가 없으면 API 요청을 중단 (404 방지)
     if (!cardId) {
-      console.error("cardId가 없습니다! 요청을 중단합니다.");
+      console.error("cardId가 없습니다! 요청 중단.");
       return null;
     }
 
-    const response = await axiosInstance.get(`/${teamId}/comments`, {
+    const response = await axiosInstance.get(`/comments`, {
       params: { cardId, size, ...(cursorId ? { cursorId } : {}) },
     });
 
-    console.log("댓글 목록 응답:", response.data);
+    console.log("✅ 댓글 목록 응답:", response.data);
     return response.data;
   } catch (error: any) {
     console.error(
-      "댓글 목록 조회 실패:",
+      "❌ 댓글 목록 조회 실패:",
       error.response?.status,
       error.response?.data?.message || error.response?.data
     );
@@ -33,33 +30,31 @@ export const getComments = async (
 };
 
 export const createComment = async (
-  teamId: string,
   cardId: number,
   content: string,
   columnId: number,
   dashboardId: number
 ) => {
   try {
-    console.log("댓글 생성 API 요청 데이터:", {
-      teamId,
-      cardId,
-      content,
-      columnId,
-      dashboardId,
-    });
-
-    const response = await axiosInstance.post(`/${teamId}/comments`, {
+    console.log("🔥 API 요청 데이터:", {
       content,
       cardId,
       columnId,
       dashboardId,
     });
 
-    console.log("댓글 생성 API 응답:", response.data);
+    const response = await axiosInstance.post(`/comments`, {
+      content,
+      cardId,
+      columnId,
+      dashboardId,
+    });
+
+    console.log("✅ 댓글 생성 성공:", response.data);
     return response.data;
   } catch (error: any) {
     console.error(
-      "댓글 생성 API 실패:",
+      "❌ 댓글 생성 실패:",
       error.response?.status,
       error.response?.data?.message || error.response?.data
     );
@@ -67,24 +62,19 @@ export const createComment = async (
   }
 };
 
-export const updateComment = async (
-  teamId: string,
-  commentId: number,
-  content: string
-) => {
+export const updateComment = async (commentId: number, content: string) => {
   try {
-    console.log("댓글 수정 요청 데이터:", { teamId, commentId, content });
+    console.log("🔄 댓글 수정 요청 데이터:", { commentId, content });
 
-    const response = await axiosInstance.put(
-      `/${teamId}/comments/${commentId}`,
-      { content }
-    );
+    const response = await axiosInstance.put(`/comments/${commentId}`, {
+      content,
+    });
 
-    console.log("댓글 수정 API 응답:", response.data);
+    console.log("✅ 댓글 수정 성공:", response.data);
     return response.data;
   } catch (error: any) {
     console.error(
-      "댓글 수정 실패:",
+      "❌ 댓글 수정 실패:",
       error.response?.status,
       error.response?.data?.message || error.response?.data
     );
@@ -92,19 +82,17 @@ export const updateComment = async (
   }
 };
 
-export const deleteComment = async (teamId: string, commentId: number) => {
+export const deleteComment = async (commentId: number) => {
   try {
-    console.log("댓글 삭제 요청:", { teamId, commentId });
+    console.log("🗑️ 댓글 삭제 요청:", { commentId });
 
-    const response = await axiosInstance.delete(
-      `/${teamId}/comments/${commentId}`
-    );
+    const response = await axiosInstance.delete(`/comments/${commentId}`);
 
-    console.log("댓글 삭제 응답:", response.data);
+    console.log("✅ 댓글 삭제 성공:", response.data);
     return response.data;
   } catch (error: any) {
     console.error(
-      "댓글 삭제 실패:",
+      "❌ 댓글 삭제 실패:",
       error.response?.status,
       error.response?.data?.message || error.response?.data
     );

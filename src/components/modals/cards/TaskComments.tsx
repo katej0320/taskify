@@ -1,43 +1,52 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "@/src/api/axios"; // 수정된 부분
+import { getComments, deleteComment } from "@/src/api/comments";
 import styled from "styled-components";
 
 interface TaskCommentsProps {
-  teamId: string;
   cardId: number;
-  columnId: number;
-  dashboardId: number;
   enableInfiniteScroll?: boolean;
+  comments: any[]; // ✅ 부모 컴포넌트(TaskCardModal)에서 관리하는 댓글 상태를 받음
+  setComments: React.Dispatch<React.SetStateAction<any[]>>; // ✅ 상태 업데이트 함수 받음
 }
 
 const TaskComments: React.FC<TaskCommentsProps> = ({
-  teamId,
   cardId,
-  columnId,
-  dashboardId,
   enableInfiniteScroll = true,
+  comments,
+  setComments, // ✅ 부모에서 내려준 상태 업데이트 함수
 }) => {
-  const [comments, setComments] = useState<any[]>([]);
+  const [cursorId, setCursorId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    fetchComments();
-  }, [teamId, cardId]);
+    if (cardId) fetchComments(true);
+  }, [cardId]);
 
-  const fetchComments = async () => {
+  const fetchComments = async (reset = false) => {
+    if (!cardId || loading || (!reset && !hasMore)) return;
+
+    setLoading(true);
     try {
-      const response = await axiosInstance.get(
-        `/teams/${teamId}/cards/${cardId}/comments`
-      );
-      setComments(response.data.comments);
+      const response = await getComments(cardId, 10, reset ? null : cursorId);
+      if (response) {
+        setComments((prev) =>
+          reset ? response.comments : [...prev, ...response.comments]
+        );
+        setCursorId(response.nextCursor || null);
+        setHasMore(response.hasMore);
+      }
     } catch (error) {
       console.error("❌ 댓글 조회 실패:", error);
     }
+    setLoading(false);
   };
 
   const handleDeleteComment = async (commentId: number) => {
+    if (!window.confirm("정말 이 댓글을 삭제하시겠습니까?")) return;
     try {
-      await axiosInstance.delete(`/teams/${teamId}/comments/${commentId}`);
-      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
+      await deleteComment(commentId);
+      setComments((prev) => prev.filter((comment) => comment.id !== commentId)); // ✅ 즉시 UI 업데이트
     } catch (error) {
       console.error("❌ 댓글 삭제 실패:", error);
     }
@@ -66,7 +75,7 @@ export default TaskComments;
 
 const CommentList = styled.ul`
   width: 420px;
-  max-height: 72px;
+  max-height: 200px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

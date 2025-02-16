@@ -2,16 +2,24 @@ import { Draggable } from "@hello-pangea/dnd";
 import Image from "next/image";
 import styles from "./TaskCard.module.scss";
 import { useState } from "react";
-import CustomModal from "../modal/CustomModal";
-import DetailModal from "./detailModal";
+/* import CustomModal from "../modal/CustomModal"; // ❌ 기존 코드 비활성화 */
+/* import DetailModal from "./detailModal"; // ❌ 기존 코드 비활성화 */
+import TaskCardModal from "../modals/cards/TaskCardModal"; // ✅ TaskCardModal 유지
 
-export default function TaskCard({ card, index, columnTitle }: any) {
+export default function TaskCard({
+  card,
+  index,
+  columnTitle,
+  columnId,
+  dashboardId,
+}: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const dueDate = card.dueDate;
   const date = dueDate ? dueDate.split(" ")[0] : "";
+
   return (
     <Draggable draggableId={String(card.id)} index={index}>
       {(provided) => (
@@ -24,7 +32,7 @@ export default function TaskCard({ card, index, columnTitle }: any) {
           <div onClick={openModal}>
             <Image
               className={styles.taskImg}
-              src={card.image}
+              src={card.imageUrl}
               width={274}
               height={160}
               alt="카드 이미지"
@@ -47,7 +55,9 @@ export default function TaskCard({ card, index, columnTitle }: any) {
               <p>{date}</p>
             </div>
           </div>
-          {/* 모달 */}
+
+          {/* ✅ 기존 코드 비활성화 (작동되지 않도록 처리) */}
+          {/* 
           {isModalOpen && (
             <CustomModal
               className={styles.modal}
@@ -57,6 +67,20 @@ export default function TaskCard({ card, index, columnTitle }: any) {
             >
               <DetailModal card={card} columnTitle={columnTitle} />
             </CustomModal>
+          )} 
+          */}
+
+          {/* ✅ TaskCardModal 적용 */}
+          {isModalOpen && (
+            <TaskCardModal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              onOpenEditModal={() => {}} // 할 일 수정 모달 열기 함수 (추후 구현)
+              cardId={card.id}
+              columnTitle={columnTitle} // 컬럼 타이틀만 전달
+              columnId={columnId}
+              dashboardId={dashboardId}
+            />
           )}
         </div>
       )}
