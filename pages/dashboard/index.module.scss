@@ -1,4 +1,5 @@
 @use "/styles/color.scss" as *;
+
 .contents {
   display: flex;
   flex-direction: column;
@@ -9,23 +10,29 @@
 .content {
   margin-left: 300px;
   padding: 20px;
-  background-color: #f0f0f0;
+  background-color: $gray1;
   flex-grow: 1;
-  gap: 20px;
-  // 스크롤이 되지 않는 이슈가 발생되어 추가하였습니다. 02.14_혜림
   overflow-y: auto;
+  transition: margin-left 0.3s ease-in-out;
 }
 
-.listCard {
-  div {
-    text-align: center;
+.listcard {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+
+  @media (max-width: 1199px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
-.listCard {
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+.listcardandpagination {
+  max-width: 1200px;
+  width: 100%;
 }
 
 .dashboard {
@@ -39,12 +46,12 @@
   width: 8px;
   height: 8px;
   border-radius: 50px;
-  background-color: $white;
 }
 
 .inviteContent {
-  width: 80%;
-  max-height: 750px;
+  max-width: 1200px;
+  width: 100%;
+  min-height: 390px;
   background-color: $white;
   border-radius: 8px;
   padding: 32px 28px;
@@ -57,29 +64,15 @@
   }
 }
 
-.listcardandpagination {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 80%; /* Use full width */
-}
-
 .pagination {
   display: flex;
   justify-content: flex-end;
   margin: 10px 0;
-  width: 100%; /* Ensure pagination takes full width */
+  width: 90%;
 }
 
-.listcard,
 .addCard {
   display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  justify-content: space-between; /* Ensures even spacing */
-}
-
-.addCard {
   gap: 12px;
   justify-content: center;
   align-items: center;
@@ -111,17 +104,6 @@
 
   .listcardandpagination {
     width: 100%;
-  }
-
-  .listcard {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    overflow-x: auto;
-  }
-
-  .listcard > a {
-    flex-shrink: 0; /* Prevent shrinking on smaller screens */
   }
 
   .pagination {

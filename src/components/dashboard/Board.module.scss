@@ -10,6 +10,7 @@
     flex-direction: column;
     justify-content: flex-start;
     overflow-y: auto;
+    width: 100%;
   }
 
   @media (max-width: 768px) {
@@ -25,12 +26,21 @@
   display: flex;
   flex-direction: column;
   margin-right: 16px;
+  height: 100vh;
 
-  border-right: 1px solid $gray2;
+  border-right: 1px solid $gray3;
   padding-right: 20px;
 
   &:last-child {
     border-right: none;
+  }
+  @media (max-width: 1199px) and (min-width: 768px) {
+    flex-direction: row;
+    height: auto;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid $gray3;
+    padding-bottom: 20px;
   }
 }
 
@@ -43,6 +53,12 @@
 
 .listCard {
   margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: ce;
+  @media (max-width: 1199px) and (min-width: 768px) {
+    width: 100%;
+  }
 }
 
 .listCardModal {
@@ -103,4 +119,7 @@
 
 .create:hover {
   background-color: $violet2;
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
 }

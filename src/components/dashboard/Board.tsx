@@ -118,7 +118,7 @@ export default function Board() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >
-        <h2>새 컬럼 생성</h2>
+        <h2>칼럼 수정</h2>
         <div>이름</div>
 
         <input

@@ -8,7 +8,7 @@
 .Container {
   margin-left: 300px;
   padding: 20px;
-  background-color: $gray2;
+  background-color: $gray1;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@
   .Container {
     margin-left: 160px;
     padding: 20px;
-    background-color: $gray2;
+    background-color: $gray1;
   }
 }
 
@@ -27,6 +27,6 @@
   .Container {
     margin-left: 60px;
     padding: 20px;
-    background-color: $gray2;
+    background-color: $gray1;
   }
 }

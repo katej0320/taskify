@@ -36,28 +36,16 @@ export default function Pagination({
         <button
           onClick={handlePrev}
           disabled={currentPage === 1}
-          style={{
-            background: "none",
-            border: "none",
-            padding: 0,
-            cursor: currentPage === 1 ? "not-allowed" : "pointer",
-            opacity: currentPage === 1 ? 0.5 : 1,
-          }}
+          className={styles.buttonleft}
         >
-          <Image
-            src="/icons/paginationprev.png"
-            alt="paginationprevbutton"
-            width={40}
-            height={40}
-          />
+          &lt;
         </button>
-        <button onClick={handleNext} disabled={currentPage === totalPages}>
-          <Image
-            src="/icons/paginationnext.png"
-            alt="paginationnextbutton"
-            width={40}
-            height={40}
-          />
+        <button
+          className={styles.buttonright}
+          onClick={handleNext}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
         </button>
       </div>
     </>

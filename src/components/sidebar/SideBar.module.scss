@@ -8,6 +8,7 @@
   left: 0;
   z-index: 1000;
   padding-bottom: 50px;
+  transition: width 0.3s ease-in-out;
 }
 
 .sidebarcontent {
@@ -33,20 +34,6 @@
   color: $gray5;
 }
 
-.dashboard {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  width: 1200px;
-}
-
-.colorCircle {
-  width: 8px;
-  height: 8px;
-  border-radius: 50px;
-  background-color: $white;
-}
-
 .dashboardlist {
   display: flex;
   justify-content: flex-start;
@@ -54,12 +41,21 @@
   gap: 16px;
   margin: 20px;
   padding-bottom: 12px;
-
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
   text-align: left;
   color: $gray5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+.colorCircle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50px;
+  flex-shrink: 0;
 }
 
 .scroll {
