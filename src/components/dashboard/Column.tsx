@@ -7,14 +7,8 @@ import ListCard from "../dashboardlist/card/ListCard";
 import Image from "next/image";
 import CustomModal from "../modal/CustomModal";
 import styles from "./Column.module.scss";
-import {
-  getCards,
-  updateColumnTitle,
-  deleteColumn,
-  addCards,
-} from "@/src/api/dashboardApi";
+import { updateColumnTitle, deleteColumn } from "@/src/api/dashboardApi";
 import AddModal from "./addModal";
-import { useRouter } from "next/router";
 import axiosInstance from "@/src/api/axios";
 
 export default function Column({ column, onDelete }: any) {
@@ -74,6 +68,10 @@ export default function Column({ column, onDelete }: any) {
     }
   };
 
+  const handleCardDelete = (cardId: string) => {
+    setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
+  };
+
   return (
     <div className={styles.columnWrapper}>
       <div className={styles.columnTitle}>
@@ -111,6 +109,7 @@ export default function Column({ column, onDelete }: any) {
                 columnTitle={columnTitle}
                 columnId={column.id} // 컬럼 ID 추가
                 dashboardId={column.dashboardId} // 대시보드 ID 추가
+                // onCardDelete={handleCardDelete}
               />
             ))}
             {provided.placeholder}

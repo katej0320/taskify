@@ -1,5 +1,6 @@
 "use Client";
-import styles from "./createBoard.module.scss";
+import { Dashboard } from "@/src/types/dashboard";
+import styles from "./createDashboard.module.scss";
 import { useCreateBoard } from "@/src/hooks/useCreateBoard";
 
 interface CreateBoardProps {
@@ -9,16 +10,20 @@ interface CreateBoardProps {
   setSelectedColor: (color: string) => void;
   handleCreate: () => Promise<void>;
   onClose: () => void;
+  onDashboardCreate?: (newDashboard: Dashboard) => void;
 }
 
-export default function CreateBoard({ onClose }: CreateBoardProps) {
+export default function CreateBoard({
+  onClose,
+  onDashboardCreate,
+}: CreateBoardProps) {
   const {
     dashboardName,
     setDashboardName,
     selectedColor,
     setSelectedColor,
     handleCreate,
-  } = useCreateBoard(onClose);
+  } = useCreateBoard(onClose, onDashboardCreate);
 
   return (
     <div className={styles.modalContent}>

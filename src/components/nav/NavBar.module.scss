@@ -26,7 +26,6 @@
   align-items: center;
   gap: 36px;
 }
-
 .navButton {
   background: none;
   border: 1px solid $gray3;
@@ -60,6 +59,7 @@
   justify-content: center;
   color: white;
   font-weight: bold;
+  cursor:pointer;
 }
 
 .profileName {
@@ -80,3 +80,4 @@
   align-items: center;
   gap: 8px;
 }
+

@@ -136,3 +136,13 @@ export const deleteColumn = async (columnId: number) => {
     throw error;
   }
 };
+
+export const deleteCard = async (cardId: number) => {
+  try {
+    const response = await axiosInstance.delete(`/cards/${cardId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting column:", error);
+    throw error;
+  }
+};

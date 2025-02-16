@@ -86,7 +86,6 @@ const AddModal: React.FC<AddModalProps> = ({
     };
 
     try {
-      // 이미지 파일이 있으면 FormData로 전송
       const formData = new FormData();
       if (image) {
         formData.append("file", image);
@@ -96,12 +95,27 @@ const AddModal: React.FC<AddModalProps> = ({
       await addCards(cardData);
       fetchCards();
 
-      // 카드 추가 성공 시 모달 닫기
+      // 이미지가 있으면 업로드 후 imageUrl을 업데이트
+      // if (image) {
+      //   const uploadResult = await uploadImage(formData);
+      //   cardData.imageUrl = uploadResult.url; // 이미지 업로드 후 URL 저장
+      // }
+      resetForm();
       onClose();
     } catch (error) {
       console.error("Error adding card:", error);
       setError("카드를 추가하는 중 오류가 발생했습니다.");
     }
+  };
+
+  const resetForm = () => {
+    setTitle("");
+    setDescription("");
+    setDueDate(null);
+    setTags([]);
+    setTagInput("");
+    setImage(null);
+    setSelectedAssignee({});
   };
 
   const changeUser = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -115,12 +129,16 @@ const AddModal: React.FC<AddModalProps> = ({
 
         <label>담당자</label>
         <select className={styles.input} onChange={changeUser}>
-          {members?.map((member: any) => (
-            <option key={member.id} value={member.userId}>
-              {member.nickname}
-            </option>
-          ))}
-          <option>test</option>
+          {members?.map((member: any) => {
+            return (
+              <option key={member.id} value={member.userId}>
+                {member.nickname}
+              </option>
+            );
+          })}
+          <option disabled hidden selected>
+            담당자를 선택하세요
+          </option>
         </select>
 
         <label>제목 *</label>

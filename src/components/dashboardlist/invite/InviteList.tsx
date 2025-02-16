@@ -30,15 +30,12 @@ const InviteDashboardList: React.FC<InviteDashboardListProps> = ({
 
   const handleAccept = async (invitationId: number, dashboardId: number) => {
     try {
-      // 초대 수락 처리
       await acceptInvite(invitationId);
 
-      // 초대 목록에서 해당 초대 삭제
       setUpdatedInvitations((prevInvitations) =>
         prevInvitations.filter((invite) => invite.id !== invitationId)
       );
 
-      // 대시보드 리스트에 해당 대시보드 추가
       onAcceptInvite(dashboardId); // 부모 컴포넌트로 대시보드 추가 처리
     } catch (error) {
       console.error("초대 수락 실패:", error);

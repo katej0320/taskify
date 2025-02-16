@@ -1,15 +1,10 @@
 import { useState } from "react";
 import axiosInstance from "@/src/api/axios";
-
-interface Dashboard {
-  id: string;
-  title: string;
-  color: string;
-}
+import { Dashboard } from "../types/dashboard";
 
 export const useCreateBoard = (
-    onClose: () => void, 
-    onDashboardCreate?: (newDashboard: Dashboard) => void
+  onClose: () => void,
+  onDashboardCreate?: (newDashboard: Dashboard) => void
 ) => {
   const [dashboardName, setDashboardName] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -38,7 +33,9 @@ export const useCreateBoard = (
 
       if (response.status === 200 || response.status === 201) {
         onDashboardCreate?.(response.data);
-        onClose(); // 모달 닫기
+        setDashboardName("");
+        setSelectedColor("");
+        onClose();
       } else {
         console.error("❌ Unexpected response status:", response.status);
       }
