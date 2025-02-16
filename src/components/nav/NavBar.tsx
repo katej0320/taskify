@@ -55,15 +55,19 @@ export default function NavBar() {
           <span className={styles.dashboardTitle}>{headerTitle}</span>
         </div>
         <div className={styles.rightSection}>
-          <button className={styles.navButton}>
-            <Image
-              src="/icons/settings.svg"
-              width={20}
-              height={20}
-              alt="설정"
-            />
-            관리
-          </button>
+          {/* 수정 페이지 링크 추가 02.15_혜림 */}
+          <Link href={`/dashboard/${params}/edit`}>
+            <button className={styles.navButton}>
+              <Image
+                src="/icons/settings.svg"
+                width={20}
+                height={20}
+                alt="설정"
+              />
+              관리
+            </button>
+          </Link>
+          {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
           <InviteButton $nav dashboardId={params}>
             <Image src="/icons/add_box.svg" width={20} height={20} alt="초대" />
             초대하기
