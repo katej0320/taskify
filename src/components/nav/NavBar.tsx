@@ -16,6 +16,8 @@ export default function NavBar() {
   const pathname = router.asPath;
   const { dashboards } = useDashboard();
 
+  console.log(router.route === `/dashboard/[id]`);
+
   const [headerTitle, setHeaderTitle] = useState("내 대시보드");
   const [userData, setUserData] = useState<any>(null);
 
@@ -67,30 +69,41 @@ export default function NavBar() {
           <span className={styles.dashboardTitle}>{headerTitle}</span>
         </div>
         <div className={styles.rightSection}>
-          {/* 수정 페이지 링크 추가 02.15_혜림 */}
-          <Link href={`/dashboard/${params}/edit`}>
-            <button className={styles.navButton}>
-              <Image
-                src="/icons/settings.svg"
-                width={20}
-                height={20}
-                alt="설정"
-              />
-              관리
-            </button>
-          </Link>
-          {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
-          <InviteButton
-            $nav
-            dashboardId={params}
-            setUpdateInvite={setUpdateInvite}
-          >
-            <Image src="/icons/add_box.svg" width={20} height={20} alt="초대" />
-            초대하기
-          </InviteButton>
-          <div>
-            <hr className={styles.hr} />
-          </div>
+          {/* 대시보드 상세 및 수정 페이지에서만 활성화 02.16_혜림 */}
+          {(router.route === `/dashboard/[id]` ||
+            router.route === `/dashboard/[id]/edit`) && (
+            <>
+              {/* 수정 페이지 링크 추가 02.15_혜림 */}
+              <Link href={`/dashboard/${params}/edit`}>
+                <button className={styles.navButton}>
+                  <Image
+                    src="/icons/settings.svg"
+                    width={20}
+                    height={20}
+                    alt="설정"
+                  />
+                  관리
+                </button>
+              </Link>
+              {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
+              <InviteButton
+                $nav
+                dashboardId={params}
+                setUpdateInvite={setUpdateInvite}
+              >
+                <Image
+                  src="/icons/add_box.svg"
+                  width={20}
+                  height={20}
+                  alt="초대"
+                />
+                초대하기
+              </InviteButton>
+              <div>
+                <hr className={styles.hr} />
+              </div>
+            </>
+          )}
           <Link href="/mypage">
             <div className={styles.profile}>
               <span className={styles.profileIcon}>
