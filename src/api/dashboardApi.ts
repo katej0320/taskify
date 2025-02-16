@@ -71,6 +71,16 @@ export async function acceptInvite(invitationId: number) {
   });
 }
 
+export async function rejectInvite(invitationId: number) {
+  return PUThWithAuth(`/invitations/${invitationId}`, {
+    method: "PUT",
+    body: { invitationId, inviteAccepted: false }, // Update status to false for rejection
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
 export async function getColumns(dashboardId: number) {
   return fetchWithAuth("/columns", { dashboardId });
 }

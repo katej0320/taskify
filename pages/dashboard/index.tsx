@@ -4,25 +4,57 @@ import { useEffect, useState } from "react";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
 import styles from "./index.module.scss";
-import { getDashboards, getInviteList } from "@/src/api/dashboardApi";
+import { getDashboards } from "@/src/api/dashboardApi";
 import None from "@/src/components/dashboardlist/invite/none";
 import InviteDashboardList from "@/src/components/dashboardlist/invite/InviteList";
 import DashboardList from "@/src/components/dashboardlist/DashBoardList"; // 이 부분을 다시 활성화 가능
 import useRequireAuth from "@/src/hooks/useRequireAuth";
+import { useInView } from "react-intersection-observer";
+import axiosInstance from "@/src/api/axios";
 
 export default function MyDashboardPage() {
-  useRequireAuth(); 
+  useRequireAuth();
 
   const [dashboards, setDashboards] = useState<any[]>([]);
   const [invitations, setInvitations] = useState<any[]>([]);
+  const [cursorId, setCursorId] = useState<number>();
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView && cursorId !== null) {
+      const fetchInvitations = async () => {
+        try {
+          const res = cursorId
+            ? await axiosInstance.get("/invitations", {
+                params: { cursorId },
+              })
+            : await axiosInstance.get("/invitations");
+
+          const newInvitations = res.data.invitations;
+          const newCursorId = res.data.cursorId;
+
+          setInvitations((prevInvitations) => [
+            ...prevInvitations,
+            ...newInvitations,
+          ]);
+          setCursorId(newCursorId);
+
+          console.log("alskfgdhsjlfkdjlf");
+          console.log(newCursorId);
+        } catch (error) {
+          console.error("초대 리스트 불러오기 실패:", error);
+        }
+      };
+
+      fetchInvitations();
+    }
+  }, [inView]);
 
   useEffect(() => {
     async function fetchData() {
       try {
         const { dashboards = [] } = await getDashboards();
-        const { invitations = [] } = await getInviteList();
         setDashboards(dashboards);
-        setInvitations(invitations);
       } catch (error) {
         console.error("Failed to fetch dashboard:", error);
       }
@@ -59,6 +91,7 @@ export default function MyDashboardPage() {
             <None />
           )}
         </div>
+        <div ref={ref}></div>
       </div>
     </div>
   );

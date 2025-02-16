@@ -25,7 +25,7 @@ export interface DashBoardResponse {
 export interface IInviteParams {
   teamId?: string;
   size?: number;
-  cursorId?: number;
+  cursorId?: number | null;
   title?: string;
 }
 
