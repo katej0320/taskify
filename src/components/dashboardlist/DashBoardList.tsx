@@ -5,16 +5,10 @@ import Pagination from "@/src/components/pagination/Pagination"; // ✅ 추가
 import styles from "../../../pages/dashboard/index.module.scss";
 import { useEffect, useState } from "react";
 
-import { DashBoardResponse, Dashboard } from "@/src/types/dashboard";
+import { Dashboard } from "@/src/types/dashboard";
 import axiosInstance from "@/src/api/axios";
 import CustomModal from "../modal/CustomModal";
 import CreateBoard from "./createDashboard/createDashboard";
-
-interface DashboardListProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
 
 export default function DashboardList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +35,7 @@ export default function DashboardList() {
     setDashboards((prev) => [newDashboard, ...prev].slice(0, size));
     setTotal((prev) => prev + 1);
     closeModal();
+    window.location.reload();
   };
   return (
     <>

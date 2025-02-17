@@ -2,13 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 import axiosInstance from "@/src/api/axios"; // axiosInstance 적용
 
-// ✅ .env에서 teamId 자동 추출
-const teamId = process.env.NEXT_PUBLIC_BASE_URL?.split("/").pop();
-
 interface TaskDropdownProps {
-  cardId: number; // ✅ teamId 제거
+  cardId: number;
   onOpenEditModal: () => void;
-  onClose: () => void /* 닫기 기능 추가 */;
+  onClose: () => void;
 }
 
 const TaskDropdown: React.FC<TaskDropdownProps> = ({
@@ -20,7 +17,7 @@ const TaskDropdown: React.FC<TaskDropdownProps> = ({
 
   const handleDeleteCard = async () => {
     try {
-      await axiosInstance.delete(`/cards/${cardId}`); // ✅ teamId 제거 후 API 호출
+      await axiosInstance.delete(`/cards/${cardId}`);
       alert("카드가 삭제되었습니다.");
       window.location.reload(); // 삭제 후 새로고침
     } catch (error) {

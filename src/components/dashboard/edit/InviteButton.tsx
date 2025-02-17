@@ -52,24 +52,18 @@ const ButtonContainer = styled(Button)<Props>`
         background-color: #eee;
       }
     `}
-
-  @media (max-width: 768px) {
-    position: absolute;
-    top: 79px;
-    right: 28px;
-  }
 `;
 
 export function InviteButton({
   $nav,
   children,
   dashboardId,
-  setUpdateInvite
+  setUpdateInvite,
 }: {
   $nav?: boolean;
   children?: ReactNode;
   dashboardId: string | string[] | undefined;
-  setUpdateInvite?:React.Dispatch<SetStateAction<boolean>>
+  setUpdateInvite?: React.Dispatch<SetStateAction<boolean>>;
 }) {
   const [isUpdate, setIsUpdate] = useState(false);
   const [isModal, setIsModal] = useState(false);

@@ -2,7 +2,9 @@ import Image from "next/image";
 import styles from "./TaskCard.module.scss";
 import { useState } from "react";
 import TaskCardModal from "../modals/cards/TaskCardModal";
-import React from 'react';
+import React from "react";
+import TaskTags from "../modals/cards/TaskTags";
+import MemberProfile from "../MemberProfile/MemberProfile";
 
 export default function TaskCard({
   card,
@@ -34,11 +36,7 @@ export default function TaskCard({
             <h3>{card.title}</h3>
             <div className={styles.tabletRow}>
               <div>
-                {card.tags.map((tag: string) => (
-                  <span className={styles.tag} key={tag}>
-                    {tag}
-                  </span>
-                ))}
+                <TaskTags tags={card?.tags || []} />
               </div>
               <div className={styles.bottom}>
                 <div className={styles.date}>
@@ -50,6 +48,7 @@ export default function TaskCard({
                   />
                   <p>{date}</p>
                 </div>
+
                 <div className={styles.name}>{card.assignee.nickname[0]}</div>
               </div>
             </div>

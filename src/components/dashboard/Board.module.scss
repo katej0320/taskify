@@ -17,7 +17,7 @@
     flex-direction: column;
     gap: 12px;
     padding: 8px;
-    height: auto;
+    height: 100%;
   }
 }
 
@@ -41,6 +41,9 @@
     border-right: none;
     border-bottom: 1px solid $gray3;
     padding-bottom: 20px;
+  }
+  @media (max-width: 768px) {
+    height: 100%;
   }
 }
 
