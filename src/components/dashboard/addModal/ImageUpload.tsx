@@ -17,6 +17,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
+        onImageUpload(file); // 부모에게 이미지 업로드 완료 알림
       };
       reader.readAsDataURL(file);
     }

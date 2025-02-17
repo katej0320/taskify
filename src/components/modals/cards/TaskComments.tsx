@@ -168,17 +168,17 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
 export default TaskComments;
 
 const EditInput = styled.textarea`
-  width: 80%; /* 기존보다 넓게 조정 */
-  min-height: 40px; /* 기본 높이 */
-  max-height: 100px; /* 최대 높이 지정 */
+  width: 80%;
+  min-height: 40px;
+  max-height: 100px;
   padding: 6px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  resize: none; /* 사용자가 크기 조절 못하도록 */
-  overflow-y: auto; /* 입력이 많아지면 자동 스크롤 */
+  resize: none;
+  overflow-y: auto;
   word-break: break-word;
-  white-space: pre-wrap; /* 줄 바꿈 유지 */
+  white-space: pre-wrap;
   background: white;
 `;
 
@@ -202,12 +202,14 @@ const CommentList = styled.ul`
 
 const TaskCommentItem = styled.li`
   display: flex;
-  align-items: center;
-  padding: 10px;
+  align-items: flex-start;
   gap: 12px;
   border-bottom: 1px solid #eee;
-  height: 40px;
+  width: 100%;
+  min-height: 50px;
   overflow: hidden;
+  word-break: break-word;
+  white-space: pre-wrap;
 `;
 
 const CommentContentWrapper = styled.div`
@@ -241,11 +243,13 @@ const CommentTime = styled.span`
 `;
 
 const TaskCommentText = styled.p`
-  font-size: 14px;
+  font-size: 12px;
   color: #333;
   word-break: break-word;
   white-space: pre-wrap;
   overflow-wrap: break-word;
+  min-height: initial;
+  padding: 2px 0;
 `;
 
 const DropdownContainer = styled.div`

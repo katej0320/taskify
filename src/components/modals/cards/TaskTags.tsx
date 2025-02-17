@@ -65,8 +65,8 @@ const Tag = styled.span<{ bgColor: string; textColor: string }>`
   justify-content: center;
   border-radius: 4px;
   padding: 4px 10px;
-  min-width: 64px;
-  max-width: fit-content;
+  min-width: 40px; /* 최소 크기 설정 */
+  max-width: auto; /* 최대 크기 자동 조정 */
   height: 26px;
   white-space: nowrap;
   overflow: hidden;
