@@ -1,6 +1,5 @@
 @use "/styles/color.scss" as *;
 
-/* 모달 오버레이 스타일 */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -14,10 +13,9 @@
   z-index: 9999; //제일 상단에 늘 고정
 }
 
-/* 모달 내용 스타일 */
 .modalContent {
   background-color: $white;
-  width: 584px;
+  width: 368px;
   max-height: 90vh;
   padding-top: 32px; // padding 위, 아래는 고정
   padding-bottom: 32px;

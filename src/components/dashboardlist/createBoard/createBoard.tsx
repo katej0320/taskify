@@ -1,36 +1,24 @@
 "use Client";
-import { useState } from "react";
-import styles from "./Board.module.scss";
-import axios from "axios";
-import axiosInstance from "@/src/api/axios";
+import styles from "./createBoard.module.scss";
+import { useCreateBoard } from "@/src/hooks/useCreateBoard";
 
-export default function Board() {
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [dashboardName, setDashboardName] = useState("");
-  const [selectedColor, setSelectedColor] = useState(""); // 색상 상태 추가
 
-  const closeModal = () => setIsModalOpen(false);
 
-  const handleCreate = async () => {
-    // POST 요청을 보내는 부분 (axios 사용)
-    try {
-      const response = await axiosInstance.post("/dashboards", {
-        title: dashboardName,
-        color: selectedColor, // 선택한 색상도 함께 보내기
-      });
+interface CreateBoardProps {
+  dashboardName: string;
+  setDashboardName: (name: string) => void;
+  selectedColor: string;
+  setSelectedColor: (color: string) => void;
+  handleCreate: () => Promise<void>;
+  onClose: () => void;
+}
 
-      if (response.status === 200) {
-        setIsModalOpen(false); // 요청 성공 시 모달 닫기
-      } else {
-        console.error("Failed to create dashboard");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+export default function CreateBoard({ onClose, onDashboardCreate }: CreateBoardProps) {
+  const { dashboardName, setDashboardName, selectedColor, setSelectedColor, handleCreate } = useCreateBoard(
+    onClose,
+    onDashboardCreate
+  );
 
-  // isModalOpen이 false일 경우 모달을 렌더링하지 않음
-  if (!isModalOpen) return null;
 
   return (
     <div className={styles.modalContent}>
@@ -81,7 +69,7 @@ export default function Board() {
         />
       </div>
       <div className={styles.buttonGroup}>
-        <button className={styles.cancle} onClick={closeModal}>
+        <button className={styles.cancle} onClick={onClose}>
           취소
         </button>
         <button className={styles.create} onClick={handleCreate}>

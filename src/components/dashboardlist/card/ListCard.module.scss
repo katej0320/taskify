@@ -1,12 +1,11 @@
-/* 박스 스타일을 강조 */
 .box {
   padding: 20px;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
   background-color: #fff;
-
+  flex-shrink: 0;
   width: 332px;
-  height: 70px;
+  max-height: 70px;
   margin: 20px 5px;
 
   font-size: 16px;

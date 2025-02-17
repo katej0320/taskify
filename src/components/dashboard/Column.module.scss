@@ -1,25 +1,72 @@
 @use "/styles/color.scss" as *;
+.columnWrapper {
+  padding-top: 22px;
+  padding-left: 20px;
+  max-width: 350px;
 
-.modalContent {
-  height: 340px;
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 21.48px;
+    color: $black2;
+  }
+}
 
-  h1 {
+.circle {
+  width: 8px;
+  height: 8px;
+  background-color: $violet2;
+  border-radius: 50%;
+}
+
+.columnTitle {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 5px;
+}
+
+.subTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.totalCount {
+  width: 20px;
+  height: 20px;
+  background-color: $gray2;
+  border-radius: 4px;
+  padding: 3px 6px;
+  color: $gray5;
+}
+
+.listcolumn {
+  width: 314px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.taskCard {
+  margin-bottom: 20px;
+}
+.listCardModal {
+  color: $black2;
+  h2 {
     font-size: 24px;
     font-weight: 700;
     line-height: 32px;
-    color: $black2;
     margin-bottom: 24px;
   }
-
-  .modalTitle {
+  div {
     font-size: 18px;
     font-weight: 500;
     line-height: 26px;
-    color: $black2;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
-
-  .modalInput {
+  .input {
     width: 100%;
     height: 50px;
     border-radius: 8px;
@@ -31,39 +78,6 @@
     margin-bottom: 20px;
   }
 }
-
-.colorDiv {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 40px;
-}
-
-.color {
-  width: 30px;
-  height: 30px;
-  padding: 3px;
-  border-radius: 15px;
-}
-.colorGreen {
-  background-color: $green;
-}
-
-.colorPurple {
-  background-color: $purple;
-}
-
-.colorOrange {
-  background-color: $orange;
-}
-
-.colorBlue {
-  background-color: $blue;
-}
-
-.colorPink {
-  background-color: $pink;
-}
-
 .buttonGroup {
   display: flex;
   gap: 8px;

@@ -21,6 +21,7 @@ export function InviteModal({
   isErrorMessage,
   setIsUpdate,
   postInvitation,
+  setUpdateInvite,
 }: {
   isModal: boolean;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,6 +30,7 @@ export function InviteModal({
   isErrorMessage: string;
   setIsUpdate: React.Dispatch<React.SetStateAction<boolean>>;
   postInvitation?: () => Promise<void>;
+  setUpdateInvite?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const closeModal = () => setIsModal(false);
 
@@ -54,6 +56,8 @@ export function InviteModal({
         onSubmit={(e) => {
           e.preventDefault();
           postInvitation?.();
+          setUpdateInvite?.(true);
+          setIsValue("");
         }}
       >
         <InputContainer>
@@ -72,6 +76,8 @@ export function InviteModal({
             onClick={() => {
               setIsUpdate(false);
               postInvitation?.();
+              setUpdateInvite?.(true);
+              setIsValue("");
             }}
           >
             생성
