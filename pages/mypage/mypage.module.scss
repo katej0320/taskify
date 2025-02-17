@@ -132,6 +132,9 @@
     }
   }
 
+
+
+  
   .saveButton {
     width: 400px;
     height: 54px;
@@ -139,8 +142,8 @@
 
   .changeButton {
     width: 624px;
-    height: 54px;
-    margin-top: 30px;
+    height: 100px !important;
+    margin-top: 24px;
   }
 
   .saveButton,
@@ -167,12 +170,13 @@
 
 .errorText {
   position: absolute;
-  bottom: -17px;
-  left: 0;
+  bottom: 25px;
+  left: 350px;
   width: 100%;
   color: red;
   font-size: 12px;
 }
+
 
 @media (max-width: 1199px) and (min-width: 768px) {
   .content {
@@ -187,5 +191,49 @@
     margin-left: 60px;
     padding: 20px;
     background-color: $gray1;
+
+
+.customButton{
+display: flex;
+justify-content: center;
+background-color: $violet2 !important;
+}
+
+.modalStyle p {
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.removeButton {
+  position: absolute;
+  top: -8px;
+  right: -9px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+
+  &:hover {
+    background: rgba(255, 0, 0, 0.8);
+
   }
 }

@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "./Dropdown.module.scss";
 
-// interface DropdownProps {
-//   children?: React.ReactNode;
-// }
+interface DropdownProps {
+  className?: string;
+}
 
-export default function Dropdown() {
+export default function Dropdown({className}:DropdownProps) {
   const router = useRouter();
 
   const handleLogout = () => {
