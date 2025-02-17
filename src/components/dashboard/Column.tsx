@@ -108,31 +108,33 @@ export default function Column({ column, onDelete }: any) {
       </div>
       <Droppable droppableId={String(column.id)}>
         {(provided) => (
-          <>
-            <div ref={provided.innerRef} {...provided.droppableProps}>
-              <ListCard className={styles.listcolumn}>
-                <Image
-                  src="/icons/chip.svg"
-                  width={22}
-                  height={22}
-                  alt="chip.svg"
-                  onClick={() => openModal("add-column")}
-                  style={{ cursor: "pointer" }}
-                />
-              </ListCard>
-              {cards?.map((card) => (
-                <TaskCard
-                  key={card.id}
-                  card={card}
-                  className={styles.taskCard}
-                  columnTitle={columnTitle}
-                  onCardDelete={handleCardDelete}
-                />
-              ))}
-              {provided.placeholder}
-            </div>
-            <div ref={ref}></div>
-          </>
+
+
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            <ListCard className={styles.listcolumn}>
+              <Image
+                src="/icons/chip.svg"
+                width={22}
+                height={22}
+                alt="chip.svg"
+                onClick={() => openModal("add-column")}
+                style={{ cursor: "pointer" }}
+              />
+            </ListCard>
+            {cards?.map((card) => (
+              <TaskCard
+                key={card.id}
+                card={card}
+                className={styles.taskCard}
+                columnTitle={columnTitle}
+                columnId={column.id} // 컬럼 ID 추가
+                dashboardId={column.dashboardId} // 대시보드 ID 추가
+                // onCardDelete={handleCardDelete}
+              />
+            ))}
+            {provided.placeholder}
+          </div>
+
         )}
       </Droppable>
 

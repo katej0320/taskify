@@ -3,10 +3,11 @@
 import Image from "next/image";
 import styles from "./NavBar.module.scss";
 import { useEffect, useState, useRef } from "react";
-
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { getMe } from "@/src/api/meApi";
+import { InviteButton } from "../dashboard/edit/InviteButton";
+import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 import { getDashboard } from "@/src/api/dashboardApi";
 import Dropdown from "@/src/components/nav/dropdown/Dropdown";
 import { isDocumentDefined } from "swr/_internal";
@@ -48,6 +49,10 @@ export default function NavBar() {
     };
   }, [isDropDownOpen]);
 
+  // 초대하기 생성 후 초대 내역 리스트 업데이트 02.16_혜림
+  const [updateInvite, setUpdateInvite] = useState(false);
+  const { getInvitations } = useEdit();
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -86,46 +91,81 @@ export default function NavBar() {
     }
   }, [pathname, params]);
 
+  // 초대하기 생성 후 초대 내역 리스트 업데이트 02.16_혜림
+  useEffect(() => {
+    if (updateInvite) getInvitations();
+
+    setUpdateInvite(false);
+  }, [updateInvite]);
+
   return (
-    <nav className={styles.navbar}>
-      <div className={styles.leftSection}>
-        <span className={styles.dashboardTitle}>
-          {headerTitle}
-          {createByMe && (
-            <Image src="/icons/crown.svg" width={20} height={20} alt="초대" />
-          )}
-        </span>
-      </div>
-      <div className={styles.rightSection}>
-        <button className={styles.navButton}>
-          <Image src="/icons/settings.svg" width={20} height={20} alt="설정" />
-          관리
-        </button>
-        <button className={styles.navButton}>
-          <Image src="/icons/add_box.svg" width={20} height={20} alt="초대" />
-          초대하기
-        </button>
-        <div>
-          <hr className={styles.hr} />
+    <>
+      <nav className={styles.navbar}>
+        <div className={styles.leftSection}>
+          <span className={styles.dashboardTitle}>
+            {headerTitle}
+            {createByMe && (
+              <Image src="/icons/crown.svg" width={20} height={20} alt="초대" />
+            )}
+          </span>
         </div>
+        <div className={styles.rightSection}>
+          {/* 대시보드 상세 및 수정 페이지에서만 활성화 02.16_혜림 */}
+          {(router.route === `/dashboard/[id]` ||
+            router.route === `/dashboard/[id]/edit`) && (
+            <>
+              {/* 수정 페이지 링크 추가 02.15_혜림 */}
+              {router.route === `/dashboard/[id]` && (
+                <Link href={`/dashboard/${params}/edit`}>
+                  <button className={styles.navButton}>
+                    <Image
+                      src="/icons/settings.svg"
+                      width={20}
+                      height={20}
+                      alt="설정"
+                    />
+                    관리
+                  </button>
+                </Link>
+              )}
 
-        <div className={styles["profile-container"]} ref={dropdownRef}>
-          <div className={styles.profile} onClick={toggleDropdown}>
-            <span className={styles.profileIcon}>
-              {userData ? userData.email[0] : "?"}
-            </span>
-            <span className={styles.profileName}>
-              {userData ? userData.nickname : "로딩중..."}
-            </span>
-          </div>
-
-          {isDropDownOpen && (
-            <div>
-              <Dropdown />
+              {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
+              <InviteButton
+                $nav
+                dashboardId={params}
+                setUpdateInvite={setUpdateInvite}
+              >
+                <Image
+                  src="/icons/add_box.svg"
+                  width={20}
+                  height={20}
+                  alt="초대"
+                />
+                초대하기
+              </InviteButton>
+              <div>
+                <hr className={styles.hr} />
+              </div>
+            </>
+          )}
+          <div className={styles["profile-container"]} ref={dropdownRef}>
+            <div className={styles.profile} onClick={toggleDropdown}>
+              <span className={styles.profileIcon}>
+                {userData ? userData.email[0] : "?"}
+              </span>
+              <span className={styles.profileName}>
+                {userData ? userData.nickname : "로딩중..."}
+              </span>
+            
+            {isDropDownOpen && (
+              <div className={styles.dropdown}>
+                <Dropdown  />
+              </div>
+            )}
             </div>
-          )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }

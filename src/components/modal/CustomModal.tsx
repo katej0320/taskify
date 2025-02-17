@@ -7,7 +7,8 @@ interface ModalProps {
   onClose?: () => void;
   children: React.ReactNode;
   className?: string;
-  width?: string; // 🔹 width 추가
+  width?: string;
+  height?: string; // 🔹 height 추가
 }
 
 export default function CustomModal({
@@ -16,14 +17,15 @@ export default function CustomModal({
   children,
   className,
   width = "584px",
+  height = "auto", // 🔹 기본값 추가
 }: ModalProps) {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className={`${styles.modalOverlay} ${className}`} onClick={onClose}>
+    <div className={`${styles.modalOverlay} ${className}`} onClick={onClose} >
       <div
         className={`${styles.modalContent} ${className}`}
-        style={{ width }} // 🔹 props로 width 조정 가능
+        style={{ width, height }} // 🔹 props로 height 조정 가능
         onClick={(e) => e.stopPropagation()}
       >
         {children}
