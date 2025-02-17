@@ -138,8 +138,8 @@
 
   .changeButton {
     width: 624px;
-    height: 54px;
-    margin-top: 30px;
+    height: 100px !important;
+    margin-top: 24px;
   }
 
   .saveButton,
@@ -166,9 +166,21 @@
 
 .errorText {
   position: absolute;
-  bottom: -17px;
-  left: 0;
+  bottom: 25px;
+  left: 350px;
   width: 100%;
   color: red;
   font-size: 12px;
+}
+
+
+.customButton{
+display: flex;
+justify-content: center;
+background-color: $violet2;
+}
+
+.modalStyle p {
+  padding-bottom: 20px;
+  text-align: center;
 }
