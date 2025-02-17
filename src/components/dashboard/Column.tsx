@@ -10,6 +10,7 @@ import styles from "./Column.module.scss";
 import { updateColumnTitle, deleteColumn } from "@/src/api/dashboardApi";
 import AddModal from "./addModal";
 import axiosInstance from "@/src/api/axios";
+import { useInView } from "react-intersection-observer";
 
 export default function Column({ column, onDelete }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,21 +18,29 @@ export default function Column({ column, onDelete }: any) {
   const [cards, setCards] = useState<any[]>([]);
   const [totalCount, setTotalCount] = useState<number>();
   const [columnTitle, setColumnTitle] = useState(column.title);
+  const [cursorId, setCursorId] = useState<number>();
+  const [ref, inView] = useInView();
 
   useEffect(() => {
-    fetchCards();
-  }, []);
+    if (inView && cursorId !== null) {
+      fetchCards();
+    }
+  }, [inView]);
 
   const fetchCards = async () => {
     try {
-      12 - 1;
-      const response = await axiosInstance.get("/cards", {
-        params: { columnId: column.id },
-      });
-
-      console.log("res", response);
-      setCards(response.data.cards);
+      const response = cursorId
+        ? await axiosInstance.get("/cards", {
+            params: { columnId: column.id, cursorId },
+          })
+        : await axiosInstance.get("/cards", {
+            params: { columnId: column.id },
+          });
+      const newCards = response.data.cards;
+      const newCursorId = response.data.cursorId;
+      setCards((prevCards) => [...prevCards, ...newCards]);
       setTotalCount(response.data.totalCount);
+      setCursorId(newCursorId);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -90,6 +99,8 @@ export default function Column({ column, onDelete }: any) {
       </div>
       <Droppable droppableId={String(column.id)}>
         {(provided) => (
+
+
           <div ref={provided.innerRef} {...provided.droppableProps}>
             <ListCard className={styles.listcolumn}>
               <Image
@@ -114,6 +125,7 @@ export default function Column({ column, onDelete }: any) {
             ))}
             {provided.placeholder}
           </div>
+
         )}
       </Droppable>
 

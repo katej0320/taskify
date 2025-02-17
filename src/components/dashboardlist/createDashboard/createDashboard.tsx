@@ -1,7 +1,7 @@
-"use Client";
 import { Dashboard } from "@/src/types/dashboard";
 import styles from "./createDashboard.module.scss";
 import { useCreateBoard } from "@/src/hooks/useCreateBoard";
+import Image from "next/image";
 
 interface CreateBoardProps {
   dashboardName: string;
@@ -12,7 +12,6 @@ interface CreateBoardProps {
   onClose: () => void;
   onDashboardCreate?: (newDashboard: Dashboard) => void;
 }
-
 export default function CreateBoard({
   onClose,
   onDashboardCreate,
@@ -25,6 +24,14 @@ export default function CreateBoard({
     handleCreate,
   } = useCreateBoard(onClose, onDashboardCreate);
 
+  const colors = [
+    { code: "#7ac555", className: styles.colorGreen },
+    { code: "#760dde", className: styles.colorPurple },
+    { code: "#ffa500", className: styles.colorOrange },
+    { code: "#76a5ea", className: styles.colorBlue },
+    { code: "#e876ea", className: styles.colorPink },
+  ];
+
   return (
     <div className={styles.modalContent}>
       <h1>새로운 대시보드</h1>
@@ -36,42 +43,23 @@ export default function CreateBoard({
         onChange={(e) => setDashboardName(e.target.value)}
       />
       <div className={styles.colorDiv}>
-        {/* 색상 버튼들 */}
-        <div
-          className={`${styles.color} ${styles.colorGreen}`}
-          onClick={() => setSelectedColor("#7ac555")}
-          style={{
-            border: selectedColor === "#7ac555" ? "2px solid black" : "",
-          }}
-        />
-        <div
-          className={`${styles.color} ${styles.colorPurple}`}
-          onClick={() => setSelectedColor("#760dde")}
-          style={{
-            border: selectedColor === "#760dde" ? "2px solid black" : "",
-          }}
-        />
-        <div
-          className={`${styles.color} ${styles.colorOrange}`}
-          onClick={() => setSelectedColor("#ffa500")}
-          style={{
-            border: selectedColor === "#ffa500" ? "2px solid black" : "",
-          }}
-        />
-        <div
-          className={`${styles.color} ${styles.colorBlue}`}
-          onClick={() => setSelectedColor("#76a5ea")}
-          style={{
-            border: selectedColor === "#76a5ea" ? "2px solid black" : "",
-          }}
-        />
-        <div
-          className={`${styles.color} ${styles.colorPink}`}
-          onClick={() => setSelectedColor("#e876ea")}
-          style={{
-            border: selectedColor === "#e876ea" ? "2px solid black" : "",
-          }}
-        />
+        {colors.map(({ code, className }) => (
+          <div
+            key={code}
+            className={`${styles.color} ${className}`}
+            onClick={() => setSelectedColor(code)}
+          >
+            {selectedColor === code && (
+              <Image
+                src="/icons/Vector.svg"
+                width={15}
+                height={11}
+                alt="체크 표시"
+                className={styles.colorCheck}
+              />
+            )}
+          </div>
+        ))}
       </div>
       <div className={styles.buttonGroup}>
         <button className={styles.cancle} onClick={onClose}>
