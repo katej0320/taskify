@@ -9,11 +9,7 @@ import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
 import ProfileSettings from "@/src/components/mypage/profilesetting";
 
-
-
 export default function MyPage() {
-  
-
   // useSWR로 사용자 데이터 요청
   const { data: user, error } = useSWR<User>("12-1/users", getUser);
 
@@ -21,10 +17,12 @@ export default function MyPage() {
   if (!user) return <p>로딩 중</p>;
 
   return (
-    <div className={styles.global}>
+    <div>
       <NavBar />
       <SideBar />
-      <ProfileSettings user={user} />
+      <div className={styles.content}>
+        <ProfileSettings user={user} />
+      </div>
     </div>
   );
 }

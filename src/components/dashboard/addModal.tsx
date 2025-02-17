@@ -36,6 +36,26 @@ const AddModal: React.FC<AddModalProps> = ({
   const [members, setMembers] = useState<any>([]);
   const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
 
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+
+  const handleSelectUser = (member: any) => {
+    setSelectedUser(member);
+    setSelectedAssignee(member.userId); // 담당자 ID 설정
+    setIsSelectOpen(false); // 선택 후 드롭다운 닫기
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -67,7 +87,8 @@ const AddModal: React.FC<AddModalProps> = ({
     setTags(tags.filter((_, i) => i !== index));
   };
 
-  const handleCreateCard = async () => {
+  const handleCreateCard = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!title || !description || !dueDate || selectedAssignee === null) {
       setError("제목, 설명, 마감일은 필수 입력 항목입니다.");
       return;
@@ -120,84 +141,102 @@ const AddModal: React.FC<AddModalProps> = ({
     setImage(null);
     setSelectedAssignee(null);
   };
+  const isDisabled =
+    !title || !description || !dueDate || selectedAssignee === null;
 
   return (
     <CustomModal isOpen={isOpen} onClose={onClose}>
-      <div className={styles.modalContent}>
-        <h2>할 일 생성</h2>
+      <form onSubmit={handleCreateCard}>
+        <div className={styles.modalContent}>
+          <h2>할 일 생성</h2>
+          <label className={styles.label}>담당자</label>
+          <div className={styles.dropdown}>
+            <div
+              className={styles.selected}
+              onClick={() => setIsSelectOpen((prev) => !prev)}
+            >
+              {selectedUser ? selectedUser.nickname : "담당자를 선택하세요"}
+            </div>
+            {isSelectOpen && (
+              <div className={styles.dropdownMenu}>
+                {members?.map((member: any) => (
+                  <div
+                    key={member.id}
+                    className={styles.dropdownItem}
+                    onClick={() => handleSelectUser(member)}
+                  >
+                    {member.nickname}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-        <label>담당자</label>
-        <select className={styles.input} onChange={changeUser}>
-          {members?.map((member: any) => {
-            return (
-              <option key={member.id} value={member.userId}>
-                {member.nickname}
-              </option>
-            );
-          })}
-          <option disabled hidden selected>
-            담당자를 선택하세요
-          </option>
-        </select>
+          <label>제목 *</label>
+          <input
+            type="text"
+            className={styles.input}
+            placeholder="제목을 입력해 주세요"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
 
-        <label>제목 *</label>
-        <input
-          type="text"
-          className={styles.input}
-          placeholder="제목을 입력해 주세요"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
+          <label>설명 *</label>
+          <textarea
+            className={styles.textarea}
+            placeholder="설명을 입력해 주세요"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
 
-        <label>설명 *</label>
-        <textarea
-          className={styles.textarea}
-          placeholder="설명을 입력해 주세요"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
+          <label>마감일 *</label>
 
-        <label>마감일 *</label>
-        <DatePicker
-          className={styles.date}
-          selected={dueDate}
-          onChange={(date) => setDueDate(date)}
-          dateFormat="yyyy-MM-dd HH:mm"
-          showTimeSelect
-          timeFormat="HH:mm"
-          timeIntervals={10}
-          placeholderText="날짜를 입력해 주세요"
-        />
+          <DatePicker
+            className={styles.date}
+            selected={dueDate}
+            onChange={(date) => setDueDate(date)}
+            dateFormat="yyyy-MM-dd HH:mm"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={10}
+            placeholderText="날짜를 입력해 주세요"
+            required
+          />
 
-        <label>태그</label>
-        <input
-          type="text"
-          className={styles.input}
-          placeholder="입력 후 Enter"
-          value={tagInput}
-          onChange={(e) => setTagInput(e.target.value)}
-          onKeyDown={handleTagKeyPress}
-        />
-        <TaskTags tags={tags} />
+          <label>태그</label>
+          <input
+            type="text"
+            className={styles.input}
+            placeholder="입력 후 Enter"
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            onKeyDown={handleTagKeyPress}
+          />
+          <TaskTags tags={tags} />
 
-        <label>이미지</label>
-        <div className={styles.imageUpload}>
-          <ImageUpload onImageUpload={setImage} />
+          <label>이미지</label>
+          <div className={styles.imageUpload}>
+            <ImageUpload onImageUpload={setImage} />
+          </div>
+
+          {error && <p className={styles.error}>{error}</p>}
+
+          <div className={styles.buttonGroup}>
+            <button className={styles.cancle} type="button" onClick={onClose}>
+              취소
+            </button>
+            <button
+              className={styles.create}
+              type="submit"
+              disabled={isDisabled}
+            >
+              생성
+            </button>
+          </div>
         </div>
-
-        {error && <p className={styles.error}>{error}</p>}
-
-        <div className={styles.buttonGroup}>
-          <button className={styles.cancle} onClick={onClose}>
-            취소
-          </button>
-          <button className={styles.create} onClick={handleCreateCard}>
-            생성
-          </button>
-        </div>
-      </div>
+      </form>
     </CustomModal>
   );
 };

@@ -5,17 +5,17 @@ import { useRouter } from "next/navigation";
 import styles from "@/pages/mypage/mypage.module.scss";
 import ProfileCard from "./profilecard";
 import PasswordCard from "./passwordcard";
-import { updateProfile } from "@/src/api/userApi"; 
-import { User } from "@/src/types/users"; 
+import { updateProfile } from "@/src/api/userApi";
+import { User } from "@/src/types/users";
 
 interface ProfileSettingsProps {
-  user: User; 
+  user: User;
 }
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
   const router = useRouter();
 
-  const [nickname, setNickname] = useState(user.nickname); 
+  const [nickname, setNickname] = useState(user.nickname);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false); // 로딩 상태 관리
   const [error, setError] = useState<string | null>(null); // 오류 상태 관리
@@ -29,12 +29,12 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
       // API 호출 (nickname과 profileImage를 업데이트)
       const result = await updateProfile(nickname, profileImage);
       console.log("프로필 수정 완료:", result);
-  
+
       // 성공 시 마이페이지로 리다이렉트
       router.push("/mypage");
     } catch (error) {
       console.error("프로필 업데이트 오류:", error);
-  
+
       // 오류 메시지 설정 (에러 유형에 따라 메시지 다르게 설정 가능)
       if (error instanceof Error) {
         setError(error.message || "프로필 업데이트에 실패했습니다.");
@@ -67,7 +67,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
           profileImage={profileImage}
           setProfileImage={setProfileImage}
         />
-        
+
         <PasswordCard />
 
         {/* 로딩 중일 때 표시 */}

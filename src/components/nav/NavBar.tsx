@@ -10,7 +10,7 @@ import { InviteButton } from "../dashboard/edit/InviteButton";
 import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 import { getDashboard } from "@/src/api/dashboardApi";
 import Dropdown from "@/src/components/nav/dropdown/Dropdown";
-import { isDocumentDefined } from "swr/_internal";
+import axiosInstance from "@/src/api/axios";
 
 export default function NavBar() {
   const router = useRouter();
@@ -21,6 +21,7 @@ export default function NavBar() {
   const [userData, setUserData] = useState<any>(null);
   const [createByMe, setCreateByMe] = useState(false);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const [members, setMembers] = useState<any>([]);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -64,15 +65,26 @@ export default function NavBar() {
     };
 
     fetchUserData();
-  }, []); // 이 부분은 컴포넌트가 처음 렌더링될 때만 실행
+  }, []);
 
   useEffect(() => {
     if (!pathname) return;
 
     if (pathname.startsWith("/dashboard/") && params) {
       const dashboardId = Number(params);
+      const fetchMembers = async () => {
+        try {
+          const res = await axiosInstance.get("/members", {
+            params: { dashboardId },
+          });
 
-      // ✅ API 호출하여 대시보드 상세 정보 가져오기
+          setMembers(res.data.members);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchMembers();
+
       const fetchDashboard = async () => {
         try {
           const dashboard = await getDashboard(dashboardId);
@@ -83,7 +95,6 @@ export default function NavBar() {
           setHeaderTitle("잘못된 상세 페이지");
         }
       };
-
       fetchDashboard();
     } else {
       setHeaderTitle("내 대시보드");
@@ -116,38 +127,57 @@ export default function NavBar() {
             <>
               {/* 수정 페이지 링크 추가 02.15_혜림 */}
               {router.route === `/dashboard/[id]` && (
-                <Link href={`/dashboard/${params}/edit`}>
-                  <button className={styles.navButton}>
+                <>
+                  <Link href={`/dashboard/${params}/edit`}>
+                    <button className={styles.navButton}>
+                      <Image
+                        src="/icons/settings.svg"
+                        width={20}
+                        height={20}
+                        alt="설정"
+                      />
+                      관리
+                    </button>
+                  </Link>
+                  <InviteButton
+                    $nav
+                    dashboardId={params}
+                    setUpdateInvite={setUpdateInvite}
+                  >
                     <Image
-                      src="/icons/settings.svg"
+                      src="/icons/add_box.svg"
                       width={20}
                       height={20}
-                      alt="설정"
+                      alt="초대"
                     />
-                    관리
-                  </button>
-                </Link>
+                    초대하기
+                  </InviteButton>
+                </>
               )}
 
               {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
-              <InviteButton
-                $nav
-                dashboardId={params}
-                setUpdateInvite={setUpdateInvite}
-              >
-                <Image
-                  src="/icons/add_box.svg"
-                  width={20}
-                  height={20}
-                  alt="초대"
-                />
-                초대하기
-              </InviteButton>
+
+              {/* 멤버들 리스트 출력 */}
+              <div>
+                {members.length > 0 ? (
+                  <div style={{ display: "flex" }}>
+                    {members.map((member: any) => (
+                      <div className={styles.memberCircle} key={member.id}>
+                        {/* 프로필 이미지 컴포넌트로 치환 */}
+                        {member.nickname[0]}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No members found.</p>
+                )}
+              </div>
               <div>
                 <hr className={styles.hr} />
               </div>
             </>
           )}
+
           <div className={styles["profile-container"]} ref={dropdownRef}>
             <div className={styles.profile} onClick={toggleDropdown}>
               <span className={styles.profileIcon}>
@@ -156,12 +186,12 @@ export default function NavBar() {
               <span className={styles.profileName}>
                 {userData ? userData.nickname : "로딩중..."}
               </span>
-            
-            {isDropDownOpen && (
-              <div className={styles.dropdown}>
-                <Dropdown  />
-              </div>
-            )}
+
+              {isDropDownOpen && (
+                <div className={styles.dropdown}>
+                  <Dropdown />
+                </div>
+              )}
             </div>
           </div>
         </div>

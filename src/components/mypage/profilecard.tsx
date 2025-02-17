@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import styles from "@/pages/mypage/mypage.module.scss";
 import AvatarUploader from "./avataruploader";
-import { updateProfile } from "@/src/api/userApi"; 
+import { updateProfile } from "@/src/api/userApi";
 
 interface ProfileCardProps {
-  email: string; 
+  email: string;
   nickname: string;
   setNickname: (nickname: string) => void;
   profileImage: string | null;
@@ -24,12 +24,12 @@ export default function ProfileCard({
   const [error, setError] = useState<string | null>(null); // 오류 상태 관리
 
   // handleSave 함수에 async 추가
-  const handleSave = async () => { 
+  const handleSave = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      await updateProfile( nickname, profileImage );
+      await updateProfile(nickname, profileImage);
       console.log("프로필 저장 완료", { nickname, profileImage });
       alert("프로필이 업데이트되었습니다!");
       router.push("/mypage"); // 성공 시 마이페이지로 이동
@@ -67,7 +67,7 @@ export default function ProfileCard({
         </div>
       </div>
       <button
-        onClick={handleSave} // 클릭 시 handleSave 실행
+        onClick={handleSave}
         className={styles.saveButton}
         disabled={loading}
       >
