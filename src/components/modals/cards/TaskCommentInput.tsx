@@ -78,7 +78,7 @@ export default TaskCommentInput;
 const CommentInputContainer = styled.div`
   position: relative;
   width: 450px;
-  height: 650px; /* 높이 추가 조정 */
+  height: 110px; /* 높이 추가 조정 */
   border: 1px solid #d9d9d9;
   border-radius: 6px;
   background: #ffffff;
