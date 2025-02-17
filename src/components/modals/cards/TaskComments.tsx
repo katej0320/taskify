@@ -1,34 +1,53 @@
-import { useEffect, useState } from "react";
-import { getComments, deleteComment } from "@/src/api/comments";
+import { useEffect, useState, useRef } from "react";
+import { getComments, deleteComment, updateComment } from "@/src/api/comments";
 import styled from "styled-components";
+import Image from "next/image";
 
 interface TaskCommentsProps {
   cardId: number;
-  enableInfiniteScroll?: boolean;
-  comments: any[]; // ✅ 부모 컴포넌트(TaskCardModal)에서 관리하는 댓글 상태를 받음
-  setComments: React.Dispatch<React.SetStateAction<any[]>>; // ✅ 상태 업데이트 함수 받음
+  comments: any[];
+  setComments: React.Dispatch<React.SetStateAction<any[]>>;
+  onOpenEditModal?: () => void;
 }
 
 const TaskComments: React.FC<TaskCommentsProps> = ({
   cardId,
-  enableInfiniteScroll = true,
   comments,
-  setComments, // ✅ 부모에서 내려준 상태 업데이트 함수
+  setComments,
+  onOpenEditModal,
 }) => {
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editContent, setEditContent] = useState<string>("");
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
+  const observer = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     if (cardId) fetchComments(true);
   }, [cardId]);
 
+  useEffect(() => {
+    if (!loading && hasMore && comments.length > 0) {
+      const trigger = document.getElementById("scroll-trigger");
+      if (trigger) {
+        observer.current = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            fetchComments();
+          }
+        });
+        observer.current.observe(trigger);
+      }
+    }
+    return () => observer.current?.disconnect();
+  }, [comments]);
+
   const fetchComments = async (reset = false) => {
     if (!cardId || loading || (!reset && !hasMore)) return;
-
     setLoading(true);
     try {
-      const response = await getComments(cardId, 10, reset ? null : cursorId);
+      const response = await getComments(cardId, 2, reset ? null : cursorId);
       if (response) {
         setComments((prev) =>
           reset ? response.comments : [...prev, ...response.comments]
@@ -42,71 +61,230 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
     setLoading(false);
   };
 
-  const handleDeleteComment = async (commentId: number) => {
-    if (!window.confirm("정말 이 댓글을 삭제하시겠습니까?")) return;
+  const handleEditClick = (comment: any) => {
+    setEditingCommentId(comment.id);
+    setEditContent(comment.content);
+  };
+
+  const handleUpdateComment = async (commentId: number) => {
+    if (!editContent.trim()) return;
+    try {
+      await updateComment(commentId, editContent);
+      setComments((prev) =>
+        prev.map((comment) =>
+          comment.id === commentId
+            ? { ...comment, content: editContent }
+            : comment
+        )
+      );
+      setEditingCommentId(null);
+    } catch (error) {
+      console.error("❌ 댓글 수정 실패:", error);
+    }
+  };
+
+  const handleDeleteClick = async (commentId: number) => {
     try {
       await deleteComment(commentId);
-      setComments((prev) => prev.filter((comment) => comment.id !== commentId)); // ✅ 즉시 UI 업데이트
+      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.error("❌ 댓글 삭제 실패:", error);
     }
   };
 
   return (
-    <CommentList>
-      {comments.length > 0 ? (
-        comments.map((comment) => (
-          <CommentItem key={comment.id}>
-            <CommentAuthor>{comment.author.nickname}</CommentAuthor>
-            <CommentContent>{comment.content}</CommentContent>
-            <DeleteButton onClick={() => handleDeleteComment(comment.id)}>
-              삭제
-            </DeleteButton>
-          </CommentItem>
-        ))
-      ) : (
-        <NoComments>아직 댓글이 없습니다.</NoComments>
-      )}
-    </CommentList>
+    <CommentListWrapper>
+      <CommentList>
+        {comments.map((comment) => (
+          <TaskCommentItem key={comment.id}>
+            <ProfileImage src="/icons/profile-placeholder.svg" alt="프로필" />
+            <CommentContentWrapper>
+              <CommentHeader>
+                <CommentMeta>
+                  <CommentAuthor>{comment.author.nickname}</CommentAuthor>
+                  <CommentTime>
+                    {new Date(comment.createdAt).toLocaleString("ko-KR", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </CommentTime>
+                </CommentMeta>
+                <DropdownContainer>
+                  <DropdownIcon
+                    src="/icons/kebab.svg"
+                    alt="메뉴"
+                    onClick={() =>
+                      setOpenDropdownId(
+                        openDropdownId === comment.id ? null : comment.id
+                      )
+                    }
+                  />
+                  {openDropdownId === comment.id && (
+                    <DropdownMenu>
+                      {editingCommentId === comment.id ? (
+                        <DropdownItem
+                          onClick={() => handleUpdateComment(comment.id)}
+                        >
+                          저장
+                        </DropdownItem>
+                      ) : (
+                        <DropdownItem onClick={() => handleEditClick(comment)}>
+                          수정
+                        </DropdownItem>
+                      )}
+                      <DropdownItem
+                        onClick={() => handleDeleteClick(comment.id)}
+                      >
+                        삭제
+                      </DropdownItem>
+                    </DropdownMenu>
+                  )}
+                </DropdownContainer>
+              </CommentHeader>
+              {editingCommentId === comment.id ? (
+                <EditInput
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  onBlur={() => handleUpdateComment(comment.id)}
+                />
+              ) : (
+                <TaskCommentText>{comment.content}</TaskCommentText>
+              )}
+            </CommentContentWrapper>
+          </TaskCommentItem>
+        ))}
+        <div
+          id="scroll-trigger"
+          style={{ height: "10px", visibility: "hidden" }}
+        />
+      </CommentList>
+    </CommentListWrapper>
   );
 };
 
 export default TaskComments;
 
+const EditInput = styled.textarea`
+  width: 80%; /* 기존보다 넓게 조정 */
+  min-height: 40px; /* 기본 높이 */
+  max-height: 100px; /* 최대 높이 지정 */
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none; /* 사용자가 크기 조절 못하도록 */
+  overflow-y: auto; /* 입력이 많아지면 자동 스크롤 */
+  word-break: break-word;
+  white-space: pre-wrap; /* 줄 바꿈 유지 */
+  background: white;
+`;
+
+const CommentListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  height: 60px;
+  overflow: hidden;
+`;
+
 const CommentList = styled.ul`
-  width: 420px;
-  max-height: 200px;
+  width: 100%;
+  height: 100%;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 0;
 `;
 
-const CommentItem = styled.li`
+const TaskCommentItem = styled.li`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px;
-  border-bottom: 1px solid #d9d9d9;
+  padding: 10px;
+  gap: 12px;
+  border-bottom: 1px solid #eee;
+  height: 40px;
+  overflow: hidden;
 `;
 
-const CommentAuthor = styled.div`
-  font-weight: bold;
-`;
-
-const CommentContent = styled.div`
+const CommentContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  margin-left: 8px;
 `;
 
-const DeleteButton = styled.button`
-  background: none;
-  border: none;
-  color: red;
-  cursor: pointer;
+const CommentHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
-const NoComments = styled.p`
-  text-align: center;
+const CommentMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+const CommentAuthor = styled.span`
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+`;
+
+const CommentTime = styled.span`
+  font-size: 12px;
   color: #999;
+`;
+
+const TaskCommentText = styled.p`
+  font-size: 14px;
+  color: #333;
+  word-break: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+`;
+
+const DropdownContainer = styled.div`
+  position: relative;
+`;
+
+const DropdownIcon = styled.img`
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+`;
+
+const DropdownMenu = styled.ul`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: max-content;
+  max-width: 150px;
+  z-index: 1000;
+`;
+
+const DropdownItem = styled.li`
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  &:hover {
+    background: #f1f1f1;
+  }
+`;
+const ProfileImage = styled.img`
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
 `;

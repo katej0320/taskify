@@ -98,9 +98,9 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
           />
           <TaskComments
             cardId={cardId}
-            enableInfiniteScroll={true}
             comments={comments}
             setComments={setComments}
+            onOpenEditModal={onOpenEditModal}
           />
         </CommentSection>
       </ModalContent>
