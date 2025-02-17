@@ -3,10 +3,11 @@ import CustomModal from "../modal/CustomModal";
 import styles from "./AddModal.module.scss";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { addCards } from "../../api/dashboardApi";
+import { addCards, uploadImage } from "../../api/dashboardApi";
 import ImageUpload from "./addModal/ImageUpload";
 import { useRouter } from "next/router";
 import axiosInstance from "@/src/api/axios";
+import TaskTags from "../modals/cards/TaskTags";
 
 interface AddModalProps {
   isOpen: boolean;
@@ -73,36 +74,35 @@ const AddModal: React.FC<AddModalProps> = ({
     }
     setError(null);
 
-    const cardData = {
-      assigneeUserId: selectedAssignee,
-      dashboardId,
-      columnId,
-      title,
-      description,
-      dueDate:
-        dueDate.toISOString().split("T")[0] +
-        " " +
-        dueDate.toISOString().split("T")[1].slice(0, 5),
-      tags,
-      imageUrl:
-        "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/task_image/12-1_44989_1739532858828.png", // 이미지 URL은 이미지 업로드 후 반환된 URL로 설정
-    };
-
     try {
-      const formData = new FormData();
+      let imageUrl = "";
+
+      // 이미지가 있는 경우 업로드
       if (image) {
-        formData.append("file", image);
+        const formData = new FormData();
+        formData.append("image", image);
+        const uploadResult = await uploadImage(columnId, formData);
+        imageUrl = uploadResult.imageUrl; // 업로드된 이미지의 URL 저장
       }
 
+      const cardData = {
+        assigneeUserId: selectedAssignee,
+        dashboardId,
+        columnId,
+        title,
+        description,
+        dueDate:
+          dueDate.toISOString().split("T")[0] +
+          " " +
+          dueDate.toISOString().split("T")[1].slice(0, 5),
+        tags,
+        imageUrl,
+      };
+
       // 카드 생성 API 호출
-      const result = await addCards(cardData);
+      await addCards(cardData);
       fetchCards();
 
-      // 이미지가 있으면 업로드 후 imageUrl을 업데이트
-      // if (image) {
-      //   const uploadResult = await uploadImage(formData);
-      //   cardData.imageUrl = uploadResult.url; // 이미지 업로드 후 URL 저장
-      // }
       resetForm();
       onClose();
     } catch (error) {
@@ -140,7 +140,6 @@ const AddModal: React.FC<AddModalProps> = ({
           </option>
         </select>
 
-        {/* 제목 입력 */}
         <label>제목 *</label>
         <input
           type="text"
@@ -151,7 +150,6 @@ const AddModal: React.FC<AddModalProps> = ({
           required
         />
 
-        {/* 설명 입력 */}
         <label>설명 *</label>
         <textarea
           className={styles.textarea}
@@ -161,7 +159,6 @@ const AddModal: React.FC<AddModalProps> = ({
           required
         />
 
-        {/* 마감일  */}
         <label>마감일 *</label>
         <DatePicker
           className={styles.date}
@@ -173,7 +170,7 @@ const AddModal: React.FC<AddModalProps> = ({
           timeIntervals={10}
           placeholderText="날짜를 입력해 주세요"
         />
-        {/* 태그 입력 */}
+
         <label>태그</label>
         <input
           type="text"
@@ -183,17 +180,11 @@ const AddModal: React.FC<AddModalProps> = ({
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={handleTagKeyPress}
         />
-        <div className={styles.tags}>
-          {tags.map((tag, index) => (
-            <span key={index} className={styles.tag}>
-              {tag} <button onClick={() => handleRemoveTag(index)}>✕</button>
-            </span>
-          ))}
-        </div>
+        <TaskTags tags={tags} />
 
         <label>이미지</label>
         <div className={styles.imageUpload}>
-          <ImageUpload />
+          <ImageUpload onImageUpload={setImage} />
         </div>
 
         {error && <p className={styles.error}>{error}</p>}

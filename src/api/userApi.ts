@@ -13,7 +13,7 @@ export const getUser = async (): Promise<User> => {
     }
 
     const response = await axios.get(
-      "https://sp-taskify-api.vercel.app/12-1/users", // 사용자 정보 가져오는 URL
+      "https://sp-taskify-api.vercel.app/12-1/users/me", // 사용자 정보 가져오는 URL
       {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Authorization 헤더에 access token 추가
@@ -47,8 +47,8 @@ export const updateProfile = async (
       formData.append("profileImage", profileImage);
     }
 
-    const response = await axios.post(
-      "https://sp-taskify-api.vercel.app/12-1/users",
+    const response = await axios.put(
+      "https://sp-taskify-api.vercel.app/12-1/users/me",
       formData,
       {
         headers: {
