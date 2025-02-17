@@ -1,13 +1,19 @@
-import { useEffect, useState } from "react";
+import { ReactNode, SetStateAction, useEffect, useState } from "react";
+import styled, { css } from "styled-components";
 import axiosInstance from "@/src/api/axios";
 import axios from "axios";
-import styled from "styled-components";
 import { Button } from "../../button/CustomButton2";
 import IconAdd from "@/public/images/dashboard/edit/ic_invite.svg";
 import { InviteModal } from "./modal/Invite";
 import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
+import { useEditToast } from "@/src/hooks/dashboard/edit/useEditToast";
+import { Toast } from "./toast/Toast";
 
-const ButtonContainer = styled(Button)`
+type Props = {
+  $nav?: boolean;
+};
+
+const ButtonContainer = styled(Button)<Props>`
   width: fit-content;
   padding: 0 15px;
   margin-left: 16px;
@@ -24,6 +30,29 @@ const ButtonContainer = styled(Button)`
     margin-right: 3px;
   }
 
+  ${(props) =>
+    props.$nav &&
+    css`
+      display: flex;
+      align-items: center;
+      height: auto;
+      line-height: normal;
+      margin-left: 0;
+      padding: 8px 12px;
+      box-sizing: border-box;
+      border-radius: 6px;
+      background: #fff;
+      color: #787486;
+
+      img {
+        margin-right: 5px;
+      }
+
+      &:hover {
+        background-color: #eee;
+      }
+    `}
+
   @media (max-width: 768px) {
     position: absolute;
     top: 79px;
@@ -32,9 +61,15 @@ const ButtonContainer = styled(Button)`
 `;
 
 export function InviteButton({
+  $nav,
+  children,
   dashboardId,
+  setUpdateInvite
 }: {
+  $nav?: boolean;
+  children?: ReactNode;
   dashboardId: string | string[] | undefined;
+  setUpdateInvite?:React.Dispatch<SetStateAction<boolean>>
 }) {
   const [isUpdate, setIsUpdate] = useState(false);
   const [isModal, setIsModal] = useState(false);
@@ -42,6 +77,8 @@ export function InviteButton({
   const [isErrorMessage, setIsErrorMessage] = useState("");
 
   const { getInvitations } = useEdit();
+
+  const { isToast, setIsToast } = useEditToast();
 
   const handleShowModal = () => {
     setIsModal(true);
@@ -54,6 +91,7 @@ export function InviteButton({
       });
       getInvitations();
       setIsUpdate(true);
+      setIsToast(true);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response)
@@ -77,11 +115,15 @@ export function InviteButton({
 
   // 초대 API 전송 성공 시 모달 비활성화
   useEffect(() => {
-    if (isUpdate) setIsModal(false);
+    if (isUpdate) {
+      setIsModal(false);
+      getInvitations();
+    }
   }, [isUpdate]);
 
   return (
     <>
+      {isToast && <Toast setIsToast={setIsToast} createInvite />}
       {isModal && (
         <InviteModal
           isModal={isModal}
@@ -91,11 +133,18 @@ export function InviteButton({
           isErrorMessage={isErrorMessage}
           postInvitation={postInvitation}
           setIsUpdate={setIsUpdate}
+          setUpdateInvite={setUpdateInvite}
         />
       )}
-      <ButtonContainer onClick={handleShowModal}>
-        <IconAdd />
-        초대하기
+      {$nav}
+      <ButtonContainer {...($nav && { $nav })} onClick={handleShowModal}>
+        {$nav ? (
+          children
+        ) : (
+          <>
+            <IconAdd /> 초대하기
+          </>
+        )}
       </ButtonContainer>
     </>
   );
