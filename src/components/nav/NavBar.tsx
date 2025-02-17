@@ -101,31 +101,34 @@ export default function NavBar() {
   return (
     <>
       <nav className={styles.navbar}>
-      <div className={styles.leftSection}>
-        <span className={styles.dashboardTitle}>
-          {headerTitle}
-          {createByMe && (
-            <Image src="/icons/crown.svg" width={20} height={20} alt="초대" />
-          )}
-        </span>
-      </div>
+        <div className={styles.leftSection}>
+          <span className={styles.dashboardTitle}>
+            {headerTitle}
+            {createByMe && (
+              <Image src="/icons/crown.svg" width={20} height={20} alt="초대" />
+            )}
+          </span>
+        </div>
         <div className={styles.rightSection}>
           {/* 대시보드 상세 및 수정 페이지에서만 활성화 02.16_혜림 */}
           {(router.route === `/dashboard/[id]` ||
             router.route === `/dashboard/[id]/edit`) && (
             <>
               {/* 수정 페이지 링크 추가 02.15_혜림 */}
-              <Link href={`/dashboard/${params}/edit`}>
-                <button className={styles.navButton}>
-                  <Image
-                    src="/icons/settings.svg"
-                    width={20}
-                    height={20}
-                    alt="설정"
-                  />
-                  관리
-                </button>
-              </Link>
+              {router.route === `/dashboard/[id]` && (
+                <Link href={`/dashboard/${params}/edit`}>
+                  <button className={styles.navButton}>
+                    <Image
+                      src="/icons/settings.svg"
+                      width={20}
+                      height={20}
+                      alt="설정"
+                    />
+                    관리
+                  </button>
+                </Link>
+              )}
+
               {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
               <InviteButton
                 $nav
@@ -146,21 +149,21 @@ export default function NavBar() {
             </>
           )}
           <div className={styles["profile-container"]} ref={dropdownRef}>
-          <div className={styles.profile} onClick={toggleDropdown}>
-            <span className={styles.profileIcon}>
-              {userData ? userData.email[0] : "?"}
-            </span>
-            <span className={styles.profileName}>
-              {userData ? userData.nickname : "로딩중..."}
-            </span>
-          </div>
-
-          {isDropDownOpen && (
-            <div>
-              <Dropdown />
+            <div className={styles.profile} onClick={toggleDropdown}>
+              <span className={styles.profileIcon}>
+                {userData ? userData.email[0] : "?"}
+              </span>
+              <span className={styles.profileName}>
+                {userData ? userData.nickname : "로딩중..."}
+              </span>
             </div>
-          )}
-        </div>
+
+            {isDropDownOpen && (
+              <div>
+                <Dropdown />
+              </div>
+            )}
+          </div>
         </div>
       </nav>
     </>
