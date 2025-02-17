@@ -1,21 +1,22 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import CustomModal from "../CustomModal";
-import TaskHeader from "./TaskHeader";
-import TaskImage from "./TaskImage";
+import CustomModal from "../../modal/CustomModal";
+import TaskDropdown from "./TaskDropdown";
 import TaskColumn from "./TaskColumn";
 import TaskTags from "./TaskTags";
+import TaskImage from "./TaskImage";
 import TaskAssignee from "./TaskAssignee";
 import TaskComments from "./TaskComments";
+import TaskCommentInput from "./TaskCommentInput";
 import { getCardDetail } from "@/src/api/cards";
-import { getColumns } from "@/src/api/columns";
+import { getComments } from "@/src/api/comments";
 
 interface TaskCardModalProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenEditModal: () => void;
-  teamId: string;
   cardId: number;
+  columnTitle: string;
   columnId: number;
   dashboardId: number;
 }
@@ -24,67 +25,84 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
   isOpen,
   onClose,
   onOpenEditModal,
-  teamId,
   cardId,
+  columnTitle,
   columnId,
   dashboardId,
 }) => {
   const [cardData, setCardData] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [columnTitle, setColumnTitle] = useState<string>("없음");
+  const [comments, setComments] = useState<any[]>([]);
 
   useEffect(() => {
     if (isOpen) {
-      setLoading(true);
-      Promise.all([
-        getCardDetail(teamId, cardId).then((data) => setCardData(data)),
-        getColumns(teamId, dashboardId).then((columns) => {
-          const column = columns.find((col: any) => col.id === columnId);
-          setColumnTitle(column ? column.title : "없음");
-        }),
-      ])
-        .catch((error) => console.error("데이터 가져오기 실패:", error))
-        .finally(() => setLoading(false));
+      getCardDetail(cardId)
+        .then((data) => setCardData(data))
+        .catch((error) => console.error("❌ 카드 상세 조회 실패:", error));
+
+      fetchComments();
     }
-  }, [isOpen, teamId, cardId, columnId, dashboardId]);
+  }, [isOpen, cardId]);
+
+  const fetchComments = async () => {
+    try {
+      const response = await getComments(cardId, 10, null);
+      if (response && response.comments) {
+        setComments(response.comments);
+      }
+    } catch (error) {
+      console.error("❌ 댓글 조회 실패:", error);
+    }
+  };
 
   return (
-    <CustomModal isOpen={isOpen} onClose={onClose} className="largeModal">
+    <CustomModal isOpen={isOpen} onClose={onClose} width="730px" height="auto">
       <ModalContent onClick={(e) => e.stopPropagation()}>
-        {/* 카드 헤더 */}
-        <TaskHeader title={cardData?.title} onClose={onClose} />
+        <HeaderContainer>
+          <Title>{cardData?.title || "제목 없음"}</Title>
+          <TaskDropdown
+            cardId={cardId}
+            onOpenEditModal={onOpenEditModal}
+            onClose={onClose}
+          />
+        </HeaderContainer>
 
-        {/* 컬럼명 + 태그 */}
-        <ColumnTagWrapper>
-          <TaskColumn
-            teamId={teamId}
+        <ColumnAndTagsContainer>
+          <TaskColumn columnTitle={columnTitle} />
+          <VerticalDivider />
+          <TaskTags tags={cardData?.tags || []} />
+        </ColumnAndTagsContainer>
+
+        <ContentWrapper>
+          <LeftContent>
+            {cardData?.description && (
+              <Description>{cardData.description}</Description>
+            )}
+            <TaskImage imageUrl={cardData?.imageUrl} />
+          </LeftContent>
+
+          <RightContent>
+            <TaskAssignee
+              assignee={cardData?.assignee ?? { nickname: "담당자 없음" }}
+              dueDate={cardData?.dueDate ?? "마감일 없음"}
+            />
+          </RightContent>
+        </ContentWrapper>
+
+        <CommentSection>
+          <TaskCommentInput
+            cardId={cardId}
             columnId={columnId}
             dashboardId={dashboardId}
+            onCommentAdded={fetchComments}
+            setComments={setComments}
           />
-          <TaskTags tags={cardData?.tags || []} />
-        </ColumnTagWrapper>
-
-        {/* 카드 이미지 */}
-        <TaskImage imageUrl={cardData?.imageUrl} />
-
-        {/* 담당자 & 마감일 */}
-        <TaskAssignee
-          assignee={cardData?.assignee}
-          dueDate={cardData?.dueDate}
-        />
-
-        {/* 설명 (설명이 있을 때만 표시) */}
-        {cardData?.description && (
-          <Description>{cardData.description}</Description>
-        )}
-
-        {/* 댓글 섹션 */}
-        <TaskComments
-          teamId={teamId}
-          cardId={cardId}
-          columnId={columnId}
-          dashboardId={dashboardId}
-        />
+          <TaskComments
+            cardId={cardId}
+            enableInfiniteScroll={true}
+            comments={comments}
+            setComments={setComments}
+          />
+        </CommentSection>
       </ModalContent>
     </CustomModal>
   );
@@ -93,27 +111,80 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
 export default TaskCardModal;
 
 const ModalContent = styled.div`
-  width: 900px;
-  max-width: 90vw;
-  background: white;
-  border-radius: 12px;
-  padding: 32px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
 `;
 
-const ColumnTagWrapper = styled.div`
+const HeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  font-weight: 700;
+  color: #333236;
+`;
+
+const ColumnAndTagsContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
+  gap: 20px;
+  margin-top: 8px;
+`;
+
+const VerticalDivider = styled.div`
+  width: 1px;
+  height: 20px;
+  background-color: #d9d9d9;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  flex-direction: row;
+`;
+
+const LeftContent = styled.div`
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+`;
+
+const RightContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+const CommentSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 250px;
+`;
+
+const CommentTitle = styled.h3`
+  font-size: 16px;
+  font-weight: bold;
 `;
 
 const Description = styled.p`
+  width: 470px;
+  height: 92px;
   font-size: 14px;
-  color: #333;
-  line-height: 1.6;
-  margin-top: 10px;
+  font-weight: 400;
+  color: #000000;
+  padding: 10px;
+  margin-top: 8px;
 `;

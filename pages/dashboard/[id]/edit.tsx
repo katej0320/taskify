@@ -11,6 +11,7 @@ import InvitationContainer from "@/src/components/dashboard/edit/InvitationConta
 import MemberContainer from "@/src/components/dashboard/edit/MemberContainer";
 import { EditProvider } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 
+
 const Contents = styled.div`
   width: calc(100vw * 375 / 1200);
   min-width: 600px;
@@ -22,6 +23,8 @@ const Contents = styled.div`
 `;
 
 export default function EditPage() {
+ 
+
   const router = useRouter();
   const dashboardId = router.query.id;
 

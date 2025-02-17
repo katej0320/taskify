@@ -1,4 +1,5 @@
 @use "/styles/color.scss" as *;
+
 .contents {
   display: flex;
   flex-direction: column;
@@ -9,23 +10,29 @@
 .content {
   margin-left: 300px;
   padding: 20px;
-  background-color: #f0f0f0;
+  background-color: $gray1;
   flex-grow: 1;
-  gap: 20px;
-  // 스크롤이 되지 않는 이슈가 발생되어 추가하였습니다. 02.14_혜림
   overflow-y: auto;
+  transition: margin-left 0.3s ease-in-out;
 }
 
-.listCard {
-  div {
-    text-align: center;
+.listcard {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+
+  @media (max-width: 1199px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
-.listCard {
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+.listcardandpagination {
+  max-width: 1200px;
+  width: 100%;
 }
 
 .dashboard {
@@ -39,12 +46,12 @@
   width: 8px;
   height: 8px;
   border-radius: 50px;
-  background-color: $white;
 }
 
 .inviteContent {
-  width: 1022px;
-  max-height: 750px;
+  max-width: 1200px;
+  width: 100%;
+  min-height: 390px;
   background-color: $white;
   border-radius: 8px;
   padding: 32px 28px;
@@ -57,21 +64,51 @@
   }
 }
 
-.listcardandpagination {
-  flex-wrap: wrap;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 1200px;
-}
 .pagination {
   display: flex;
   justify-content: flex-end;
   margin: 10px 0;
-  width: 990px;
+  width: 90%;
 }
 
-.listcard {
+.addCard {
   display: flex;
-  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  padding-left: 75px;
+  font-family: Pretendard;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.dashboardlist {
+  overflow-y: auto;
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+  .content {
+    margin-left: 160px;
+    padding: 20px;
+    background-color: $gray2;
+  }
+}
+
+@media (max-width: 767px) {
+  .content {
+    margin-left: 60px;
+    padding: 20px;
+    background-color: $gray2;
+  }
+
+  .listcardandpagination {
+    width: 100%;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
 }

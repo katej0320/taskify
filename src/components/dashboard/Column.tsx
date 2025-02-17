@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { Droppable } from "@hello-pangea/dnd";
 import TaskCard from "./TaskCard";
@@ -6,13 +7,10 @@ import ListCard from "../dashboardlist/card/ListCard";
 import Image from "next/image";
 import CustomModal from "../modal/CustomModal";
 import styles from "./Column.module.scss";
-import {
-  getCards,
-  updateColumnTitle,
-  deleteColumn,
-  addCards, // 새로운 카드 추가 API 함수 필요
-} from "@/src/api/dashboardApi";
+import { updateColumnTitle, deleteColumn } from "@/src/api/dashboardApi";
 import AddModal from "./addModal";
+import axiosInstance from "@/src/api/axios";
+import { useInView } from "react-intersection-observer";
 
 export default function Column({ column, onDelete }: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,19 +18,29 @@ export default function Column({ column, onDelete }: any) {
   const [cards, setCards] = useState<any[]>([]);
   const [totalCount, setTotalCount] = useState<number>();
   const [columnTitle, setColumnTitle] = useState(column.title);
+  const [cursorId, setCursorId] = useState<number>();
+  const [ref, inView] = useInView();
 
   useEffect(() => {
-    fetchCards();
-  }, [column.id]);
+    if (inView && cursorId !== null) {
+      fetchCards();
+    }
+  }, [inView]);
 
   const fetchCards = async () => {
     try {
-      const response = await getCards(10, column.id);
-      const { cards, totalCount } = response;
-      if (response) {
-        setCards(cards);
-        setTotalCount(totalCount);
-      }
+      const response = cursorId
+        ? await axiosInstance.get("/cards", {
+            params: { columnId: column.id, cursorId },
+          })
+        : await axiosInstance.get("/cards", {
+            params: { columnId: column.id },
+          });
+      const newCards = response.data.cards;
+      const newCursorId = response.data.cursorId;
+      setCards((prevCards) => [...prevCards, ...newCards]);
+      setTotalCount(response.data.totalCount);
+      setCursorId(newCursorId);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -69,13 +77,8 @@ export default function Column({ column, onDelete }: any) {
     }
   };
 
-  const handleAddCard = async (cardTitle: string) => {
-    try {
-      await addCards(column.id, column.idcardTitle); // 새 카드 추가 API 호출
-      fetchCards(); // 카드 목록을 새로 고침
-    } catch (error) {
-      console.error("Error adding card:", error);
-    }
+  const handleCardDelete = (cardId: string) => {
+    setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
   };
 
   return (
@@ -96,6 +99,8 @@ export default function Column({ column, onDelete }: any) {
       </div>
       <Droppable droppableId={String(column.id)}>
         {(provided) => (
+
+
           <div ref={provided.innerRef} {...provided.droppableProps}>
             <ListCard className={styles.listcolumn}>
               <Image
@@ -107,16 +112,20 @@ export default function Column({ column, onDelete }: any) {
                 style={{ cursor: "pointer" }}
               />
             </ListCard>
-            {cards.map((card) => (
+            {cards?.map((card) => (
               <TaskCard
                 key={card.id}
                 card={card}
                 className={styles.taskCard}
                 columnTitle={columnTitle}
+                columnId={column.id} // 컬럼 ID 추가
+                dashboardId={column.dashboardId} // 대시보드 ID 추가
+                // onCardDelete={handleCardDelete}
               />
             ))}
             {provided.placeholder}
           </div>
+
         )}
       </Droppable>
 
@@ -147,7 +156,12 @@ export default function Column({ column, onDelete }: any) {
       </CustomModal>
 
       {modalContent === "add-column" && (
-        <AddModal isOpen={isModalOpen} onClose={closeModal} />
+        <AddModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          columnId={column.id}
+          fetchCards={fetchCards}
+        />
       )}
     </div>
   );
