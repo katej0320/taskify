@@ -9,11 +9,11 @@ import passwordeyeopen from "@/public/images/passwordeyeopen.png";
 import loginlogo from "@/public/icons/loginlogo.png";
 import Image from "next/image";
 import style from "./index.module.scss";
-import CustomModal from "@/src/components/modals/CustomModal";
+import CustomModal from "@/src/components/modal/CustomModal";
 import registerStyles from "./modal.module.scss";
 import CustomButton from "@/src/components/button/CustomButton";
 import buttonStyles from "./button.module.scss";
-import { useDevice } from '@/src/hooks/useDevice';
+import useDevice  from '@/src/hooks/useDevice';
 
 
 export default function RegisterPage() {
@@ -309,7 +309,7 @@ export default function RegisterPage() {
       </form>
 
       {/* 모달 컴포넌트 */}
-      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} width="368">
         <div className={registerStyles.modalOverlay}>
           <div className={registerStyles.contentstyle}>
             <div className={registerStyles.textandbutton}>
