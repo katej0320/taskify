@@ -131,6 +131,9 @@
     }
   }
 
+
+
+  
   .saveButton {
     width: 400px;
     height: 54px;
@@ -183,4 +186,37 @@ background-color: $violet2;
 .modalStyle p {
   padding-bottom: 20px;
   text-align: center;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.removeButton {
+  position: absolute;
+  top: -8px;
+  right: -9px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+
+  &:hover {
+    background: rgba(255, 0, 0, 0.8);
+  }
 }
