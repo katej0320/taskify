@@ -220,7 +220,15 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    transform: scale(1.2);
+    width: 80vw;
+    
+    /* 🟢 transform 속성을 한 줄로 합치기 */
+    transform: translate(-50%, -50%);
+    
+    /* 🔹 중앙 정렬을 위한 absolute + top, left 설정 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
   }
 
 }
