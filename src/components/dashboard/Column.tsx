@@ -27,18 +27,27 @@ export default function Column({ column, onDelete }: any) {
     }
   }, [inView]);
 
-  const fetchCards = async () => {
+  const fetchCards = async (reset = false) => {
     try {
-      const response = cursorId
+      const response = reset
+        ? await axiosInstance.get("/cards", { params: { columnId: column.id } })
+        : cursorId
         ? await axiosInstance.get("/cards", {
             params: { columnId: column.id, cursorId },
           })
         : await axiosInstance.get("/cards", {
             params: { columnId: column.id },
           });
+
       const newCards = response.data.cards;
       const newCursorId = response.data.cursorId;
-      setCards((prevCards) => [...prevCards, ...newCards]);
+
+      if (reset) {
+        setCards(newCards); // 🔥 항상 새로운 데이터로 덮어쓰기
+      } else {
+        setCards((prevCards) => [...prevCards, ...newCards]); // 스크롤 페이징 시 추가
+      }
+
       setTotalCount(response.data.totalCount);
       setCursorId(newCursorId);
     } catch (error) {
@@ -160,7 +169,7 @@ export default function Column({ column, onDelete }: any) {
           isOpen={isModalOpen}
           onClose={closeModal}
           columnId={column.id}
-          fetchCards={fetchCards}
+          fetchCards={() => fetchCards(true)}
         />
       )}
     </div>

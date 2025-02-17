@@ -54,7 +54,7 @@ export const updateProfile = async (
         "Content-Type": "application/json",
       },
     });
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("프로필 업데이트 실패:", error);
