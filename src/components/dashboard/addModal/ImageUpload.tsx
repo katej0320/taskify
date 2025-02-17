@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styles from "./ImageUpload.module.scss";
 
-const ImageUpload = () => {
+interface ImageUploadProps {
+  onImageUpload: (image: File | null) => void;
+}
+
+const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -13,6 +17,7 @@ const ImageUpload = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
+        onImageUpload(file); // 부모에게 이미지 업로드 완료 알림
       };
       reader.readAsDataURL(file);
     }
@@ -21,6 +26,7 @@ const ImageUpload = () => {
   const handleRemoveImage = () => {
     setImage(null);
     setImagePreview(null);
+    onImageUpload(null); // 부모에게 이미지 삭제 알림
   };
 
   return (

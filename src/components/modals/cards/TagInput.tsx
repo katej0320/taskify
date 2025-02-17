@@ -29,17 +29,22 @@ const getTagColor = (() => {
 
 const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
   const [tagInput, setTagInput] = useState("");
+  const [placeholder, setPlaceholder] = useState("태그 입력 후 Enter");
 
   const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim()) {
       e.preventDefault();
-      setTags([...tags, tagInput.trim()]);
+      if (!tags.includes(tagInput.trim())) {
+        setTags([...tags, tagInput.trim()]);
+      }
       setTagInput("");
+      if (tags.length + 1 > 0) setPlaceholder("");
+    } else if (e.key === "Backspace" && tagInput === "" && tags.length > 0) {
+      e.preventDefault();
+      const newTags = tags.slice(0, -1);
+      setTags(newTags);
+      if (newTags.length === 0) setPlaceholder("태그 입력 후 Enter");
     }
-  };
-
-  const handleRemoveTag = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
   };
 
   return (
@@ -52,14 +57,15 @@ const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
           return (
             <TagItem key={index} bgColor={bgColor} textColor={textColor}>
               {tag}
-              <RemoveBtn onClick={() => handleRemoveTag(index)}>x</RemoveBtn>
             </TagItem>
           );
         })}
         <TagTextInput
           type="text"
-          placeholder="태그 입력 후 Enter"
+          placeholder={placeholder}
           value={tagInput}
+          onFocus={() => !tags.length && setPlaceholder("")}
+          onBlur={() => !tags.length && setPlaceholder("태그 입력 후 Enter")}
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={handleTagKeyPress}
         />
@@ -96,19 +102,15 @@ const TagTextInput = styled.input`
 const TagItem = styled.span<{ bgColor: string; textColor: string }>`
   background-color: ${(props) => props.bgColor};
   color: ${(props) => props.textColor};
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 4px 12px;
   font-size: 12px;
   display: flex;
   align-items: center;
   gap: 6px;
-`;
-
-const RemoveBtn = styled.button`
-  background: none;
-  border: none;
-  font-size: 12px;
-  color: red;
-  cursor: pointer;
-  padding: 0;
+  min-width: auto;
+  height: 28px;
+  max-width: fit-content;
+  white-space: nowrap;
+  justify-content: center;
 `;
