@@ -7,12 +7,12 @@ import { addCards, uploadImage } from "../../api/dashboardApi";
 import ImageUpload from "./addModal/ImageUpload";
 import { useRouter } from "next/router";
 import axiosInstance from "@/src/api/axios";
-import TagInput from "../modals/cards/TagInput";
+import TaskTags from "../modals/cards/TaskTags";
 
 interface AddModalProps {
   isOpen: boolean;
   onClose: () => void;
-  columnId: number;
+  columnId: number; // columnId를 부모로부터 받아옵니다
   fetchCards: () => void;
 }
 
@@ -29,11 +29,21 @@ const AddModal: React.FC<AddModalProps> = ({
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState<Date | null>(null);
   const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   const [members, setMembers] = useState<any>([]);
   const [selectedAssignee, setSelectedAssignee] = useState<number | null>(null);
-  const [attemptSubmit, setAttemptSubmit] = useState(false);
-  const [loading, setLoading] = useState(false);
+
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+
+  const handleSelectUser = (member: any) => {
+    setSelectedUser(member);
+    setSelectedAssignee(member.userId); // 담당자 ID 설정
+    setIsSelectOpen(false); // 선택 후 드롭다운 닫기
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -52,117 +62,139 @@ const AddModal: React.FC<AddModalProps> = ({
         const response = await axiosInstance.get("/members", {
           params: { dashboardId },
         });
+
         setMembers(response.data.members);
       } catch (error) {
         console.error(error);
       }
     };
     fetchMembers();
-  }, [dashboardId]);
+  }, []);
 
   const changeUser = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedUserId = Number(e.target.value);
-    setSelectedAssignee(selectedUserId); // 담당자 ID를 상태에 저장
+    setSelectedAssignee(Number(e.target.value));
   };
 
-  const isDisabled = !title || !description || !dueDate;
+  const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && tagInput.trim()) {
+      setTags([...tags, tagInput.trim()]);
+      setTagInput("");
+      e.preventDefault();
+    }
+  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleRemoveTag = (index: number) => {
+    setTags(tags.filter((_, i) => i !== index));
+  };
+
+  const handleCreateCard = async (e: React.FormEvent) => {
     e.preventDefault();
-    setAttemptSubmit(true);
-    if (isDisabled) return;
+    if (!title || !description || !dueDate || selectedAssignee === null) {
+      setError("제목, 설명, 마감일은 필수 입력 항목입니다.");
+      return;
+    }
+    setError(null);
 
-    setLoading(true);
     try {
       let imageUrl = "";
+
+      // 이미지가 있는 경우 업로드
       if (image) {
         const formData = new FormData();
         formData.append("image", image);
         const uploadResult = await uploadImage(columnId, formData);
-        imageUrl = uploadResult.imageUrl;
+        imageUrl = uploadResult.imageUrl; // 업로드된 이미지의 URL 저장
       }
 
-      // 카드 데이터 객체
       const cardData = {
-        assigneeUserId: selectedAssignee || 0, // 담당자 ID가 없으면 0을 기본값으로 설정
+        assigneeUserId: selectedAssignee,
         dashboardId,
         columnId,
         title,
         description,
-        dueDate: dueDate?.toISOString() || "", // 날짜가 없으면 빈 문자열 처리
-        tags: tags.length > 0 ? tags : [], // 태그가 없으면 빈 배열 처리
-        imageUrl: imageUrl || "", // 이미지 URL이 없으면 빈 문자열 처리
+        dueDate:
+          dueDate.toISOString().split("T")[0] +
+          " " +
+          dueDate.toISOString().split("T")[1].slice(0, 5),
+        tags,
+        imageUrl,
       };
 
-      console.log("📝 최종 카드 데이터:", JSON.stringify(cardData, null, 2)); // 실제 API로 전송하는 데이터
-
-      await addCards(cardData); // 카드 생성 요청
+      // 카드 생성 API 호출
+      await addCards(cardData);
       fetchCards();
+
+      resetForm();
       onClose();
     } catch (error) {
       console.error("Error adding card:", error);
-    } finally {
-      setLoading(false);
+      setError("카드를 추가하는 중 오류가 발생했습니다.");
     }
   };
 
+  const resetForm = () => {
+    setTitle("");
+    setDescription("");
+    setDueDate(null);
+    setTags([]);
+    setTagInput("");
+    setImage(null);
+    setSelectedAssignee(null);
+  };
+  const isDisabled =
+    !title || !description || !dueDate || selectedAssignee === null;
+
   return (
     <CustomModal isOpen={isOpen} onClose={onClose}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleCreateCard}>
         <div className={styles.modalContent}>
           <h2>할 일 생성</h2>
-          <label>담당자</label>
-          <select className={styles.input} onChange={changeUser}>
-            <option value="" disabled hidden>
-              담당자를 선택하세요
-            </option>
-            {members?.map((member: any) => (
-              <option key={member.id} value={member.userId}>
-                {member.nickname}
-              </option>
-            ))}
-          </select>
-          <label className={attemptSubmit && !title ? styles.errorLabel : ""}>
-            제목 *{" "}
-            {attemptSubmit && !title && (
-              <span className={styles.requiredText}>(필수 입력)</span>
+          <label className={styles.label}>담당자</label>
+          <div className={styles.dropdown}>
+            <div
+              className={styles.selected}
+              onClick={() => setIsSelectOpen((prev) => !prev)}
+            >
+              {selectedUser ? selectedUser.nickname : "담당자를 선택하세요"}
+            </div>
+            {isSelectOpen && (
+              <div className={styles.dropdownMenu}>
+                {members?.map((member: any) => (
+                  <div
+                    key={member.id}
+                    className={styles.dropdownItem}
+                    onClick={() => handleSelectUser(member)}
+                  >
+                    {member.nickname}
+                  </div>
+                ))}
+              </div>
             )}
-          </label>
+          </div>
+
+          <label>제목 *</label>
           <input
             type="text"
-            className={`${styles.input} ${
-              attemptSubmit && !title ? styles.errorInput : ""
-            }`}
+            className={styles.input}
             placeholder="제목을 입력해 주세요"
-            value={title || ""} // 값이 없으면 빈 문자열로 설정하여 placeholder 보이게 처리
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
+            required
           />
-          <label
-            className={attemptSubmit && !description ? styles.errorLabel : ""}
-          >
-            설명 *{" "}
-            {attemptSubmit && !description && (
-              <span className={styles.requiredText}>(필수 입력)</span>
-            )}
-          </label>
+
+          <label>설명 *</label>
           <textarea
-            className={`${styles.textarea} ${
-              attemptSubmit && !description ? styles.errorInput : ""
-            }`}
+            className={styles.textarea}
             placeholder="설명을 입력해 주세요"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            required
           />
-          <label className={attemptSubmit && !dueDate ? styles.errorLabel : ""}>
-            마감일 *{" "}
-            {attemptSubmit && !dueDate && (
-              <span className={styles.requiredText}>(필수 입력)</span>
-            )}
-          </label>
+
+          <label>마감일 *</label>
+
           <DatePicker
-            className={`${styles.date} ${
-              attemptSubmit && !dueDate ? styles.errorInput : ""
-            }`}
+            className={styles.date}
             selected={dueDate}
             onChange={(date) => setDueDate(date)}
             dateFormat="yyyy-MM-dd HH:mm"
@@ -170,13 +202,27 @@ const AddModal: React.FC<AddModalProps> = ({
             timeFormat="HH:mm"
             timeIntervals={10}
             placeholderText="날짜를 입력해 주세요"
+            required
           />
+
           <label>태그</label>
-          <TagInput tags={tags} setTags={setTags} />
+          <input
+            type="text"
+            className={styles.input}
+            placeholder="입력 후 Enter"
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            onKeyDown={handleTagKeyPress}
+          />
+          <TaskTags tags={tags} />
+
           <label>이미지</label>
           <div className={styles.imageUpload}>
             <ImageUpload onImageUpload={setImage} />
           </div>
+
+          {error && <p className={styles.error}>{error}</p>}
+
           <div className={styles.buttonGroup}>
             <button className={styles.cancle} type="button" onClick={onClose}>
               취소
@@ -184,9 +230,9 @@ const AddModal: React.FC<AddModalProps> = ({
             <button
               className={styles.create}
               type="submit"
-              disabled={loading || isDisabled}
+              disabled={isDisabled}
             >
-              {loading ? "생성 중..." : "생성"}
+              생성
             </button>
           </div>
         </div>

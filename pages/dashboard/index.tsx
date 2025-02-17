@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
@@ -5,17 +7,17 @@ import styles from "./index.module.scss";
 import { getDashboards } from "@/src/api/dashboardApi";
 import None from "@/src/components/dashboardlist/invite/none";
 import InviteDashboardList from "@/src/components/dashboardlist/invite/InviteList";
-import DashboardList from "@/src/components/dashboardlist/DashBoardList"; // 이 부분을 다시 활성화 가능
-import useRequireAuth from "@/src/hooks/useRequireAuth";
+import DashboardList from "@/src/components/dashboardlist/DashBoardList";
 import { useInView } from "react-intersection-observer";
 import axiosInstance from "@/src/api/axios";
+import useRequireAuth from "@/src/hooks/useRequireAuth";
 
 export default function MyDashboardPage() {
   useRequireAuth();
-
   const [dashboards, setDashboards] = useState<any[]>([]);
   const [invitations, setInvitations] = useState<any[]>([]);
   const [cursorId, setCursorId] = useState<number>();
+
   const [ref, inView] = useInView();
 
   useEffect(() => {
@@ -31,14 +33,12 @@ export default function MyDashboardPage() {
           const newInvitations = res.data.invitations;
           const newCursorId = res.data.cursorId;
 
-          setInvitations((prevInvitations) => [
-            ...prevInvitations,
-            ...newInvitations,
-          ]);
+          setInvitations((prevInvitations) => {
+            console.log("1111111", [...prevInvitations, ...newInvitations]);
+            return [...prevInvitations, ...newInvitations];
+          });
+          console.log(newInvitations);
           setCursorId(newCursorId);
-
-          console.log("alskfgdhsjlfkdjlf");
-          console.log(newCursorId);
         } catch (error) {
           console.error("초대 리스트 불러오기 실패:", error);
         }
@@ -47,6 +47,11 @@ export default function MyDashboardPage() {
       fetchInvitations();
     }
   }, [inView]);
+
+  useEffect(() => {
+    console.log("***********");
+    console.log(invitations);
+  }, [invitations]);
 
   useEffect(() => {
     async function fetchData() {
@@ -77,13 +82,13 @@ export default function MyDashboardPage() {
           <DashboardList />
         </div>
 
-        {/* 초대받은 대시보드 */}
         <div className={styles.inviteContent}>
           <h2>초대받은 대시보드</h2>
           {invitations.length > 0 ? (
             <InviteDashboardList
               invitations={invitations}
               onAcceptInvite={handleAddDashboard} // 초대 수락 후 대시보드 목록에 추가하는 함수 전달
+              setInvitations={setInvitations}
             />
           ) : (
             <None />

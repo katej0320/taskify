@@ -69,7 +69,7 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
         <ColumnAndTagsContainer>
           <TaskColumn columnTitle={columnTitle} />
           <VerticalDivider />
-          <TaskTags tags={cardData?.tags || []} isEditable={false} />{" "}
+          <TaskTags tags={cardData?.tags || []} />
         </ColumnAndTagsContainer>
 
         <ContentWrapper>

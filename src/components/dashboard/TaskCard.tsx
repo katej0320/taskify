@@ -1,117 +1,72 @@
-import React, { useMemo } from "react";
-import styled from "styled-components";
+import Image from "next/image";
+import styles from "./TaskCard.module.scss";
+import { useState } from "react";
+import TaskCardModal from "../modals/cards/TaskCardModal";
+import React from "react";
+import TaskTags from "../modals/cards/TaskTags";
+import MemberProfile from "../MemberProfile/MemberProfile";
 
-interface TaskTagsProps {
-  tags: { id: number; text: string }[];
-  tagInput: string; // 추가
-  setTagInput: (value: string) => void; // 추가
-  onRemove?: (index: number) => void;
-  onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-}
+export default function TaskCard({
+  card,
+  key,
+  columnTitle,
+  columnId,
+  dashboardId,
+  onCardDelete,
+}: any) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-const TAG_COLORS: { [key: string]: string } = {
-  "#F9EEE3": "#FFA500",
-  "#E7F7DB": "#7AC555",
-  "#F7DBF0": "#E876EA",
-  "#DBE6F7": "#76A5EA",
-};
-
-const getTagColor = (() => {
-  const tagColorMap = new Map<string, string>();
-  const availableColors = Object.keys(TAG_COLORS);
-
-  return (tag: string) => {
-    if (!tagColorMap.has(tag)) {
-      const randomColor =
-        availableColors[tagColorMap.size % availableColors.length];
-      tagColorMap.set(tag, randomColor);
-    }
-    return tagColorMap.get(tag) || "#ddd";
-  };
-})();
-
-const TaskTags: React.FC<TaskTagsProps> = ({
-  tags,
-  tagInput,
-  setTagInput,
-  onRemove,
-  onKeyPress,
-}) => {
-  const uniqueTags = useMemo(() => [...new Set(tags)], [tags]);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const dueDate = card.dueDate;
+  const date = dueDate ? dueDate.split(" ")[0] : "";
 
   return (
-    <TagsInputContainer>
-      {uniqueTags.map((tag, index) => {
-        const bgColor = getTagColor(tag.text);
-        const textColor = TAG_COLORS[bgColor];
+    <div className={styles.taskWrapper}>
+      <div onClick={openModal}>
+        <div className={styles.tabletContent}>
+          <Image
+            className={styles.taskImg}
+            src={card.imageUrl}
+            width={274}
+            height={160}
+            alt="카드 이미지"
+          />
+          <div className={styles.tabletWidth}>
+            <h3>{card.title}</h3>
+            <div className={styles.tabletRow}>
+              <div>
+                <TaskTags tags={card?.tags || []} />
+              </div>
+              <div className={styles.bottom}>
+                <div className={styles.date}>
+                  <Image
+                    src="/icons/calendar.svg"
+                    width={20}
+                    height={20}
+                    alt="설정"
+                  />
+                  <p>{date}</p>
+                </div>
 
-        return (
-          <Tag key={tag.id} bgColor={bgColor} textColor={textColor}>
-            {tag.text}
-            {onRemove && (
-              <RemoveButton onClick={() => onRemove(index)}>✕</RemoveButton>
-            )}
-          </Tag>
-        );
-      })}
-      <Input
-        type="text"
-        placeholder="태그 입력 후 Enter"
-        value={tagInput}
-        onChange={(e) => setTagInput(e.target.value)}
-        onKeyDown={onKeyPress}
-      />
-    </TagsInputContainer>
+                <div className={styles.name}>{card.assignee.nickname[0]}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {isModalOpen && (
+        <TaskCardModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onOpenEditModal={() => {}}
+          cardId={card.id}
+          columnTitle={columnTitle}
+          columnId={columnId}
+          dashboardId={dashboardId}
+        />
+      )}
+    </div>
   );
-};
-
-export default TaskTags;
-
-const TagsInputContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  min-height: 50px;
-`;
-
-const Tag = styled.span<{ bgColor: string; textColor: string }>`
-  background: ${(props) => props.bgColor};
-  color: ${(props) => props.textColor};
-  font-weight: 400;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 4px;
-  padding: 4px 10px;
-  min-width: 64px;
-  max-width: fit-content;
-  height: 26px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const RemoveButton = styled.button`
-  background: none;
-  border: none;
-  color: inherit;
-  font-size: 14px;
-  margin-left: 8px;
-  cursor: pointer;
-  &:hover {
-    color: red;
-  }
-`;
-
-const Input = styled.input`
-  flex-grow: 1;
-  border: none;
-  font-size: 14px;
-  &:focus {
-    outline: none;
-  }
-`;
+}

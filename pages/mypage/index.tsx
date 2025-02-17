@@ -17,10 +17,12 @@ export default function MyPage() {
   if (!user) return <p>로딩 중</p>;
 
   return (
-    <div className={styles.global}>
+    <div>
       <NavBar />
       <SideBar />
-      <ProfileSettings user={user} />
+      <div className={styles.content}>
+        <ProfileSettings user={user} />
+      </div>
     </div>
   );
 }

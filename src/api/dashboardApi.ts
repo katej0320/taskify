@@ -153,7 +153,7 @@ export const deleteCard = async (cardId: number) => {
 export const uploadImage = async (columnId: number, formData: FormData) => {
   try {
     const response = await axiosInstance.post(
-      `/columns/${columnId}/card-image`, // 백틱 사용
+      `/columns/${columnId}/card-image`,
       formData,
       {
         headers: {
