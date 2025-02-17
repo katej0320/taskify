@@ -74,7 +74,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
         {loading && <p>저장 중...</p>}
 
         {/* 오류 메시지 표시 */}
-        {error && <p className={styles.error}>{error}</p>}
+        {/* {error && <p className={styles.error}>{error}</p>} */}
       </div>
     </div>
   );
