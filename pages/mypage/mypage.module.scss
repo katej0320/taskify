@@ -132,9 +132,6 @@
     }
   }
 
-
-
-  
   .saveButton {
     width: 400px;
     height: 54px;
@@ -177,7 +174,6 @@
   font-size: 12px;
 }
 
-
 @media (max-width: 1199px) and (min-width: 768px) {
   .content {
     margin-left: 160px;
@@ -191,12 +187,13 @@
     margin-left: 60px;
     padding: 20px;
     background-color: $gray1;
+  }
+}
 
-
-.customButton{
-display: flex;
-justify-content: center;
-background-color: $violet2 !important;
+.customButton {
+  display: flex;
+  justify-content: center;
+  background-color: $violet2 !important;
 }
 
 .modalStyle p {
@@ -230,10 +227,8 @@ background-color: $violet2 !important;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  
 
   &:hover {
     background: rgba(255, 0, 0, 0.8);
-
   }
 }
