@@ -27,6 +27,7 @@ export default function AvatarUploader({
       };
       reader.readAsDataURL(file);
     }
+    event.target.value = "";
   };
 
   // ✅ 삭제 버튼 클릭 시 이미지 제거 및 파일 입력 필드 초기화
