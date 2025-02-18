@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import CustomModal from "@/src/components/modal/CustomModal";
 import ListCard from "@/src/components/dashboardlist/card/ListCard";
-import CreateBoard from "@/src/components/dashboardlist/createBoard/createBoard";
+import CreateBoard from "@/src/components/dashboardlist/createDashboard/createDashboard";
 import styles from "../../../pages/dashboard/index.module.scss";
 import DashboardList from "@/src/components/dashboardlist/DashBoardList";
 import axiosInstance from "@/src/api/axios";
@@ -26,7 +26,7 @@ export default function NewDashboard() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // ✅ API에서 대시보드 데이터를 불러오는 함수
+ 
   const fetchDashboards = async () => {
     try {
       setLoading(true);
@@ -39,16 +39,9 @@ export default function NewDashboard() {
       });
 
       if (response.data && Array.isArray(response.data.dashboards)) {
-        console.log(
-          "✅ 대시보드 목록 업데이트 중...",
-          response.data.dashboards
-        );
         setDashboards([...response.data.dashboards]);
-      } else {
-        console.error("❌ 예상치 못한 응답 구조:", response.data);
-      }
+      } 
     } catch (error) {
-      console.error("❌ 대시보드 불러오기 실패:", error);
     } finally {
       setLoading(false);
     }
@@ -58,16 +51,13 @@ export default function NewDashboard() {
     fetchDashboards();
   }, []);
 
-  // ✅ useCreateBoard 훅 사용
+ 
   const { dashboardName, setDashboardName, selectedColor, setSelectedColor, handleCreate } =
     useCreateBoard(closeModal, async (newDashboard) => {
-      console.log("📢 새로운 대시보드 추가 요청:", newDashboard);
 
       try {
-        await fetchDashboards(); // ✅ 최신 데이터 다시 불러오기
-        console.log("✅ 최신 대시보드 데이터를 다시 불러옴!");
+        await fetchDashboards(); 
       } catch (error) {
-        console.error("❌ 대시보드 생성 후 데이터 갱신 실패:", error);
       }
     });
 
@@ -100,7 +90,7 @@ export default function NewDashboard() {
             setDashboardName={setDashboardName}
             selectedColor={selectedColor}
             setSelectedColor={setSelectedColor}
-            handleCreate={handleCreate} // ✅ 이벤트 핸들러 직접 전달
+            handleCreate={handleCreate}
             onClose={closeModal}
           />
         </CustomModal>

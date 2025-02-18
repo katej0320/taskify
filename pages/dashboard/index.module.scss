@@ -29,6 +29,21 @@
   }
 }
 
+.listCard{
+  display: flex;
+  justify-content: space-between;
+}
+.listcardelements{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arrow {
+  display: flex;
+  justify-content: flex-start; 
+}
+
 .listcardandpagination {
   max-width: 1200px;
   width: 100%;
