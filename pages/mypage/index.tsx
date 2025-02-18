@@ -9,7 +9,7 @@ import styles from "./mypage.module.scss";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
 import ProfileSettings from "@/src/components/mypage/profilesetting";
-import useAuth from "@/src/hooks/useRequireAuth";
+
 
 const Container = styled.div`
   width: calc(100vw * 375 / 1200);

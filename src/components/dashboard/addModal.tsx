@@ -146,9 +146,8 @@ const AddModal: React.FC<AddModalProps> = ({
     !title ||
     !description ||
     !dueDate ||
-    selectedAssignee ||
-    !tagInput === null;
-
+    selectedAssignee === null ||
+    tagInput.trim() === "";
   return (
     <form onSubmit={handleCreateCard} style={{ width: "578px" }}>
       {isSelectOpen && (

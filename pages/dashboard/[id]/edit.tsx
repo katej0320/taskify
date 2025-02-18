@@ -10,7 +10,7 @@ import DeleteContainer from "@/src/components/dashboard/edit/DeleteContainer";
 import InvitationContainer from "@/src/components/dashboard/edit/InvitationContainer";
 import MemberContainer from "@/src/components/dashboard/edit/MemberContainer";
 import { EditProvider } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
-import useAuth from "@/src/hooks/useRequireAuth";
+
 
 const Container = styled.div`
   width: calc(100vw * 375 / 1200);
