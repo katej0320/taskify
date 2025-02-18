@@ -85,9 +85,7 @@ const AddModal: React.FC<AddModalProps> = ({
     }
   };
 
-  const handleRemoveTag = (tag: string) => {
-    setTags(tags.filter((existingTag) => existingTag !== tag));
-  };
+ 
   const handleCreateCard = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !description || !dueDate || selectedAssignee === null) {
@@ -273,7 +271,7 @@ const AddModal: React.FC<AddModalProps> = ({
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={handleTagKeyPress}
         />
-        <TaskTags tags={tags} onRemoveTag={handleRemoveTag} />
+        <TaskTags tags={tags} />
 
         <label>이미지</label>
         <div className={styles.imageUpload}>
