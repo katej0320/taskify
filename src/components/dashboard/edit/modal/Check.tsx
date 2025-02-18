@@ -36,19 +36,14 @@ export const CheckModal = ({
             {(member || invite || dashboard) && (
               <Button onClick={closeModal}>닫기</Button>
             )}
-            <Button
+           <Button
               $confirm
               onClick={() => {
                 closeModal();
-                if (member || invite) {
-                  setIsToast?.(true);
-                } else if (member) {
-                  deleteMember?.();
-                } else if (invite) {
-                  deleteInvitation?.();
-                } else if (dashboard) {
-                  deleteDashboard?.();
-                }
+                (member || invite) && setIsToast?.(true);
+                member && deleteMember?.();
+                invite && deleteInvitation?.();
+                dashboard && deleteDashboard?.();
               }}
             >
               {member || dashboard
