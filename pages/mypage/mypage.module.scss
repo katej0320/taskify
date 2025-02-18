@@ -137,10 +137,12 @@
     height: 54px;
   }
 
+   
+
   .changeButton {
     width: 624px;
     height: 100px !important;
-    margin-top: 24px;
+    margin-top: 20px;
   }
 
   .saveButton,
@@ -156,6 +158,11 @@
   }
 }
 
+.saveButton:disabled {
+  cursor: auto;
+  background: #9fa6b2;
+}
+
 .passwordInputGroup {
   position: relative;
   width: 100%;
@@ -165,10 +172,14 @@
   border-color: red !important;
 }
 
+.confirmpasswordinput{
+  position: relative;
+} 
+
 .errorText {
   position: absolute;
-  bottom: 25px;
-  left: 350px;
+  bottom: -25px;
+  left: 10px;
   width: 100%;
   color: red;
   font-size: 12px;
