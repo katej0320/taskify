@@ -11,6 +11,7 @@ import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 import { getDashboard } from "@/src/api/dashboardApi";
 import Dropdown from "@/src/components/nav/dropdown/Dropdown";
 import axiosInstance from "@/src/api/axios";
+import { styled } from "styled-components";
 
 export default function NavBar() {
   const router = useRouter();
@@ -163,8 +164,14 @@ export default function NavBar() {
                   <div style={{ display: "flex" }}>
                     {members.map((member: any) => (
                       <div className={styles.memberCircle} key={member.id}>
-                        {/* 프로필 이미지 컴포넌트로 치환 */}
-                        {member.nickname[0]}
+                        {member.profileImageUrl ? (
+                          <ProfileImage
+                            src={member.profileImageUrl}
+                            alt="프로필"
+                          />
+                        ) : (
+                          <AssigneeCircle>{member?.nickname[0]}</AssigneeCircle>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -181,7 +188,11 @@ export default function NavBar() {
           <div className={styles["profile-container"]} ref={dropdownRef}>
             <div className={styles.profile} onClick={toggleDropdown}>
               <span className={styles.profileIcon}>
-                {userData ? userData.email[0] : "?"}
+                {userData?.profileImageUrl ? (
+                  <ProfileImage src={userData.profileImageUrl} alt="프로필" />
+                ) : (
+                  <AssigneeCircle>{userData?.nickname[0]}</AssigneeCircle>
+                )}
               </span>
               <span className={styles.profileName}>
                 {userData ? userData.nickname : "로딩중..."}
@@ -199,3 +210,22 @@ export default function NavBar() {
     </>
   );
 }
+
+const ProfileImage = styled.img`
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+`;
+
+const AssigneeCircle = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dbe6f7;
+`;

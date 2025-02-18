@@ -115,7 +115,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
       <CommentList>
         {comments.map((comment) => (
           <TaskCommentItem key={comment.id}>
-            <ProfileImage src="/icons/profile-placeholder.svg" alt="프로필" />
+            <ProfileImage src={comment.author.profileImageUrl} alt="프로필" />
             <CommentContentWrapper>
               <CommentHeader>
                 <CommentMeta>

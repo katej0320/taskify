@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styled from "styled-components";
 
 interface TaskAssigneeProps {
@@ -18,7 +19,11 @@ const TaskAssignee: React.FC<TaskAssigneeProps> = ({ assignee, dueDate }) => {
         <Assignee>
           <span>담당자</span>
           <AssigneeDetails>
-            <AssigneeCircle>{firstLetter}</AssigneeCircle>
+            {profileImage ? (
+              <ProfileImage src={profileImage} alt="프로필" />
+            ) : (
+              <AssigneeCircle>{firstLetter}</AssigneeCircle>
+            )}
             <span>{assignee?.nickname}</span>
           </AssigneeDetails>
         </Assignee>
