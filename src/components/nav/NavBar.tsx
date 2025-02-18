@@ -150,46 +150,28 @@ export default function NavBar() {
                 />
                 <div>초대하기</div>
               </InviteButton>
+              <div>
+                {members.length > 0 ? (
+                  <div style={{ display: "flex" }}>
+                    {members.map((member: any, index: number) => (
+                      <div className={styles.memberCircle} key={member.id}>
+                        {member.profileImageUrl ? (
+                          <ProfileImage
+                            src={member.profileImageUrl}
+                            alt="프로필"
+                          />
+                        ) : (
+                          <AssigneeCircle>{member?.nickname[0]}</AssigneeCircle>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No members found.</p>
+                )}
+              </div>
             </>
           )}
-
-          {/* 멤버들 리스트 출력 */}
-          <div>
-            {members.length > 0 ? (
-              <div style={{ display: "flex" }}>
-                {members.map((member: any) => (
-                  <div className={styles.memberCircle} key={member.id}>
-                    {member.profileImageUrl ? (
-                      <ProfileImage src={member.profileImageUrl} alt="프로필" />
-                    ) : (
-                      <AssigneeCircle>{member?.nickname[0]}</AssigneeCircle>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p>No members found.</p>
-            )}
-            {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
-            <InviteButton
-              $nav
-              dashboardId={params}
-              setUpdateInvite={setUpdateInvite}
-            >
-              <Image
-                src="/icons/add_box.svg"
-                width={20}
-                height={20}
-                alt="초대"
-              />
-              초대하기
-            </InviteButton>
-
-            <div>
-              <hr className={styles.hr} />
-            </div>
-          </div>
-
           <div className={styles["profile-container"]} ref={dropdownRef}>
             <div className={styles.profile} onClick={toggleDropdown}>
               <span className={styles.profileIcon}>
