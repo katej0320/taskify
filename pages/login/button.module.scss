@@ -1,0 +1,20 @@
+@use "/styles/color.scss" as *;
+.button1 {
+  width: 240px;
+  height: 48px;
+  background: $violet2;
+  color: white;
+  padding: 0;
+}
+
+
+@media (min-width: 376px) and (max-width: 1024px){
+  .button1 {
+    width: 240px;
+    height: 48px;
+    background: $violet2;
+    color: white;
+    padding: 0;
+    
+  }
+}

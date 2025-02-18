@@ -1,0 +1,92 @@
+@use "/styles/color.scss" as *;
+.inviteTable {
+  margin-top: 24px;
+  border-collapse: collapse;
+  height: 100%;
+}
+
+.inviteHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 12px 20px;
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  color: $gray4;
+}
+
+.inviteRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 12px 20px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  color: $black2;
+
+  border-bottom: 1px solid $gray2;
+}
+
+.inviteRow {
+  &:hover {
+    background: #f9f9f9;
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.accept {
+  background-color: $violet2;
+  color: $white;
+  padding: 7px 29px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.reject {
+  background-color: $white;
+  padding: 7px 29px;
+  border: 1px solid $gray3;
+  border-radius: 4px;
+  cursor: pointer;
+  color: $violet2;
+  white-space: nowrap;
+}
+
+.accept:hover {
+  background-color: #434190;
+}
+
+.reject:hover {
+  background-color: #e2e8f0;
+}
+@media (max-width: 767px) {
+  .inviteHeader {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-size: 14px;
+  }
+
+  .inviteRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-size: 14px;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .accept,
+  .reject {
+    width: 100%;
+    padding: 8px;
+  }
+}
