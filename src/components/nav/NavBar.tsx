@@ -177,13 +177,43 @@ export default function NavBar() {
                   </div>
                 ) : (
                   <p>No members found.</p>
+
                 )}
-              </div>
-              <div>
-                <hr className={styles.hr} />
-              </div>
-            </>
-          )}
+                {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
+                <InviteButton
+                  $nav
+                  dashboardId={params}
+                  setUpdateInvite={setUpdateInvite}
+                >
+                  <Image
+                    src="/icons/add_box.svg"
+                    width={20}
+                    height={20}
+                    alt="초대"
+                  />
+                  초대하기
+                </InviteButton>
+
+                {/* 멤버들 리스트 출력 */}
+                <div>
+                  {members.length > 0 ? (
+                    <div style={{ display: "flex" }}>
+                      {members.map((member: any) => (
+                        <div className={styles.memberCircle} key={member.id}>
+                          {/* 프로필 이미지 컴포넌트로 치환 */}
+                          {member.nickname[0]}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>No members found.</p>
+                  )}
+                </div>
+                <div>
+                  <hr className={styles.hr} />
+                </div>
+              </>
+            )}
 
           <div className={styles["profile-container"]} ref={dropdownRef}>
             <div className={styles.profile} onClick={toggleDropdown}>
