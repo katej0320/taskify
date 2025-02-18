@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import CustomModal from "../../modal/CustomModal";
 import TaskDropdown from "./TaskDropdown";
 import TaskColumn from "./TaskColumn";
@@ -10,21 +9,22 @@ import TaskComments from "./TaskComments";
 import TaskCommentInput from "./TaskCommentInput";
 import { getCardDetail } from "@/src/api/cards";
 import { getComments } from "@/src/api/comments";
-import TaskEditModal from "../EditCards/TaskEditModal"; // 우리가 만든 수정 모달
+import styles from "./TaskCardModal.module.scss";
 
 interface TaskCardModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenEditModal: () => void;
   cardId: number;
   columnTitle: string;
   columnId: number;
   dashboardId: number;
-  onOpenEditModal?: () => void;
 }
 
 const TaskCardModal: React.FC<TaskCardModalProps> = ({
   isOpen,
   onClose,
+  onOpenEditModal,
   cardId,
   columnTitle,
   columnId,
@@ -32,16 +32,22 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
 }) => {
   const [cardData, setCardData] = useState<any>(null);
   const [comments, setComments] = useState<any[]>([]);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
+      document.body.style.overflow = "hidden";
       getCardDetail(cardId)
         .then((data) => setCardData(data))
         .catch((error) => console.error("❌ 카드 상세 조회 실패:", error));
 
       fetchComments();
+    } else {
+      document.body.style.overflow = "";
     }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen, cardId]);
 
   const fetchComments = async () => {
@@ -56,40 +62,38 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
   };
 
   return (
-    <CustomModal isOpen={isOpen} onClose={onClose} width="730px" height="auto">
-      <ModalContent onClick={(e) => e.stopPropagation()}>
-        <HeaderContainer>
-          <Title>{cardData?.title || "제목 없음"}</Title>
-          <TaskDropdown
-            cardId={cardId}
-            onOpenEditModal={() => setEditModalOpen(true)}
-            onClose={onClose}
-          />
-        </HeaderContainer>
+    <CustomModal isOpen={isOpen} onClose={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <TaskDropdown
+          cardId={cardId}
+          onOpenEditModal={onOpenEditModal}
+          onClose={onClose}
+        />
+        <div className={styles.headerContainer}>
+          <h2 className={styles.title}>{cardData?.title || "제목 없음"}</h2>
+        </div>
 
-        <ColumnAndTagsContainer>
+        <div className={styles.columnAndTagsContainer}>
           <TaskColumn columnTitle={columnTitle} />
-          <VerticalDivider />
+          <div className={styles.verticalDivider} />
           <TaskTags tags={cardData?.tags || []} />
-        </ColumnAndTagsContainer>
+        </div>
 
-        <ContentWrapper>
-          <LeftContent>
+        <div className={styles.contentWrapper}>
+          <div className={styles.leftContent}>
             {cardData?.description && (
-              <Description>{cardData.description}</Description>
+              <p className={styles.description}>{cardData.description}</p>
             )}
             <TaskImage imageUrl={cardData?.imageUrl} />
-          </LeftContent>
+          </div>
 
-          <RightContent>
-            <TaskAssignee
-              assignee={cardData?.assignee ?? { nickname: "담당자 없음" }}
-              dueDate={cardData?.dueDate ?? "마감일 없음"}
-            />
-          </RightContent>
-        </ContentWrapper>
+          <TaskAssignee
+            assignee={cardData?.assignee ?? { nickname: "담당자 없음" }}
+            dueDate={cardData?.dueDate ?? "마감일 없음"}
+          />
+        </div>
 
-        <CommentSection>
+        <div className={styles.commentSection}>
           <TaskCommentInput
             cardId={cardId}
             columnId={columnId}
@@ -101,96 +105,12 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
             cardId={cardId}
             comments={comments}
             setComments={setComments}
+            onOpenEditModal={onOpenEditModal}
           />
-        </CommentSection>
-      </ModalContent>
-
-      {isEditModalOpen && (
-        <TaskEditModal
-          isOpen={isEditModalOpen}
-          onClose={() => setEditModalOpen(false)}
-          task={cardData}
-          fetchCards={() => {}}
-          columnTitle={columnTitle}
-          dashboardId={dashboardId}
-        />
-      )}
+        </div>
+      </div>
     </CustomModal>
   );
 };
 
 export default TaskCardModal;
-
-const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  padding: 0;
-`;
-
-const HeaderContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 12px;
-`;
-
-const Title = styled.h2`
-  font-size: 24px;
-  font-weight: 700;
-  color: #333236;
-`;
-
-const ColumnAndTagsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-top: 8px;
-`;
-
-const VerticalDivider = styled.div`
-  width: 1px;
-  height: 20px;
-  background-color: #d9d9d9;
-`;
-
-const ContentWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  flex-direction: row;
-`;
-
-const LeftContent = styled.div`
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-start;
-`;
-
-const RightContent = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-`;
-
-const CommentSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 250px;
-`;
-
-const Description = styled.p`
-  width: 470px;
-  height: 92px;
-  font-size: 14px;
-  font-weight: 400;
-  color: #000000;
-  padding: 10px;
-  margin-top: 8px;
-`;

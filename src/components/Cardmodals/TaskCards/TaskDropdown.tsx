@@ -56,6 +56,7 @@ const ButtonGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 24px; /* 케밥 아이콘과 닫기 버튼 사이 간격 유지 */
+  justify-content: flex-end;
 `;
 
 const IconButton = styled.button`

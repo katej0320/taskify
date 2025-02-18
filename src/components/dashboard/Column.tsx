@@ -162,6 +162,16 @@ export default function Column({ column, onDelete }: any) {
             </div>
           </div>
         )}
+        {modalContent === "add-column" && (
+          <div>
+            <AddModal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              columnId={column.id}
+              fetchCards={() => fetchCards(true)}
+            />
+          </div>
+        )}
       </CustomModal>
 
       {/* 삭제 확인 모달 */}
@@ -186,16 +196,6 @@ export default function Column({ column, onDelete }: any) {
           </div>
         </div>
       </CustomModal>
-
-      {/* 새 컬럼 추가 모달 */}
-      {modalContent === "add-column" && (
-        <AddModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          columnId={column.id}
-          fetchCards={() => fetchCards(true)}
-        />
-      )}
     </div>
   );
 }

@@ -24,7 +24,7 @@ const ButtonContainer = styled(Button)<Props>`
   font-weight: 500;
   font-size: 14px;
   cursor: pointer;
-
+  white-space: nowrap;
   svg {
     padding-top: 2px;
     margin-right: 3px;
