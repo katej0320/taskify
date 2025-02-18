@@ -72,7 +72,6 @@ export default function ProfileCard({
     if (isUpdate) {
       try {
         updateProfile(nickname, profileImage);
-        console.log("프로필 저장 완료", { nickname, profileImage });
         alert("프로필이 업데이트되었습니다!");
         // 성공 시 마이페이지로 이동
         // router.push("/mypage");

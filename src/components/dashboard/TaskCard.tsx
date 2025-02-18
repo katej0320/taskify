@@ -4,7 +4,7 @@ import { useState } from "react";
 import TaskCardModal from "../modals/cards/TaskCardModal";
 import React from "react";
 import TaskTags from "../modals/cards/TaskTags";
-import MemberProfile from "../MemberProfile/MemberProfile";
+import { styled } from "styled-components";
 
 export default function TaskCard({
   card,
@@ -49,7 +49,18 @@ export default function TaskCard({
                   <p>{date}</p>
                 </div>
 
-                <div className={styles.name}>{card.assignee.nickname[0]}</div>
+                <div className={styles.name}>
+                  {card.assignee.profileImageUrl ? (
+                    <ProfileImage
+                      src={card.assignee.profileImageUrl}
+                      alt="프로필"
+                    />
+                  ) : (
+                    <AssigneeCircle>
+                      {card.assignee?.nickname[0]}
+                    </AssigneeCircle>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -70,3 +81,21 @@ export default function TaskCard({
     </div>
   );
 }
+
+const ProfileImage = styled.img`
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+`;
+const AssigneeCircle = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dbe6f7;
+`;
