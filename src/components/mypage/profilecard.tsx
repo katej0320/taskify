@@ -129,15 +129,15 @@ export default function ProfileCard({
               }}
             />
           </div>
+          <button
+            onClick={handleSave} // 클릭 시 handleSave 실행
+            className={styles.saveButton}
+            disabled={isDisabled}
+          >
+            {loading ? "저장 중" : "저장"}
+          </button>
         </div>
       </div>
-      <button
-        onClick={handleSave} // 클릭 시 handleSave 실행
-        className={styles.saveButton}
-        disabled={isDisabled}
-      >
-        {loading ? "저장 중" : "저장"}
-      </button>
 
       {/* {error && <p className={styles.error}>{error}</p>} */}
     </div>
