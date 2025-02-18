@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import styles from "./EditPage.style.module.scss";
 import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
@@ -83,7 +83,7 @@ export default function BebridgeContainer({
   }, [isBebridge]);
 
   // 조건에 따라 변경 버튼 활성화/비활성화
-  useEffect(() => {
+  useMemo(() => {
     if (
       isUpdateTitle !== "" &&
       (isTitle !== isUpdateTitle || isColor !== isUpdateColor)

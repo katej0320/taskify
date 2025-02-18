@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "@/pages/mypage/mypage.module.scss";
 import AvatarUploader from "./avataruploader";
@@ -85,7 +85,7 @@ export default function ProfileCard({
     }
   }, [isUpdate]);
 
-  useEffect(() => {
+  useMemo(() => {
     // Swagger 요구 사항으로, 프로필 이미지와 닉네임의 값이 모두 기존 값과 달라야 저장이 가능
     if (
       isNicknameValue !== "" &&
