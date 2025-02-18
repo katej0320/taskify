@@ -1,11 +1,7 @@
 import styled from "styled-components";
 import { Button } from "../../button/CustomButton2";
 import styles from "./EditPage.style.module.scss";
-<<<<<<< HEAD
 import { MemberItem } from "@/src/components/dashboard/edit/EditPageType";
-=======
-import { MemberItem } from "@/src/types/dashboard/edit/EditComponent";
->>>>>>> f6c21c9 (chore: 대시보드 수정 페이지의 구성원 썸네일 코드 추가)
 import Image from "next/image";
 
 const EmptyData = styled.div`
@@ -30,10 +26,6 @@ export function MemberList({
           <ul className={styles.memberList}>
             {isMembersData &&
               isMembersData?.map((item) => {
-<<<<<<< HEAD
-=======
-                console.log(item);
->>>>>>> f6c21c9 (chore: 대시보드 수정 페이지의 구성원 썸네일 코드 추가)
                 const { id, email, profileImageUrl } = item;
                 return (
                   <li key={id} className={styles.tile}>
