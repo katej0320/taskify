@@ -4,11 +4,8 @@ import Board from "@/src/components/dashboard/Board";
 import styles from "./index.module.scss";
 import useAuth from "@/src/hooks/useRequireAuth";
 
-
 export default function Page() {
-
-  useAuth();
-
+ 
   return (
     <>
       <SideBar />

@@ -23,7 +23,7 @@ const Container = styled.div`
 `;
 
 export default function EditPage() {
-  useAuth();
+
   const router = useRouter();
   const dashboardId = router.query.id as string;
 
