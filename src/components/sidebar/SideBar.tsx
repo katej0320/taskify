@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CustomModal from "../modal/CustomModal";
 import CreateBoard from "../dashboardlist/createDashboard/createDashboard";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axiosInstance from "@/src/api/axios";
 import { Dashboard } from "@/src/types/dashboard";
 import Pagination from "../pagination/Pagination";
@@ -21,7 +21,7 @@ export default function SideBar() {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(20);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -93,7 +93,7 @@ export default function SideBar() {
                 <CreateBoard
                   onClose={closeModal}
                   onDashboardCreate={handleDashboardCreate}
-                  dashboardName={""}
+                  dashboardName={dashboards}
                   setDashboardName={function (name: string): void {
                     throw new Error("Function not implemented.");
                   }}

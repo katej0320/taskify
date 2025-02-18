@@ -7,6 +7,8 @@ interface ModalProps {
   onClose?: () => void;
   children: React.ReactNode;
   className?: string;
+  width?: string;
+  height?: string;
 }
 
 export default function CustomModal({
