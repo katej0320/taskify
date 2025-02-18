@@ -34,10 +34,8 @@ export default function MyDashboardPage() {
           const newCursorId = res.data.cursorId;
 
           setInvitations((prevInvitations) => {
-            console.log("1111111", [...prevInvitations, ...newInvitations]);
             return [...prevInvitations, ...newInvitations];
           });
-          console.log(newInvitations);
           setCursorId(newCursorId);
         } catch (error) {
           console.error("초대 리스트 불러오기 실패:", error);
@@ -48,10 +46,7 @@ export default function MyDashboardPage() {
     }
   }, [inView]);
 
-  useEffect(() => {
-    console.log("***********");
-    console.log(invitations);
-  }, [invitations]);
+  useEffect(() => {}, [invitations]);
 
   useEffect(() => {
     async function fetchData() {

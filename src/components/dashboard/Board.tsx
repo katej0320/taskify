@@ -29,7 +29,7 @@ export default function Board() {
 
   const fetchColumns = async () => {
     if (!id) return;
-    console.log("Fetching columns with:", id);
+
     try {
       const response = await getColumns(+id);
       if (response?.result === "SUCCESS") {

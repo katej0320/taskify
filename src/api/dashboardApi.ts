@@ -32,7 +32,6 @@ async function PUThWithAuth(url: string, params?: any) {
       return null;
     }
 
-    console.log("params", params);
     const res = await axiosInstance.put(url, { ...params?.body });
 
     return res.data;

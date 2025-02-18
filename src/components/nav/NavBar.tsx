@@ -126,94 +126,69 @@ export default function NavBar() {
           {(router.route === `/dashboard/[id]` ||
             router.route === `/dashboard/[id]/edit`) && (
             <>
-              {/* 수정 페이지 링크 추가 02.15_혜림 */}
-              {router.route === `/dashboard/[id]` && (
-                <>
-                  <Link href={`/dashboard/${params}/edit`}>
-                    <button className={styles.navButton}>
-                      <Image
-                        src="/icons/settings.svg"
-                        width={20}
-                        height={20}
-                        alt="설정"
-                      />
-                      관리
-                    </button>
-                  </Link>
-                  <InviteButton
-                    $nav
-                    dashboardId={params}
-                    setUpdateInvite={setUpdateInvite}
-                  >
-                    <Image
-                      src="/icons/add_box.svg"
-                      width={20}
-                      height={20}
-                      alt="초대"
-                    />
-                    <div>초대하기</div>
-                  </InviteButton>
-                </>
-              )}
-
-              {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
-
-              {/* 멤버들 리스트 출력 */}
-              <div>
-                {members.length > 0 ? (
-                  <div style={{ display: "flex" }}>
-                    {members.map((member: any) => (
-                      <div className={styles.memberCircle} key={member.id}>
-                        {member.profileImageUrl ? (
-                          <ProfileImage
-                            src={member.profileImageUrl}
-                            alt="프로필"
-                          />
-                        ) : (
-                          <AssigneeCircle>{member?.nickname[0]}</AssigneeCircle>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p>No members found.</p>
-
-                )}
-                {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
-                <InviteButton
-                  $nav
-                  dashboardId={params}
-                  setUpdateInvite={setUpdateInvite}
-                >
+              <Link href={`/dashboard/${params}/edit`}>
+                <button className={styles.navButton}>
                   <Image
-                    src="/icons/add_box.svg"
+                    src="/icons/settings.svg"
                     width={20}
                     height={20}
-                    alt="초대"
+                    alt="설정"
                   />
-                  초대하기
-                </InviteButton>
+                  관리
+                </button>
+              </Link>
+              <InviteButton
+                $nav
+                dashboardId={params}
+                setUpdateInvite={setUpdateInvite}
+              >
+                <Image
+                  src="/icons/add_box.svg"
+                  width={20}
+                  height={20}
+                  alt="초대"
+                />
+                <div>초대하기</div>
+              </InviteButton>
+            </>
+          )}
 
-                {/* 멤버들 리스트 출력 */}
-                <div>
-                  {members.length > 0 ? (
-                    <div style={{ display: "flex" }}>
-                      {members.map((member: any) => (
-                        <div className={styles.memberCircle} key={member.id}>
-                          {/* 프로필 이미지 컴포넌트로 치환 */}
-                          {member.nickname[0]}
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p>No members found.</p>
-                  )}
-                </div>
-                <div>
-                  <hr className={styles.hr} />
-                </div>
-              </>
+          {/* 멤버들 리스트 출력 */}
+          <div>
+            {members.length > 0 ? (
+              <div style={{ display: "flex" }}>
+                {members.map((member: any) => (
+                  <div className={styles.memberCircle} key={member.id}>
+                    {member.profileImageUrl ? (
+                      <ProfileImage src={member.profileImageUrl} alt="프로필" />
+                    ) : (
+                      <AssigneeCircle>{member?.nickname[0]}</AssigneeCircle>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No members found.</p>
             )}
+            {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
+            <InviteButton
+              $nav
+              dashboardId={params}
+              setUpdateInvite={setUpdateInvite}
+            >
+              <Image
+                src="/icons/add_box.svg"
+                width={20}
+                height={20}
+                alt="초대"
+              />
+              초대하기
+            </InviteButton>
+
+            <div>
+              <hr className={styles.hr} />
+            </div>
+          </div>
 
           <div className={styles["profile-container"]} ref={dropdownRef}>
             <div className={styles.profile} onClick={toggleDropdown}>

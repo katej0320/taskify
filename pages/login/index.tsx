@@ -83,7 +83,6 @@ export default function LoginPage() {
         email,
         password,
       });
-      console.log("로그인 성공", response.data);
       const { accessToken } = response.data;
       sessionStorage.setItem("accessToken", accessToken);
       setTimeout(() => {
