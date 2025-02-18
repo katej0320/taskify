@@ -23,7 +23,7 @@ const ColorTile = styled.li`
 export default function BebridgeContainer({
   dashboardId,
 }: {
-  dashboardId: string | string[] | undefined;
+  dashboardId: string;
 }) {
   const [isUpdateTitle, setIsUpdateTitle] = useState("");
   const [isUpdateColor, setIsUpdateColor] = useState("");
@@ -33,8 +33,6 @@ export default function BebridgeContainer({
   const [isUpdate, setIsUpdate] = useState();
 
   const { isBebridge, getDashboardDetail } = useEdit();
-
-  console.log(isBebridge);
 
   const { title: isTitle, color: isColor }: { title?: string; color?: string } =
     isBebridge ?? {};

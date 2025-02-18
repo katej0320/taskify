@@ -13,7 +13,7 @@ import { PaginationButton } from "./PaginationButton";
 export default function InvitationContainer({
   dashboardId,
 }: {
-  dashboardId: string | string[] | undefined;
+  dashboardId: string;
 }) {
   const [isInvitationsData, setIsInvitationsData] = useState<InviteItem[]>();
   const [isTotalCount, setIsTotalCount] = useState(1);

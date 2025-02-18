@@ -23,10 +23,9 @@ const Contents = styled.div`
 `;
 
 export default function EditPage() {
- 
 
   const router = useRouter();
-  const dashboardId = router.query.id;
+  const dashboardId = router.query.id as string;
 
   return (
     <>
