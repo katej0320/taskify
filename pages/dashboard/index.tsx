@@ -85,7 +85,7 @@ export default function MyDashboardPage() {
           {invitations.length > 0 ? (
             <InviteDashboardList
               invitations={invitations}
-              onAcceptInvite={handleAddDashboard} // 초대 수락 후 대시보드 목록에 추가하는 함수 전달
+              onAcceptInvite={handleAddDashboard}
               setInvitations={setInvitations}
             />
           ) : (

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface TaskTagsProps {
   tags: string[];
+  onRemoveTag: (tag: string) => void; // 태그 삭제 함수
 }
 
 const TAG_COLORS: { [key: string]: string } = {
@@ -27,7 +28,7 @@ const getTagColor = (() => {
   };
 })();
 
-const TaskTags: React.FC<TaskTagsProps> = ({ tags }) => {
+const TaskTags: React.FC<TaskTagsProps> = ({ tags, onRemoveTag }) => {
   const uniqueTags = useMemo(() => [...new Set(tags)], [tags]); // 중복 태그 제거
 
   return (
@@ -39,6 +40,7 @@ const TaskTags: React.FC<TaskTagsProps> = ({ tags }) => {
         return (
           <Tag key={tag} bgColor={bgColor} textColor={textColor}>
             {tag}
+            <RemoveButton onClick={() => onRemoveTag(tag)}>x</RemoveButton>
           </Tag>
         );
       })}
@@ -50,7 +52,7 @@ export default TaskTags;
 
 const TagsContainer = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 20px;
   flex-wrap: wrap;
 `;
 
@@ -61,14 +63,27 @@ const Tag = styled.span<{ bgColor: string; textColor: string }>`
   font-size: 12px;
   line-height: 18px;
   display: flex;
-  align-items: center;
+  align-items: space-arounds;
   justify-content: center;
   border-radius: 4px;
-  padding: 4px 10px;
-  min-width: 40px; /* 최소 크기 설정 */
-  max-width: auto; /* 최대 크기 자동 조정 */
+  padding: 5px 10px;
+  min-width: 40px;
   height: 26px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const RemoveButton = styled.button`
+  background: none;
+  border: none;
+  color: #9fa6b2;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 12px;
+  margin-bottom: 7px;
+  cursor: pointer;
+
+  top: 2px;
+  right: 4px;
 `;

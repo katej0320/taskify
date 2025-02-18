@@ -77,6 +77,7 @@ const AddModal: React.FC<AddModalProps> = ({
   };
 
   const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return; // 한글 입력 중일 때는 무시
     if (e.key === "Enter" && tagInput.trim()) {
       setTags([...tags, tagInput.trim()]);
       setTagInput("");
@@ -84,10 +85,9 @@ const AddModal: React.FC<AddModalProps> = ({
     }
   };
 
-  const handleRemoveTag = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
+  const handleRemoveTag = (tag: string) => {
+    setTags(tags.filter((existingTag) => existingTag !== tag));
   };
-
   const handleCreateCard = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !description || !dueDate || selectedAssignee === null) {
@@ -143,7 +143,11 @@ const AddModal: React.FC<AddModalProps> = ({
     setSelectedAssignee(null);
   };
   const isDisabled =
-    !title || !description || !dueDate || selectedAssignee === null;
+    !title ||
+    !description ||
+    !dueDate ||
+    selectedAssignee ||
+    !tagInput === null;
 
   return (
     <form onSubmit={handleCreateCard} style={{ width: "578px" }}>
@@ -270,7 +274,7 @@ const AddModal: React.FC<AddModalProps> = ({
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={handleTagKeyPress}
         />
-        <TaskTags tags={tags} />
+        <TaskTags tags={tags} onRemoveTag={handleRemoveTag} />
 
         <label>이미지</label>
         <div className={styles.imageUpload}>
