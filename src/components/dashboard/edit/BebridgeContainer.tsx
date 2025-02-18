@@ -25,8 +25,6 @@ export default function BebridgeContainer({
 }: {
   dashboardId: string | string[] | undefined;
 }) {
-  const [isTitle, setIsTitle] = useState("");
-  const [isColor, setIsColor] = useState("");
   const [isUpdateTitle, setIsUpdateTitle] = useState("");
   const [isUpdateColor, setIsUpdateColor] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
@@ -35,6 +33,11 @@ export default function BebridgeContainer({
   const [isUpdate, setIsUpdate] = useState();
 
   const { isBebridge, getDashboardDetail } = useEdit();
+
+  console.log(isBebridge);
+
+  const { title: isTitle, color: isColor }: { title?: string; color?: string } =
+    isBebridge ?? {};
 
   // 대시보드 이름 value 저장
   const handleUpdateTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -74,9 +77,7 @@ export default function BebridgeContainer({
     if (isBebridge) {
       const { title, color }: { title: string; color: string } = isBebridge;
       const isColor = color.toLowerCase();
-      setIsTitle(title);
       setIsUpdateTitle(title);
-      setIsColor(isColor);
       setIsUpdateColor(isColor);
     }
   }, [isBebridge]);

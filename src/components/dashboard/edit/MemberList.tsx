@@ -26,7 +26,6 @@ export function MemberList({
           <ul className={styles.memberList}>
             {isMembersData &&
               isMembersData?.map((item) => {
-                console.log(item);
                 const { id, email, profileImageUrl } = item;
                 return (
                   <li key={id} className={styles.tile}>
