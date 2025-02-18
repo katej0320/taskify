@@ -84,11 +84,7 @@ export default function DashboardList() {
         </div>
 
         {isModalOpen && (
-          <CustomModal
-            className={styles.modal}
-            isOpen={isModalOpen}
-            onClose={closeModal}
-          >
+          <CustomModal isOpen={isModalOpen} onClose={closeModal}>
             <CreateBoard
               onClose={closeModal}
               onDashboardCreate={handleDashboardCreate}

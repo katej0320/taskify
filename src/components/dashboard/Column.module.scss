@@ -1,4 +1,8 @@
 @use "/styles/color.scss" as *;
+.modalWidth {
+  width: 568px;
+}
+
 .columnWrapper {
   padding-top: 22px;
   padding-left: 20px;
@@ -59,6 +63,11 @@
 .taskCard {
   margin-bottom: 20px;
 }
+
+.listCardModal {
+  width: 568px;
+}
+
 .listCardModal,
 .listCardDeleteModal {
   color: $black2;

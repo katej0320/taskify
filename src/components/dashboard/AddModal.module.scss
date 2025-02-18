@@ -1,7 +1,10 @@
 @use "/styles/color.scss" as *;
 
+.modalWidth {
+  width: 568px;
+}
+
 .modalContent {
-  border-radius: 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -123,7 +126,18 @@
   border-radius: 5px;
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
 .dropdownMenu {
+  background-color: rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 100%;
   left: 30px;
@@ -133,7 +147,7 @@
   background: white;
   max-height: 150px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 1000;
 }
 
 .dropdownItem {
@@ -169,7 +183,7 @@
 }
 
 .input {
-  flex-grow: 1; /* 입력란이 태그와 함께 늘어나도록 */
+  flex-grow: 1;
 }
 
 .tagsWrapper {
@@ -188,4 +202,16 @@
   padding: 4px 12px;
   font-size: 12px;
   display: inline-block;
+}
+
+/* 빨간 테두리 */
+.errorBorder {
+  border: 1px solid red;
+}
+
+/* 에러 메시지 스타일 */
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
 }

@@ -12,7 +12,7 @@ import CustomModal from "@/src/components/modal/CustomModal";
 import loginStyles from "./modal.module.scss";
 import CustomButton from "@/src/components/button/CustomButton";
 import buttonStyles from "./button.module.scss";
-import  useDevice  from '@/src/hooks/useDevice';
+import useDevice from "@/src/hooks/useDevice";
 
 export default function LoginPage() {
   const device = useDevice();
@@ -184,7 +184,7 @@ export default function LoginPage() {
       </form>
 
       {/* 모달 컴포넌트 */}
-      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} width="368">
+      <CustomModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className={loginStyles.modalOverlay}>
           {/* <div className={loginStyles.modalContent}> */}
           <div className={loginStyles.contentstyle}>

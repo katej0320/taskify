@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import CustomModal from "../modal/CustomModal";
 import styles from "./AddModal.module.scss";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,6 +7,7 @@ import ImageUpload from "./addModal/ImageUpload";
 import { useRouter } from "next/router";
 import axiosInstance from "@/src/api/axios";
 import TaskTags from "../modals/cards/TaskTags";
+import Image from "next/image";
 
 interface AddModalProps {
   isOpen: boolean;
@@ -145,99 +145,114 @@ const AddModal: React.FC<AddModalProps> = ({
     !title || !description || !dueDate || selectedAssignee === null;
 
   return (
-    <CustomModal isOpen={isOpen} onClose={onClose}>
-      <form onSubmit={handleCreateCard}>
-        <div className={styles.modalContent}>
-          <h2>할 일 생성</h2>
-          <label className={styles.label}>담당자</label>
-          <div className={styles.dropdown}>
+    <form onSubmit={handleCreateCard} style={{ width: "578px" }}>
+      {isSelectOpen && (
+        <div
+          className={styles.overlay}
+          onClick={() => setIsSelectOpen(false)}
+        />
+      )}
+
+      <div className={styles.modalContent}>
+        <h2>할 일 생성</h2>
+        <label className={styles.label}>담당자</label>
+        <div className={styles.dropdown}>
+          <div
+            className={styles.selected}
+            onClick={() => setIsSelectOpen((prev) => !prev)}
+          >
             <div
-              className={styles.selected}
-              onClick={() => setIsSelectOpen((prev) => !prev)}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
               {selectedUser ? selectedUser.nickname : "담당자를 선택하세요"}
+              <Image
+                src="/icons/arrow_drop.svg"
+                width={26}
+                height={26}
+                alt="dropdown icon"
+              />
             </div>
-            {isSelectOpen && (
-              <div className={styles.dropdownMenu}>
-                {members?.map((member: any) => (
-                  <div
-                    key={member.id}
-                    className={styles.dropdownItem}
-                    onClick={() => handleSelectUser(member)}
-                  >
-                    {member.nickname}
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
-
-          <label>제목 *</label>
-          <input
-            type="text"
-            className={styles.input}
-            placeholder="제목을 입력해 주세요"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-
-          <label>설명 *</label>
-          <textarea
-            className={styles.textarea}
-            placeholder="설명을 입력해 주세요"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-
-          <label>마감일 *</label>
-
-          <DatePicker
-            className={styles.date}
-            selected={dueDate}
-            onChange={(date) => setDueDate(date)}
-            dateFormat="yyyy-MM-dd HH:mm"
-            showTimeSelect
-            timeFormat="HH:mm"
-            timeIntervals={10}
-            placeholderText="날짜를 입력해 주세요"
-            required
-          />
-
-          <label>태그</label>
-          <input
-            type="text"
-            className={styles.input}
-            placeholder="입력 후 Enter"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={handleTagKeyPress}
-          />
-          <TaskTags tags={tags} />
-
-          <label>이미지</label>
-          <div className={styles.imageUpload}>
-            <ImageUpload onImageUpload={setImage} />
-          </div>
-
-          {error && <p className={styles.error}>{error}</p>}
-
-          <div className={styles.buttonGroup}>
-            <button className={styles.cancle} type="button" onClick={onClose}>
-              취소
-            </button>
-            <button
-              className={styles.create}
-              type="submit"
-              disabled={isDisabled}
-            >
-              생성
-            </button>
-          </div>
+          {isSelectOpen && (
+            <div className={styles.dropdownMenu}>
+              {members?.map((member: any) => (
+                <div
+                  key={member.id}
+                  className={styles.dropdownItem}
+                  onClick={() => handleSelectUser(member)}
+                >
+                  {member.nickname}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </form>
-    </CustomModal>
+
+        <label>제목 *</label>
+        <input
+          type="text"
+          className={styles.input}
+          placeholder="제목을 입력해 주세요"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+
+        <label>설명 *</label>
+        <textarea
+          className={styles.textarea}
+          placeholder="설명을 입력해 주세요"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+
+        <label>마감일 *</label>
+
+        <DatePicker
+          className={styles.date}
+          selected={dueDate}
+          onChange={(date) => setDueDate(date)}
+          dateFormat="yyyy-MM-dd HH:mm"
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={10}
+          placeholderText="날짜를 입력해 주세요"
+          required
+        />
+
+        <label>태그</label>
+        <input
+          type="text"
+          className={styles.input}
+          placeholder="입력 후 Enter"
+          value={tagInput}
+          onChange={(e) => setTagInput(e.target.value)}
+          onKeyDown={handleTagKeyPress}
+        />
+        <TaskTags tags={tags} />
+
+        <label>이미지</label>
+        <div className={styles.imageUpload}>
+          <ImageUpload onImageUpload={setImage} />
+        </div>
+
+        {error && <p className={styles.error}>{error}</p>}
+
+        <div className={styles.buttonGroup}>
+          <button className={styles.cancle} type="button" onClick={onClose}>
+            취소
+          </button>
+          <button className={styles.create} type="submit" disabled={isDisabled}>
+            생성
+          </button>
+        </div>
+      </div>
+    </form>
   );
 };
 

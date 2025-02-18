@@ -58,7 +58,7 @@ export const CheckModal = ({
   dashboard,
   deleteMember,
   deleteInvitation,
-  deleteDashboard
+  deleteDashboard,
 }: {
   isModal: boolean;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;

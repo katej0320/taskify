@@ -23,10 +23,28 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
   const [editContent, setEditContent] = useState<string>("");
   const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
+  const dropdownRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
     if (cardId) fetchComments(true);
-  }, [cardId]);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpenDropdownId(null);
+      }
+    };
+
+    if (openDropdownId !== null) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [openDropdownId]);
 
   useEffect(() => {
     if (!loading && hasMore && comments.length > 0) {
@@ -123,7 +141,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
                     }
                   />
                   {openDropdownId === comment.id && (
-                    <DropdownMenu>
+                    <DropdownMenu ref={dropdownRef}>
                       {editingCommentId === comment.id ? (
                         <DropdownItem
                           onClick={() => handleUpdateComment(comment.id)}
@@ -169,7 +187,7 @@ export default TaskComments;
 
 const EditInput = styled.textarea`
   width: 80%;
-  min-height: 40px;
+  min-height: 60px;
   max-height: 100px;
   padding: 6px;
   font-size: 14px;
@@ -185,9 +203,6 @@ const EditInput = styled.textarea`
 const CommentListWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 450px;
-  height: 60px;
-  overflow: hidden;
 `;
 
 const CommentList = styled.ul`
@@ -206,10 +221,11 @@ const TaskCommentItem = styled.li`
   gap: 12px;
   border-bottom: 1px solid #eee;
   width: 100%;
-  min-height: 50px;
-  overflow: hidden;
+  min-height: 60px;
+
   word-break: break-word;
   white-space: pre-wrap;
+  margin-top: 12px;
 `;
 
 const CommentContentWrapper = styled.div`
@@ -233,17 +249,17 @@ const CommentMeta = styled.div`
 
 const CommentAuthor = styled.span`
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   color: #333;
 `;
 
 const CommentTime = styled.span`
-  font-size: 12px;
+  font-size: 14px;
   color: #999;
 `;
 
 const TaskCommentText = styled.p`
-  font-size: 12px;
+  font-size: 16px;
   color: #333;
   word-break: break-word;
   white-space: pre-wrap;
@@ -266,25 +282,25 @@ const DropdownMenu = styled.ul`
   position: absolute;
   top: 100%;
   right: 0;
+
   background: white;
   border-radius: 6px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   list-style: none;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: max-content;
-  max-width: 150px;
-  z-index: 1000;
+  padding: 8px;
+  text-align: center;
+  width: 80px;
+  height: 60px;
+  margin: 8px;
 `;
 
 const DropdownItem = styled.li`
-  font-size: 12px;
   cursor: pointer;
   white-space: nowrap;
+  margin-bottom: 8px;
   &:hover {
-    background: #f1f1f1;
+    background: #f1effd;
+    color: #5534da;
   }
 `;
 const ProfileImage = styled.img`

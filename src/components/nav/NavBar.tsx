@@ -150,7 +150,7 @@ export default function NavBar() {
                       height={20}
                       alt="초대"
                     />
-                    초대하기
+                    <div>초대하기</div>
                   </InviteButton>
                 </>
               )}
