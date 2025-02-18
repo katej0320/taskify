@@ -80,16 +80,18 @@ export default function ProfileCard({
         console.error(error);
       } finally {
         setIsUpdate(false);
+        setIsDisabled(true);
       }
     }
   }, [isUpdate]);
 
   useEffect(() => {
     // Swagger 요구 사항으로, 프로필 이미지와 닉네임의 값이 모두 기존 값과 달라야 저장이 가능
-     if (
-      (isNicknameValue !== "" &&
-      isThumbnail !== "") &&
-      (recentProfileImg !== isThumbnail && recentNickname !== isNicknameValue)
+    if (
+      isNicknameValue !== "" &&
+      isThumbnail !== "" &&
+      recentProfileImg !== isThumbnail &&
+      recentNickname !== isNicknameValue
     ) {
       setIsDisabled(false);
     } else if (
@@ -141,4 +143,3 @@ export default function ProfileCard({
     </div>
   );
 }
-
