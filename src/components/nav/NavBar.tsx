@@ -126,30 +126,34 @@ export default function NavBar() {
           {(router.route === `/dashboard/[id]` ||
             router.route === `/dashboard/[id]/edit`) && (
             <>
-              <Link href={`/dashboard/${params}/edit`}>
-                <button className={styles.navButton}>
-                  <Image
-                    src="/icons/settings.svg"
-                    width={20}
-                    height={20}
-                    alt="설정"
-                  />
-                  관리
-                </button>
-              </Link>
-              <InviteButton
-                $nav
-                dashboardId={params}
-                setUpdateInvite={setUpdateInvite}
-              >
-                <Image
-                  src="/icons/add_box.svg"
-                  width={20}
-                  height={20}
-                  alt="초대"
-                />
-                <div>초대하기</div>
-              </InviteButton>
+              {createByMe && (
+                <>
+                  <Link href={`/dashboard/${params}/edit`}>
+                    <button className={styles.navButton}>
+                      <Image
+                        src="/icons/settings.svg"
+                        width={20}
+                        height={20}
+                        alt="설정"
+                      />
+                      관리
+                    </button>
+                  </Link>
+                  <InviteButton
+                    $nav
+                    dashboardId={params}
+                    setUpdateInvite={setUpdateInvite}
+                  >
+                    <Image
+                      src="/icons/add_box.svg"
+                      width={20}
+                      height={20}
+                      alt="초대"
+                    />
+                    <div>초대하기</div>
+                  </InviteButton>
+                </>
+              )}
               <div>
                 {members.length > 0 ? (
                   <div style={{ display: "flex" }}>
