@@ -11,6 +11,7 @@ import { useEdit } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
 import { getDashboard } from "@/src/api/dashboardApi";
 import Dropdown from "@/src/components/nav/dropdown/Dropdown";
 import axiosInstance from "@/src/api/axios";
+import { styled } from "styled-components";
 
 export default function NavBar() {
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function NavBar() {
     };
   }, [isDropDownOpen]);
 
+  // 초대하기 생성 후 초대 내역 리스트 업데이트 02.16_혜림
   const [updateInvite, setUpdateInvite] = useState(false);
   const { getInvitations } = useEdit();
 
@@ -57,7 +59,7 @@ export default function NavBar() {
     const fetchUserData = async () => {
       try {
         const user = await getMe();
-        setUserData(user);
+        setUserData(user); // 유저 데이터를 상태에 저장
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -101,6 +103,7 @@ export default function NavBar() {
     }
   }, [pathname, params]);
 
+  // 초대하기 생성 후 초대 내역 리스트 업데이트 02.16_혜림
   useEffect(() => {
     if (updateInvite) getInvitations();
 
@@ -123,42 +126,43 @@ export default function NavBar() {
           {(router.route === `/dashboard/[id]` ||
             router.route === `/dashboard/[id]/edit`) && (
             <>
-              {/* 수정 페이지 링크 추가 02.15_혜림 */}
-              {router.route === `/dashboard/[id]` && (
-                <>
-                  <Link href={`/dashboard/${params}/edit`}>
-                    <button className={styles.navButton}>
-                      <Image
-                        src="/icons/settings.svg"
-                        width={20}
-                        height={20}
-                        alt="설정"
-                      />
-                      관리
-                    </button>
-                  </Link>
-                  <InviteButton
-                    $nav
-                    dashboardId={params}
-                    setUpdateInvite={setUpdateInvite}
-                  >
-                    <Image
-                      src="/icons/add_box.svg"
-                      width={20}
-                      height={20}
-                      alt="초대"
-                    />
-                    <div>초대하기</div>
-                  </InviteButton>
-                </>
-              )}
-
+              <Link href={`/dashboard/${params}/edit`}>
+                <button className={styles.navButton}>
+                  <Image
+                    src="/icons/settings.svg"
+                    width={20}
+                    height={20}
+                    alt="설정"
+                  />
+                  관리
+                </button>
+              </Link>
+              <InviteButton
+                $nav
+                dashboardId={params}
+                setUpdateInvite={setUpdateInvite}
+              >
+                <Image
+                  src="/icons/add_box.svg"
+                  width={20}
+                  height={20}
+                  alt="초대"
+                />
+                <div>초대하기</div>
+              </InviteButton>
               <div>
                 {members.length > 0 ? (
                   <div style={{ display: "flex" }}>
-                    {members.map((member: any) => (
+                    {members.map((member: any, index: number) => (
                       <div className={styles.memberCircle} key={member.id}>
-                        {member.nickname[0]}
+                        {member.profileImageUrl ? (
+                          <ProfileImage
+                            src={member.profileImageUrl}
+                            alt="프로필"
+                          />
+                        ) : (
+                          <AssigneeCircle>{member?.nickname[0]}</AssigneeCircle>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -166,16 +170,16 @@ export default function NavBar() {
                   <p>No members found.</p>
                 )}
               </div>
-              <div>
-                <hr className={styles.hr} />
-              </div>
             </>
           )}
-
           <div className={styles["profile-container"]} ref={dropdownRef}>
             <div className={styles.profile} onClick={toggleDropdown}>
               <span className={styles.profileIcon}>
-                {userData ? userData.email[0] : "?"}
+                {userData?.profileImageUrl ? (
+                  <ProfileImage src={userData.profileImageUrl} alt="프로필" />
+                ) : (
+                  <AssigneeCircle>{userData?.nickname[0]}</AssigneeCircle>
+                )}
               </span>
               <span className={styles.profileName}>
                 {userData ? userData.nickname : "로딩중..."}
@@ -193,3 +197,22 @@ export default function NavBar() {
     </>
   );
 }
+
+const ProfileImage = styled.img`
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+`;
+
+const AssigneeCircle = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dbe6f7;
+`;
