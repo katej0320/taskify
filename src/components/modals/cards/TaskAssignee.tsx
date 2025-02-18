@@ -13,73 +13,87 @@ const TaskAssignee: React.FC<TaskAssigneeProps> = ({ assignee, dueDate }) => {
   const firstLetter = assignee?.nickname ? assignee.nickname[0] : "?";
 
   return (
-    <AssigneeContainer>
-      <ProfileIcon>
-        {profileImage ? (
-          <img
-            src={profileImage}
-            alt="프로필 이미지"
-            className="profile-image"
-          />
-        ) : (
-          <span className="profile-placeholder">{firstLetter}</span>
-        )}
-      </ProfileIcon>
-      <AssigneeInfo>
-        <p className="assignee-name">
-          담당자{assignee?.nickname || "담당자 없음"}
-        </p>
-        <p className="due-date">마감일{dueDate || "없음"}</p>
-      </AssigneeInfo>
-    </AssigneeContainer>
+    <>
+      <CardMetaBox>
+        <Assignee>
+          <span>담당자</span>
+          <AssigneeDetails>
+            <AssigneeCircle>{firstLetter}</AssigneeCircle>
+            <span>{assignee?.nickname}</span>
+          </AssigneeDetails>
+        </Assignee>
+
+        <DueDate>
+          <span>마감일</span>
+          <p>{dueDate}</p>
+        </DueDate>
+      </CardMetaBox>
+    </>
   );
 };
 
 export default TaskAssignee;
 
-// ✅ 스타일 유지
-const AssigneeContainer = styled.div`
-  width: 200px;
-  height: 155px;
-  border-radius: 8px;
-  padding: 13px 16px;
-  border: 1px solid #d9d9d9;
-  background: #ffffff;
+const CardMetaBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
+  padding: 16px;
+
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-top: 16px;
+  width: 100%;
+  height: 180px;
+  background-color: white;
+
+  @media (max-width: 1199px) {
+    right: 20px;
+  }
+
+  @media (max-width: 767px) {
+    height: 90px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
-const ProfileIcon = styled.div`
-  width: 40px;
-  height: 40px;
+const Assignee = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 10px;
+`;
+
+const DueDate = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  white-space: nowrap;
+`;
+
+const AssigneeDetails = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const AssigneeCircle = styled.div`
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: #f1f1f1;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 18px;
-
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-  }
+  background-color: #dbe6f7;
 `;
 
-const AssigneeInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-
-  .assignee-name {
-    font-weight: bold;
-    font-size: 14px;
-  }
-
-  .due-date {
-    font-size: 12px;
-    color: #777;
-  }
+const ProfileImage = styled.img`
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
 `;

@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  // overflow: hidden;
 }
 
 .content {
@@ -28,6 +27,21 @@
   @media (max-width: 767px) {
     grid-template-columns: repeat(1, 1fr);
   }
+}
+
+.listCard{
+  display: flex;
+  justify-content: space-between;
+}
+.listcardelements{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arrow {
+  display: flex;
+  justify-content: flex-start; 
 }
 
 .listcardandpagination {
@@ -97,7 +111,7 @@
 
 @media (max-width: 767px) {
   .content {
-    margin-left: 10px;
+    margin-left: 60px;
     padding: 20px;
     background-color: $gray1;
   }

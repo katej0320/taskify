@@ -57,38 +57,40 @@ export default function DashboardList() {
         <div className={styles.listcard}>
           {dashboards?.map((dashboard) => (
             <Link key={dashboard.id} href={`/dashboard/${dashboard.id}`}>
-              <ListCard>
-                <div
-                  className={styles.colorCircle}
-                  style={{ backgroundColor: dashboard.color }}
-                ></div>
-                <div>{dashboard.title}</div>
-                {dashboard.createdByMe && (
+              <ListCard className={styles.listCard}>
+                <div className={styles.listcardelements}>
+                  <div
+                    className={styles.colorCircle}
+                    style={{ backgroundColor: dashboard.color }}
+                  ></div>
+                  <div>{dashboard.title}</div>
+                  
+                  {dashboard.createdByMe && (
+                    <Image
+                      src="/icons/crown.svg"
+                      alt="Crown"
+                      width={16}
+                      height={16}
+                    />
+                  )}
+                </div>
+             
+                <div className={styles.arrow}>
                   <Image
-                    src="/icons/crown.svg"
-                    alt="Crown"
-                    width={16}
-                    height={16}
+                    src="/icons/arrow.svg"
+                    width={22}
+                    height={22}
+                    alt="arrow.svg"
+                    priority
                   />
-                )}
-                <Image
-                  src="/icons/arrow.svg"
-                  width={22}
-                  height={22}
-                  alt="arrow.svg"
-                  priority
-                />
+                   </div>
               </ListCard>
             </Link>
           ))}
         </div>
 
         {isModalOpen && (
-          <CustomModal
-            className={styles.modal}
-            isOpen={isModalOpen}
-            onClose={closeModal}
-          >
+          <CustomModal isOpen={isModalOpen} onClose={closeModal}>
             <CreateBoard
               onClose={closeModal}
               onDashboardCreate={handleDashboardCreate}

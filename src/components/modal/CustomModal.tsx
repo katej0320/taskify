@@ -16,16 +16,13 @@ export default function CustomModal({
   onClose,
   children,
   className,
-  width = "584px",
-  height = "auto", // 🔹 기본값 추가
 }: ModalProps) {
   if (!isOpen) return null;
 
   return createPortal(
-    <div className={`${styles.modalOverlay} ${className}`} onClick={onClose} >
+    <div className={`${styles.modalOverlay} ${className}`} onClick={onClose}>
       <div
         className={`${styles.modalContent} ${className}`}
-        style={{ width, height }} // 🔹 props로 height 조정 가능
         onClick={(e) => e.stopPropagation()}
       >
         {children}

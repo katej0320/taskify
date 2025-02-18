@@ -38,6 +38,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  white-space: nowrap;
 }
 
 .navButton:hover {
@@ -144,7 +145,7 @@
     flex-direction: row;
     align-items: center;
     height: auto;
-    margin-left: 10px;
+    margin-left: 60px;
   }
 
   .leftSection {
