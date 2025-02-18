@@ -10,21 +10,21 @@ import TaskComments from "./TaskComments";
 import TaskCommentInput from "./TaskCommentInput";
 import { getCardDetail } from "@/src/api/cards";
 import { getComments } from "@/src/api/comments";
+import TaskEditModal from "../EditCards/TaskEditModal"; // 우리가 만든 수정 모달
 
 interface TaskCardModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onOpenEditModal: () => void;
   cardId: number;
   columnTitle: string;
   columnId: number;
   dashboardId: number;
+  onOpenEditModal?: () => void;
 }
 
 const TaskCardModal: React.FC<TaskCardModalProps> = ({
   isOpen,
   onClose,
-  onOpenEditModal,
   cardId,
   columnTitle,
   columnId,
@@ -32,6 +32,7 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
 }) => {
   const [cardData, setCardData] = useState<any>(null);
   const [comments, setComments] = useState<any[]>([]);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -61,7 +62,7 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
           <Title>{cardData?.title || "제목 없음"}</Title>
           <TaskDropdown
             cardId={cardId}
-            onOpenEditModal={onOpenEditModal}
+            onOpenEditModal={() => setEditModalOpen(true)}
             onClose={onClose}
           />
         </HeaderContainer>
@@ -100,10 +101,20 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
             cardId={cardId}
             comments={comments}
             setComments={setComments}
-            onOpenEditModal={onOpenEditModal}
           />
         </CommentSection>
       </ModalContent>
+
+      {isEditModalOpen && (
+        <TaskEditModal
+          isOpen={isEditModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          task={cardData}
+          fetchCards={() => {}}
+          columnTitle={columnTitle}
+          dashboardId={dashboardId}
+        />
+      )}
     </CustomModal>
   );
 };
@@ -172,11 +183,6 @@ const CommentSection = styled.div`
   flex-direction: column;
   gap: 8px;
   max-height: 250px;
-`;
-
-const CommentTitle = styled.h3`
-  font-size: 16px;
-  font-weight: bold;
 `;
 
 const Description = styled.p`

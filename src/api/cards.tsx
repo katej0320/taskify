@@ -16,18 +16,23 @@ export const getCardDetail = async (cardId: number) => {
   }
 };
 
-export const updateCard = async (cardId: number, updateData: any) => {
+export const updateCard = async (
+  cardId: number,
+  data: {
+    columnId: number;
+    assigneeUserId: number | null;
+    title: string;
+    description: string;
+    dueDate: string | null;
+    tags: string[];
+    imageUrl?: string;
+  }
+) => {
   try {
-    console.log(`카드 수정 요청: cardId=${cardId}, data=`, updateData);
-    const response = await axiosInstance.put(`/cards/${cardId}`, updateData);
-    console.log("카드 수정 응답:", response.data);
+    const response = await axios.put(`/cards/${cardId}`, data);
     return response.data;
-  } catch (error: any) {
-    console.error(
-      "카드 수정 실패:",
-      error.response?.status,
-      error.response?.data
-    );
+  } catch (error) {
+    console.error("❌ 카드 수정 요청 실패:", error);
     throw error;
   }
 };
