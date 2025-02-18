@@ -10,9 +10,9 @@ import DeleteContainer from "@/src/components/dashboard/edit/DeleteContainer";
 import InvitationContainer from "@/src/components/dashboard/edit/InvitationContainer";
 import MemberContainer from "@/src/components/dashboard/edit/MemberContainer";
 import { EditProvider } from "@/src/contexts/dashboard/edit/EditDashboardProvider";
+import useAuth from "@/src/hooks/useRequireAuth";
 
-
-const Contents = styled.div`
+const Container = styled.div`
   width: calc(100vw * 375 / 1200);
   min-width: 600px;
   padding-bottom: calc(env(safe-area-inset-bottom) + 50px);
@@ -23,10 +23,9 @@ const Contents = styled.div`
 `;
 
 export default function EditPage() {
- 
-
+  useAuth();
   const router = useRouter();
-  const dashboardId = router.query.id;
+  const dashboardId = router.query.id as string;
 
   return (
     <>
@@ -38,13 +37,13 @@ export default function EditPage() {
           <SideBar />
           <NavBar />
           <div className={styles.content}>
-            <Contents>
+            <Container>
               <BackLocation />
               <BebridgeContainer dashboardId={dashboardId} />
               <MemberContainer />
               <InvitationContainer dashboardId={dashboardId} />
               <DeleteContainer dashboardId={dashboardId} />
-            </Contents>
+            </Container>
           </div>
         </div>
       </EditProvider>

@@ -2,9 +2,7 @@ import axiosInstance from "./axios";
 
 export const getCardDetail = async (cardId: number) => {
   try {
-    console.log(`카드 상세 조회 요청: cardId=${cardId}`);
     const response = await axiosInstance.get(`/cards/${cardId}`);
-    console.log("카드 상세 조회 응답:", response.data);
     return response.data;
   } catch (error: any) {
     console.error(
@@ -29,7 +27,11 @@ export const updateCard = async (
   }
 ) => {
   try {
+<<<<<<< HEAD
     const response = await axios.put(`/cards/${cardId}`, data);
+=======
+    const response = await axiosInstance.put(`/cards/${cardId}`, updateData);
+>>>>>>> 2ec5fcf3172cec89502966b72ea4f1163dcb4120
     return response.data;
   } catch (error) {
     console.error("❌ 카드 수정 요청 실패:", error);
@@ -39,9 +41,7 @@ export const updateCard = async (
 
 export const deleteCard = async (cardId: number) => {
   try {
-    console.log(`카드 삭제 요청: cardId=${cardId}`);
     await axiosInstance.delete(`/cards/${cardId}`);
-    console.log("카드 삭제 성공");
   } catch (error: any) {
     console.error(
       "카드 삭제 실패:",

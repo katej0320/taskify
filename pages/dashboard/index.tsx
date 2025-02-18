@@ -13,7 +13,10 @@ import axiosInstance from "@/src/api/axios";
 import useRequireAuth from "@/src/hooks/useRequireAuth";
 
 export default function MyDashboardPage() {
-  useRequireAuth();
+  const loading = useRequireAuth(); // ✅ 로그인 상태 체크
+
+  if (loading) return null; // ✅ 로딩 중일 때 아무것도 렌더링하지 않음
+
   const [dashboards, setDashboards] = useState<any[]>([]);
   const [invitations, setInvitations] = useState<any[]>([]);
   const [cursorId, setCursorId] = useState<number>();
@@ -34,10 +37,8 @@ export default function MyDashboardPage() {
           const newCursorId = res.data.cursorId;
 
           setInvitations((prevInvitations) => {
-            console.log("1111111", [...prevInvitations, ...newInvitations]);
             return [...prevInvitations, ...newInvitations];
           });
-          console.log(newInvitations);
           setCursorId(newCursorId);
         } catch (error) {
           console.error("초대 리스트 불러오기 실패:", error);
@@ -48,10 +49,7 @@ export default function MyDashboardPage() {
     }
   }, [inView]);
 
-  useEffect(() => {
-    console.log("***********");
-    console.log(invitations);
-  }, [invitations]);
+  useEffect(() => {}, [invitations]);
 
   useEffect(() => {
     async function fetchData() {

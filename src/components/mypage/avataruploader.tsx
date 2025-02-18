@@ -27,13 +27,15 @@ export default function AvatarUploader({
       };
       reader.readAsDataURL(file);
     }
+    // 동일한 파일 선택 시 이벤트가 작동하지 않는 trigger 제거
+    event.target.value = "";
   };
 
   // ✅ 삭제 버튼 클릭 시 이미지 제거 및 파일 입력 필드 초기화
   const handleRemoveImage = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsThumbnail('');
+    setIsThumbnail("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }

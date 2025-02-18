@@ -27,13 +27,6 @@ const TaskCommentInput: React.FC<TaskCommentInputProps> = ({
     }
 
     try {
-      console.log("🔥 댓글 추가 요청:", {
-        content: trimmedComment,
-        cardId,
-        columnId,
-        dashboardId,
-      });
-
       const newCommentData = await createComment(
         cardId,
         trimmedComment,
@@ -41,14 +34,10 @@ const TaskCommentInput: React.FC<TaskCommentInputProps> = ({
         dashboardId
       );
 
-      console.log("✅ 댓글 추가 성공!", newCommentData);
-
       setNewComment(""); // 입력창 초기화
 
-      // ✅ 최신 댓글을 맨 위에 추가 (최신 댓글이 위에 보이도록)
       setComments((prevComments) => [newCommentData, ...prevComments]);
 
-      // ✅ 최신 목록을 다시 불러오기 (서버 기준 동기화)
       await onCommentAdded();
     } catch (error) {
       console.error("❌ 댓글 추가 실패:", error);

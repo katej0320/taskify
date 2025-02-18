@@ -49,7 +49,10 @@ export default function PasswordCard() {
   }, [confirmPassword, newPassword]);
 
   // 비밀번호 변경 API 요청
-  async function handleChangePasswordApi(password: string, newPassword: string) {
+  async function handleChangePasswordApi(
+    password: string,
+    newPassword: string
+  ) {
     setIsLoading(true);
     try {
       const response = await axiosInstance.put("/auth/password", {
@@ -57,11 +60,13 @@ export default function PasswordCard() {
         newPassword,
       });
 
-      console.log("비밀번호 변경 성공", response.data);
       setModalMessage("비밀번호가 성공적으로 변경되었습니다."); // 성공 메시지 설정
       setIsModalOpen(true);
     } catch (error: any) {
-      console.error("비밀번호 변경 실패", error.response?.data || error.message);
+      console.error(
+        "비밀번호 변경 실패",
+        error.response?.data || error.message
+      );
 
       //  400 에러 처리 → 현재 비밀번호가 틀린 경우
       if (error.response?.status === 400) {
@@ -135,18 +140,19 @@ export default function PasswordCard() {
           placeholder="새 비밀번호 입력"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className={newPassword !== confirmPassword && confirmPassword ? styles.errorInput : ""}
+          className={
+            newPassword !== confirmPassword && confirmPassword
+              ? styles.errorInput
+              : ""
+          }
         />
-         {errorMessage && (
-        <span className={styles.errorText} aria-live="polite">
-          {errorMessage}
-        </span>
-      )}
-
-          
+        {errorMessage && (
+          <span className={styles.errorText} aria-live="polite">
+            {errorMessage}
+          </span>
+        )}
       </div>
 
-     
       <button
         onClick={handleChangePassword}
         className={styles.changeButton}
@@ -163,12 +169,12 @@ export default function PasswordCard() {
       </button>
 
       {/* 모달 창 */}
-      <CustomModal isOpen={isModalOpen} width="384">
+      <CustomModal isOpen={isModalOpen}>
         <div className={styles.CustomModal}>
           <div className={styles.modalStyle}>
             <p>{modalMessage}</p>
             <CustomButton
-              onClick={() => setIsModalOpen(false)} 
+              onClick={() => setIsModalOpen(false)}
               width={240}
               height={48}
               className={styles.customButton}

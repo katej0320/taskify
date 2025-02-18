@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import axiosInstance from "@/src/api/axios";
 import TaskTags from "../Cardmodals/TaskCards/TaskTags";
 import Image from "next/image";
+import { styled } from "styled-components";
 
 interface AddModalProps {
   isOpen: boolean;
@@ -168,7 +169,29 @@ const AddModal: React.FC<AddModalProps> = ({
                 alignItems: "center",
               }}
             >
-              {selectedUser ? selectedUser.nickname : "담당자를 선택하세요"}
+              {selectedUser ? (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    paddingLeft: "12px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {selectedUser.profileImageUrl ? (
+                    <ProfileImage
+                      src={selectedUser.profileImageUrl}
+                      alt="프로필"
+                    />
+                  ) : (
+                    <AssigneeCircle>{selectedUser?.nickname[0]}</AssigneeCircle>
+                  )}
+                  <div style={{ color: "black" }}>{selectedUser.nickname}</div>
+                </div>
+              ) : (
+                "담당자를 선택하세요"
+              )}
               <Image
                 src="/icons/arrow_drop.svg"
                 width={26}
@@ -185,7 +208,20 @@ const AddModal: React.FC<AddModalProps> = ({
                   className={styles.dropdownItem}
                   onClick={() => handleSelectUser(member)}
                 >
-                  {member.nickname}
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "12px",
+                      paddingLeft: "12px",
+                    }}
+                  >
+                    {member.profileImageUrl ? (
+                      <ProfileImage src={member.profileImageUrl} alt="프로필" />
+                    ) : (
+                      <AssigneeCircle>{member?.nickname[0]}</AssigneeCircle>
+                    )}
+                    <div style={{ color: "black" }}>{member.nickname}</div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -257,3 +293,21 @@ const AddModal: React.FC<AddModalProps> = ({
 };
 
 export default AddModal;
+
+const ProfileImage = styled.img`
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+`;
+const AssigneeCircle = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dbe6f7;
+`;

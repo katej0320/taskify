@@ -29,7 +29,7 @@ export function EditProvider({
   dashboardId,
 }: {
   children: ReactNode;
-  dashboardId: string | string[] | undefined;
+  dashboardId: string;
 }) {
   const [values, setValues] = useState({
     isBebridge: null,
