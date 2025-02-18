@@ -19,7 +19,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
 
   const [nickname, setNickname] = useState("");
   const [loading, setLoading] = useState(false); // 로딩 상태 관리
- 
+
   return (
     <div className={styles.profileSettings}>
       <button className={styles.backButton} onClick={() => router.back()}>
@@ -35,8 +35,8 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({ user }) => {
       />
 
       <PasswordCard />
-        {loading && <p>저장 중...</p>}
-      </div>
+      {loading && <p>저장 중...</p>}
+    </div>
   );
 };
 
