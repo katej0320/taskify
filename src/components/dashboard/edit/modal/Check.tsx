@@ -40,10 +40,15 @@ export const CheckModal = ({
               $confirm
               onClick={() => {
                 closeModal();
-                (member || invite) && setIsToast?.(true);
-                member && deleteMember?.();
-                invite && deleteInvitation?.();
-                dashboard && deleteDashboard?.();
+                if (member || invite) {
+                  setIsToast?.(true);
+                } else if (member) {
+                  deleteMember?.();
+                } else if (invite) {
+                  deleteInvitation?.();
+                } else if (dashboard) {
+                  deleteDashboard?.();
+                }
               }}
             >
               {member || dashboard
