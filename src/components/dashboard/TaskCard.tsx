@@ -38,9 +38,7 @@ export default function TaskCard({
               <div>
                 <TaskTags
                   tags={card?.tags || []}
-                  onRemoveTag={function (tag: string): void {
-                    throw new Error("Function not implemented.");
-                  }}
+                  
                 />
               </div>
               <div className={styles.bottom}>

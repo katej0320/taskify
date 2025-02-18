@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 interface TaskTagsProps {
   tags: string[];
-  onRemoveTag: (tag: string) => void; // 태그 삭제 함수
+
 }
 
 const TAG_COLORS: { [key: string]: string } = {
@@ -28,7 +28,7 @@ const getTagColor = (() => {
   };
 })();
 
-const TaskTags: React.FC<TaskTagsProps> = ({ tags, onRemoveTag }) => {
+const TaskTags: React.FC<TaskTagsProps> = ({ tags })=> {
   const uniqueTags = useMemo(() => [...new Set(tags)], [tags]); // 중복 태그 제거
 
   return (
@@ -40,7 +40,7 @@ const TaskTags: React.FC<TaskTagsProps> = ({ tags, onRemoveTag }) => {
         return (
           <Tag key={tag} bgColor={bgColor} textColor={textColor}>
             {tag}
-            <RemoveButton onClick={() => onRemoveTag(tag)}>x</RemoveButton>
+
           </Tag>
         );
       })}

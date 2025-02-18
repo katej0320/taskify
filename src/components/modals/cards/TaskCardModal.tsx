@@ -76,9 +76,7 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
         <div className={styles.columnAndTagsContainer}>
           <TaskColumn columnTitle={columnTitle} />
           <div className={styles.verticalDivider} />
-          <TaskTags tags={cardData?.tags || []} onRemoveTag={function (tag: string): void {
-            throw new Error("Function not implemented.");
-          } } />
+          <TaskTags tags={cardData?.tags || []} />
         </div>
 
         <div className={styles.contentWrapper}>
