@@ -137,6 +137,8 @@
     height: 54px;
   }
 
+   
+
   .changeButton {
     width: 624px;
     height: 100px !important;
@@ -170,10 +172,14 @@
   border-color: red !important;
 }
 
+.confirmpasswordinput{
+  position: relative;
+} 
+
 .errorText {
   position: absolute;
-  bottom: 30px;
-  left: 350px;
+  bottom: -25px;
+  left: 10px;
   width: 100%;
   color: red;
   font-size: 12px;
