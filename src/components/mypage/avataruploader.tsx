@@ -27,6 +27,7 @@ export default function AvatarUploader({
       };
       reader.readAsDataURL(file);
     }
+    // 동일한 파일 선택 시 이벤트가 작동하지 않는 trigger 제거
     event.target.value = "";
   };
 
@@ -34,7 +35,7 @@ export default function AvatarUploader({
   const handleRemoveImage = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsThumbnail('');
+    setIsThumbnail("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }

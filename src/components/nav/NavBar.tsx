@@ -122,61 +122,61 @@ export default function NavBar() {
         </div>
         <div className={styles.rightSection}>
           {/* 대시보드 상세 및 수정 페이지에서만 활성화 02.16_혜림 */}
-          {(router.route === `/dashboard/[id]` ||
-            router.route === `/dashboard/[id]/edit`) && (
-            <>
-              {/* 수정 페이지 링크 추가 02.15_혜림 */}
-              {router.route === `/dashboard/[id]` && (
-                <>
-                  <Link href={`/dashboard/${params}/edit`}>
-                    <button className={styles.navButton}>
-                      <Image
-                        src="/icons/settings.svg"
-                        width={20}
-                        height={20}
-                        alt="설정"
-                      />
-                      관리
-                    </button>
-                  </Link>
-                  <InviteButton
-                    $nav
-                    dashboardId={params}
-                    setUpdateInvite={setUpdateInvite}
-                  >
-                    <Image
-                      src="/icons/add_box.svg"
-                      width={20}
-                      height={20}
-                      alt="초대"
-                    />
-                    초대하기
-                  </InviteButton>
-                </>
-              )}
-
-              {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
-
-              {/* 멤버들 리스트 출력 */}
-              <div>
-                {members.length > 0 ? (
-                  <div style={{ display: "flex" }}>
-                    {members.map((member: any) => (
-                      <div className={styles.memberCircle} key={member.id}>
-                        {/* 프로필 이미지 컴포넌트로 치환 */}
-                        {member.nickname[0]}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p>No members found.</p>
+          {createByMe &&
+            (router.route === `/dashboard/[id]` ||
+              router.route === `/dashboard/[id]/edit`) && (
+              <>
+                {/* 수정 페이지 링크 추가 02.15_혜림 */}
+                {router.route === `/dashboard/[id]` && (
+                  <>
+                    <Link href={`/dashboard/${params}/edit`}>
+                      <button className={styles.navButton}>
+                        <Image
+                          src="/icons/settings.svg"
+                          width={20}
+                          height={20}
+                          alt="설정"
+                        />
+                        관리
+                      </button>
+                    </Link>
+                  </>
                 )}
-              </div>
-              <div>
-                <hr className={styles.hr} />
-              </div>
-            </>
-          )}
+                {/* 초대하기 모달 및 기능 연동 02.15_혜림 */}
+                <InviteButton
+                  $nav
+                  dashboardId={params}
+                  setUpdateInvite={setUpdateInvite}
+                >
+                  <Image
+                    src="/icons/add_box.svg"
+                    width={20}
+                    height={20}
+                    alt="초대"
+                  />
+                  초대하기
+                </InviteButton>
+
+                {/* 멤버들 리스트 출력 */}
+                <div>
+                  {members.length > 0 ? (
+                    <div style={{ display: "flex" }}>
+                      {members.map((member: any) => (
+                        <div className={styles.memberCircle} key={member.id}>
+                          {/* 프로필 이미지 컴포넌트로 치환 */}
+                          {member.nickname[0]}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>No members found.</p>
+                  )}
+                </div>
+                <div>
+                  <hr className={styles.hr} />
+                </div>
+              </>
+            )}
 
           <div className={styles["profile-container"]} ref={dropdownRef}>
             <div className={styles.profile} onClick={toggleDropdown}>
