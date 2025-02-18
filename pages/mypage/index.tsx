@@ -9,6 +9,7 @@ import styles from "./mypage.module.scss";
 import NavBar from "@/src/components/nav/NavBar";
 import SideBar from "@/src/components/sidebar/SideBar";
 import ProfileSettings from "@/src/components/mypage/profilesetting";
+import useAuth from "@/src/hooks/useRequireAuth";
 
 const Container = styled.div`
   width: calc(100vw * 375 / 1200);
@@ -21,6 +22,9 @@ const Container = styled.div`
 `;
 
 export default function MyPage() {
+  const loading = useAuth(); // ✅ 로그인 상태 체크
+
+  if (loading) return null; // ✅ 로딩 중일 때 아무것도 렌더링하지 않음
   // useSWR로 사용자 데이터 요청
   const { data: user, error } = useSWR<User>("12-1/users", getUser);
 
