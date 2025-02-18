@@ -12,12 +12,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      onImageUpload(file); // 부모 컴포넌트로 이미지 전달
+      onImageUpload(file); 
 
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
-        onImageUpload(file); // 부모에게 이미지 업로드 완료 알림
+        onImageUpload(file); 
       };
       reader.readAsDataURL(file);
     }

@@ -63,6 +63,10 @@
 }
 
 .profileIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #a3c4a2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,7 +100,6 @@
   color: $white;
 }
 
-/* Mobile and Tablet Styles */
 @media (max-width: 1199px) {
   .navbar {
     padding: 15px 40px;
@@ -166,7 +169,7 @@
   }
 
   .profileName {
-    display: none; /* Hide profile name on mobile */
+    display: none; 
   }
 
   .hr {
