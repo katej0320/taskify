@@ -127,7 +127,7 @@ export default function PasswordCard() {
         />
       </div>
 
-      <div className={styles.passwordInputGroup}>
+      <div className={`${styles.passwordInputGroup} confirmpasswordinput`}>
         <label htmlFor="confirm-password">새 비밀번호 확인</label>
         <input
           id="confirm-password"
@@ -137,14 +137,16 @@ export default function PasswordCard() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           className={newPassword !== confirmPassword && confirmPassword ? styles.errorInput : ""}
         />
-      </div>
-
-      {errorMessage && (
+         {errorMessage && (
         <span className={styles.errorText} aria-live="polite">
           {errorMessage}
         </span>
       )}
 
+          
+      </div>
+
+     
       <button
         onClick={handleChangePassword}
         className={styles.changeButton}
