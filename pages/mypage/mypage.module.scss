@@ -156,6 +156,11 @@
   }
 }
 
+.saveButton:disabled {
+  cursor: auto;
+  background: #9fa6b2;
+}
+
 .passwordInputGroup {
   position: relative;
   width: 100%;

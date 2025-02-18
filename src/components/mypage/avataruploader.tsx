@@ -1,70 +1,49 @@
-import React, { useRef } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
-import { X } from "lucide-react"; // ✅ X(삭제) 아이콘 가져오기
 import styles from "@/pages/mypage/mypage.module.scss";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 interface AvatarUploaderProps {
-  profileImage: string | null;
-  setProfileImage: (image: string | null) => void;
+  setReqImage: React.Dispatch<SetStateAction<File | string>>;
+  isThumbnail: string | StaticImport | null;
+  setIsThumbnail: React.Dispatch<SetStateAction<string | StaticImport | null>>;
 }
 
-export default function AvatarUploader({ profileImage, setProfileImage }: AvatarUploaderProps) {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
+export default function AvatarUploader({
+  setReqImage,
+  isThumbnail,
+  setIsThumbnail,
+}: AvatarUploaderProps) {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setReqImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result as string);
+        setIsThumbnail(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // ✅ 삭제 버튼 클릭 시 이미지 제거 및 파일 입력 필드 초기화
-  const handleRemoveImage = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setProfileImage(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
   return (
-    <div className={styles.avatarContainer}>
-      {/* ✅ 프로필 이미지와 파일 업로드 */}
-      <label className={styles.avatarUpload}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          ref={fileInputRef}
-          hidden
+    <label className={styles.avatarUpload}>
+      <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
+      {isThumbnail ? (
+        <Image
+          src={isThumbnail}
+          alt="Profile"
+          className={styles.avatar}
+          width={100}
+          height={100}
         />
-        {profileImage ? (
-          <div className={styles.avatarWrapper}>
-            <Image
-              src={profileImage}
-              alt="Profile"
-              className={styles.avatar}
-              width={100}
-              height={100}
-            />
-          </div>
-        ) : (
-          <div className={styles.avatarPlaceholder}>+</div>
-        )}
-        {/* ✅ X(삭제) 버튼을 프로필 이미지가 있을 때만 표시 */}
-      {profileImage && (
-        <button className={styles.removeButton} onClick={handleRemoveImage}>
-          <X size={20} color="white" />
-        </button>
+      ) : (
+        <div className={styles.avatarPlaceholder}>+</div>
       )}
-      </label>
-
-      
-    </div>
+      {/* {recentProfileImg && (
+        <Image src={recentProfileImg} alt="미리보기" width={30} height={30} />
+      )} */}
+    </label>
   );
 }
+
