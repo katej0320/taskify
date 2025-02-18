@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { Button } from "../../button/CustomButton2";
 import styles from "./EditPage.style.module.scss";
 import { MemberItem } from "@/src/components/dashboard/edit/EditPageType";
-
 import Image from "next/image";
 
 const EmptyData = styled.div`
