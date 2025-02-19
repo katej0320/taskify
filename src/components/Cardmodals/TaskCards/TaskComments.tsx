@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { getComments, deleteComment, updateComment } from "@/src/api/comments";
 import styled from "styled-components";
-import Image from "next/image";
+
 
 interface TaskCommentsProps {
   cardId: number;

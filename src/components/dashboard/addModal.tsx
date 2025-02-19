@@ -77,6 +77,7 @@ const AddModal: React.FC<AddModalProps> = ({
   };
 
   const handleTagKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return; // 한글 입력 중일 때는 무시
     if (e.key === "Enter" && tagInput.trim()) {
       setTags([...tags, tagInput.trim()]);
       setTagInput("");
@@ -84,10 +85,7 @@ const AddModal: React.FC<AddModalProps> = ({
     }
   };
 
-  const handleRemoveTag = (index: number) => {
-    setTags(tags.filter((_, i) => i !== index));
-  };
-
+ 
   const handleCreateCard = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !description || !dueDate || selectedAssignee === null) {
@@ -143,8 +141,11 @@ const AddModal: React.FC<AddModalProps> = ({
     setSelectedAssignee(null);
   };
   const isDisabled =
-    !title || !description || !dueDate || selectedAssignee === null;
-
+    !title ||
+    !description ||
+    !dueDate ||
+    selectedAssignee === null ||
+    tagInput.trim() === "";
   return (
     <form onSubmit={handleCreateCard} style={{ width: "578px" }}>
       {isSelectOpen && (
