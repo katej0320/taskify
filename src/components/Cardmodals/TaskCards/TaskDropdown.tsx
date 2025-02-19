@@ -21,7 +21,7 @@ const TaskDropdown: React.FC<TaskDropdownProps> = ({
       alert("카드가 삭제되었습니다.");
       window.location.reload(); // 삭제 후 새로고침
     } catch (error) {
-      console.error("❌ 카드 삭제 실패:", error);
+      console.error("카드 삭제 실패:", error);
     }
   };
 
@@ -47,7 +47,6 @@ const TaskDropdown: React.FC<TaskDropdownProps> = ({
 
 export default TaskDropdown;
 
-// ✅ 스타일 유지
 const DropdownContainer = styled.div`
   position: relative;
 `;
@@ -96,6 +95,7 @@ const DropdownMenu = styled.ul`
 const DropdownItem = styled.li`
   padding: 10px 16px;
   cursor: pointer;
+  text-align: center;
   &:hover {
     background: #f1f1f1;
   }
