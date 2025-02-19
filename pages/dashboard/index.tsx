@@ -10,12 +10,11 @@ import InviteDashboardList from "@/src/components/dashboardlist/invite/InviteLis
 import DashboardList from "@/src/components/dashboardlist/DashBoardList";
 import { useInView } from "react-intersection-observer";
 import axiosInstance from "@/src/api/axios";
-import useRequireAuth from "@/src/hooks/useRequireAuth";
+
 
 export default function MyDashboardPage() {
-  const loading = useRequireAuth(); // ✅ 로그인 상태 체크
+  
 
-  if (loading) return null; // ✅ 로딩 중일 때 아무것도 렌더링하지 않음
 
   const [dashboards, setDashboards] = useState<any[]>([]);
   const [invitations, setInvitations] = useState<any[]>([]);

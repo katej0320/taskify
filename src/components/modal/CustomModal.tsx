@@ -1,12 +1,15 @@
 import React from "react";
 import { createPortal } from "react-dom";
 import styles from "./CustomModal.module.scss";
+import styled from "styled-components";
 
 interface ModalProps {
   isOpen?: boolean;
   onClose?: () => void;
   children: React.ReactNode;
   className?: string;
+  width?: string;
+  height?: string;
 }
 
 export default function CustomModal({

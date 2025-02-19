@@ -15,7 +15,7 @@ export default function useAuth() {
     } else {
       setLoading(false); // ✅ 토큰이 있으면 로딩 종료
     }
-  }, []);
+  }, [router]);
 
   return loading; // ✅ 로딩 상태 반환
 }

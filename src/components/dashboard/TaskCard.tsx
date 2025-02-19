@@ -1,9 +1,9 @@
 import Image from "next/image";
 import styles from "./TaskCard.module.scss";
 import { useState } from "react";
-import TaskCardModal from "../modals/cards/TaskCardModal";
+import TaskCardModal from "../Cardmodals/TaskCards/TaskCardModal";
 import React from "react";
-import TaskTags from "../modals/cards/TaskTags";
+import TaskTags from "../Cardmodals/TaskCards/TaskTags";
 import { styled } from "styled-components";
 
 export default function TaskCard({
@@ -36,7 +36,10 @@ export default function TaskCard({
             <h3>{card.title}</h3>
             <div className={styles.tabletRow}>
               <div>
-                <TaskTags tags={card?.tags || []} />
+                <TaskTags
+                  tags={card?.tags || []}
+                  
+                />
               </div>
               <div className={styles.bottom}>
                 <div className={styles.date}>

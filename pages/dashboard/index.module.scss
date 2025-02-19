@@ -28,6 +28,16 @@
     grid-template-columns: repeat(1, 1fr);
   }
 }
+.listCard{
+  display:flex;
+  justify-content: space-between;
+}
+
+.listcardelements{
+  display: flex;
+  gap: 10px;
+  align-items: center
+}
 
 .listcardandpagination {
   max-width: 1200px;
