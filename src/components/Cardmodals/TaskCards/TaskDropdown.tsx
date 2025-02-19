@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-import axiosInstance from "@/src/api/axios"; // axiosInstance 적용
-
+import axiosInstance from "@/src/api/axios";
+import Image from "next/image";
 interface TaskDropdownProps {
   cardId: number;
   onOpenEditModal: () => void;
@@ -29,10 +29,10 @@ const TaskDropdown: React.FC<TaskDropdownProps> = ({
     <DropdownContainer>
       <ButtonGroup>
         <IconButton onClick={() => setDropdownOpen(!dropdownOpen)}>
-          <img src="/icons/kebab.svg" alt="메뉴" />
+          <Image src="/icons/kebab.svg" alt="메뉴" />
         </IconButton>
         <IconButton onClick={onClose}>
-          <img src="/icons/close.svg" alt="닫기" />
+          <Image src="/icons/close.svg" alt="닫기" />
         </IconButton>
       </ButtonGroup>
       {dropdownOpen && (

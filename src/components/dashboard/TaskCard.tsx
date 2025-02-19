@@ -36,7 +36,10 @@ export default function TaskCard({
             <h3>{card.title}</h3>
             <div className={styles.tabletRow}>
               <div>
-                <TaskTags tags={card?.tags || []} />
+                <TaskTags
+                  tags={card?.tags || []}
+                  
+                />
               </div>
               <div className={styles.bottom}>
                 <div className={styles.date}>

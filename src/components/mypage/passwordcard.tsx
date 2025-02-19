@@ -11,11 +11,11 @@ export default function PasswordCard() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // 모달 상태
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState(""); // 모달 메시지 상태 추가
+  const [modalMessage, setModalMessage] = useState(""); 
 
-  // 비밀번호 유효성 검사 함수
+ 
   const validatePassword = (password: string): string => {
     if (password.length < 8) {
       return "비밀번호는 최소 8자 이상이어야 합니다.";
@@ -23,7 +23,7 @@ export default function PasswordCard() {
     return "";
   };
 
-  // 새 비밀번호 입력 시 유효성 검사 및 현재 비밀번호와 비교
+  
   useEffect(() => {
     if (!newPassword) {
       setErrorMessage("");
@@ -39,7 +39,7 @@ export default function PasswordCard() {
     setErrorMessage(passwordError);
   }, [newPassword, currentPassword]);
 
-  // 새 비밀번호 확인 입력 시 오류 메시지 설정
+ 
   useEffect(() => {
     if (confirmPassword && newPassword !== confirmPassword) {
       setErrorMessage("새 비밀번호와 동일하지 않습니다.");
@@ -48,11 +48,8 @@ export default function PasswordCard() {
     }
   }, [confirmPassword, newPassword]);
 
-  // 비밀번호 변경 API 요청
-  async function handleChangePasswordApi(
-    password: string,
-    newPassword: string
-  ) {
+  
+  async function handleChangePasswordApi(password: string, newPassword: string) {
     setIsLoading(true);
     try {
       const response = await axiosInstance.put("/auth/password", {
@@ -60,27 +57,25 @@ export default function PasswordCard() {
         newPassword,
       });
 
-      setModalMessage("비밀번호가 성공적으로 변경되었습니다."); // 성공 메시지 설정
+      console.log("비밀번호 변경 성공", response.data);
+      setModalMessage("비밀번호가 성공적으로 변경되었습니다."); 
       setIsModalOpen(true);
     } catch (error: any) {
-      console.error(
-        "비밀번호 변경 실패",
-        error.response?.data || error.message
-      );
+      console.error("비밀번호 변경 실패", error.response?.data || error.message);
 
-      //  400 에러 처리 → 현재 비밀번호가 틀린 경우
+    
       if (error.response?.status === 400) {
         setModalMessage("현재 비밀번호를 잘못 입력하셨습니다.");
       } else {
         setModalMessage("비밀번호 변경에 실패했습니다. 다시 시도해 주세요.");
       }
-      setIsModalOpen(true); // 모달 띄우기
+      setIsModalOpen(true); 
     } finally {
       setIsLoading(false);
     }
   }
 
-  // 비밀번호 변경 처리
+
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
       setErrorMessage("모든 필드를 입력해야 합니다.");
@@ -97,10 +92,10 @@ export default function PasswordCard() {
       return;
     }
 
-    // API 요청 실행
+ 
     await handleChangePasswordApi(currentPassword, newPassword);
 
-    // 입력값 초기화
+
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
@@ -140,19 +135,18 @@ export default function PasswordCard() {
           placeholder="새 비밀번호 입력"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className={
-            newPassword !== confirmPassword && confirmPassword
-              ? styles.errorInput
-              : ""
-          }
+          className={newPassword !== confirmPassword && confirmPassword ? styles.errorInput : ""}
         />
-        {errorMessage && (
-          <span className={styles.errorText} aria-live="polite">
-            {errorMessage}
-          </span>
-        )}
+         {errorMessage && (
+        <span className={styles.errorText} aria-live="polite">
+          {errorMessage}
+        </span>
+      )}
+
+          
       </div>
 
+     
       <button
         onClick={handleChangePassword}
         className={styles.changeButton}
@@ -169,12 +163,12 @@ export default function PasswordCard() {
       </button>
 
       {/* 모달 창 */}
-      <CustomModal isOpen={isModalOpen}>
+      <CustomModal isOpen={isModalOpen} width="384">
         <div className={styles.CustomModal}>
           <div className={styles.modalStyle}>
             <p>{modalMessage}</p>
             <CustomButton
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => setIsModalOpen(false)} 
               width={240}
               height={48}
               className={styles.customButton}
