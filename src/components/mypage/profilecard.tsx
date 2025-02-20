@@ -79,10 +79,11 @@ export default function ProfileCard({
 
   useEffect(() => {
     if (
-      isNicknameValue !== "" &&
-      recentNickname !== isNicknameValue &&
-      isNicknameValue !== "" &&
-      isThumbnail !== ""
+      isThumbnail ||
+      (isNicknameValue !== "" &&
+        recentNickname !== isNicknameValue &&
+        isNicknameValue !== "" &&
+        isThumbnail !== "")
     ) {
       setIsDisabled(false);
     } else if (
