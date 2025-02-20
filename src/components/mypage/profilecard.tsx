@@ -79,20 +79,19 @@ export default function ProfileCard({
 
   useEffect(() => {
     if (
-      isThumbnail ||
-      (isNicknameValue !== "" &&
-        recentNickname !== isNicknameValue &&
-        isNicknameValue !== "" &&
-        isThumbnail !== "")
-    ) {
-      setIsDisabled(false);
-    } else if (
+      (recentNickname === isNicknameValue &&
+        recentProfileImg === isThumbnail) ||
       isNicknameValue === "" ||
-      isThumbnail === "" ||
-      (isNicknameValue !== "" && isThumbnail === "") ||
-      isNicknameValue === recentNickname
+      isThumbnail === ""
     ) {
       setIsDisabled(true);
+    } else if (
+      (recentNickname !== isNicknameValue &&
+        recentProfileImg !== isThumbnail) ||
+      recentNickname !== isNicknameValue ||
+      recentProfileImg !== isThumbnail
+    ) {
+      setIsDisabled(false);
     }
   }, [isNicknameValue, isThumbnail]);
 
