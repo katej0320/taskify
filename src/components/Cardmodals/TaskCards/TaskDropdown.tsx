@@ -29,10 +29,10 @@ const TaskDropdown: React.FC<TaskDropdownProps> = ({
     <DropdownContainer>
       <ButtonGroup>
         <IconButton onClick={() => setDropdownOpen(!dropdownOpen)}>
-          <Image src="/icons/kebab.svg" alt="메뉴" />
+          <Image src="/icons/kebab.svg" alt="메뉴" width={28} height={28} />
         </IconButton>
         <IconButton onClick={onClose}>
-          <Image src="/icons/close.svg" alt="닫기" />
+          <Image src="/icons/close.svg" alt="닫기" width={28} height={28} />
         </IconButton>
       </ButtonGroup>
       {dropdownOpen && (

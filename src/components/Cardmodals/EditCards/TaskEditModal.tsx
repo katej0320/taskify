@@ -7,6 +7,8 @@ import TagInput from "./TagInput";
 import DateInputField from "./DateInputField";
 import InputField from "./InputField";
 import TaskImageUpload from "./TaskImageUpload";
+import CustomTaskEditModal from "./CustomTaskEditModal";
+import { getMembers } from "@/src/api/members";
 
 // Task 타입 정의
 interface Task {
@@ -58,6 +60,7 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({
   const [previewUrl, setPreviewUrl] = useState<string | null>(task.imageUrl);
 
   useEffect(() => {
+    if (!isOpen) return;
     const fetchColumns = async () => {
       try {
         const data = await getColumns(dashboardId);
@@ -75,15 +78,32 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({
 
     const fetchAssignees = async () => {
       try {
-        const data = await getInvitations(dashboardId); // teamId 제거
+        console.log("🟢 현재 dashboardId:", dashboardId); // ✅ dashboardId 확인
+
+        if (!dashboardId || isNaN(Number(dashboardId))) {
+          console.error("❌ 잘못된 dashboardId:", dashboardId);
+          return;
+        }
+
+        const data = await getMembers(dashboardId); // ✅ getMembers 호출
+        console.log("🟢 getMembers 응답:", data);
+
+        if (!Array.isArray(data.members)) {
+          console.warn("⚠ API 응답에 members 키가 없음. 빈 배열 사용.");
+          setAssigneeList([]); // ✅ members가 없을 경우 안전하게 빈 배열 설정
+          return;
+        }
+
         const mappedAssignees = data.members.map((member: any) => ({
           id: member.id,
-          userId: member.userId, // 수정된 부분
+          userId: Number(member.userId),
           nickname: member.nickname,
         }));
+
+        console.log("🟢 변환된 담당자 리스트:", mappedAssignees);
         setAssigneeList(mappedAssignees);
       } catch (error) {
-        console.error("❌ 담당자 목록 조회 실패:", error);
+        console.error("❌ getMembers API 호출 실패:", error);
       }
     };
 
@@ -98,8 +118,8 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({
     try {
       const updatedData: Task = {
         ...formData,
-        assigneeUserId: formData.assigneeUserId ?? null, // 수정된 부분
-        columnId: formData.columnId ?? null, // 수정된 부분
+        assigneeUserId: formData.assigneeUserId ?? null,
+        columnId: formData.columnId ?? null,
         imageUrl: image ? URL.createObjectURL(image) : formData.imageUrl,
         dueDate: formData.dueDate || "",
       };
@@ -121,58 +141,67 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({
     setPreviewUrl(file ? URL.createObjectURL(file) : null);
   };
 
+  if (!isOpen || !task) return null;
+
   return (
-    <form onSubmit={handleSave}>
-      <StatusAssigneeSection
-        columns={columns}
-        formData={formData}
-        setFormData={setFormData}
-        assigneeList={assigneeList}
-      />
+    <CustomTaskEditModal
+      isOpen={isOpen}
+      onClose={onClose}
+      width="584px"
+      height="auto"
+    >
+      <form onSubmit={handleSave}>
+        <StatusAssigneeSection
+          columns={columns}
+          formData={formData}
+          setFormData={setFormData}
+          assigneeList={assigneeList}
+        />
 
-      <InputField
-        label="제목 *"
-        name="title"
-        type="text"
-        value={formData.title}
-        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-      />
+        <InputField
+          label="제목 *"
+          name="title"
+          type="text"
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+        />
 
-      <InputField
-        label="설명 *"
-        name="description"
-        type="textarea"
-        value={formData.description}
-        onChange={(e) =>
-          setFormData({ ...formData, description: e.target.value })
-        }
-      />
+        <InputField
+          label="설명 *"
+          name="description"
+          type="textarea"
+          value={formData.description}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
+        />
 
-      <DateInputField
-        label="마감일 *"
-        selectedDate={formData.dueDate ? new Date(formData.dueDate) : null}
-        onDateChange={(date) =>
-          setFormData({
-            ...formData,
-            dueDate: date ? date.toISOString() : null,
-          })
-        }
-      />
+        <DateInputField
+          label="마감일 *"
+          selectedDate={formData.dueDate ? new Date(formData.dueDate) : null}
+          onDateChange={(date) =>
+            setFormData({
+              ...formData,
+              dueDate: date ? date.toISOString() : null,
+            })
+          }
+        />
 
-      <TagInput tags={tags} setTags={setTags} />
+        <TagInput tags={tags} setTags={setTags} />
 
-      <TaskImageUpload
-        imageUrl={previewUrl}
-        onImageChange={handleImageChange}
-      />
+        <TaskImageUpload
+          imageUrl={previewUrl}
+          onImageChange={handleImageChange}
+        />
 
-      <div className="modalButtons">
-        <button type="button" onClick={onClose}>
-          취소
-        </button>
-        <button type="submit">수정</button>
-      </div>
-    </form>
+        <div className="modalButtons">
+          <button type="button" onClick={onClose}>
+            취소
+          </button>
+          <button type="submit">수정</button>
+        </div>
+      </form>
+    </CustomTaskEditModal>
   );
 };
 

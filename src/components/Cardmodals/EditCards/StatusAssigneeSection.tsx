@@ -1,10 +1,10 @@
 import React from "react";
-import TaskColumn from "../TaskCards/TaskColumn"; // TaskColumn 컴포넌트를 import
+import TaskColumn from "../TaskCards/TaskColumn";
 
 interface Assignee {
   id: number;
-  userId: number; // userId 추가
-  nickname: string; // nickname 추가
+  userId: number;
+  nickname: string;
 }
 
 interface Column {
@@ -35,6 +35,9 @@ const StatusAssigneeSection: React.FC<StatusAssigneeSectionProps> = ({
   setFormData,
   assigneeList,
 }) => {
+  console.log("🟢 현재 StatusAssigneeSection의 assigneeList:", assigneeList);
+  console.log("🟢 현재 선택된 담당자 ID:", formData.assigneeUserId);
+
   return (
     <div style={{ display: "flex", gap: "16px", flexDirection: "column" }}>
       <div className="dropdownSection">
@@ -51,20 +54,24 @@ const StatusAssigneeSection: React.FC<StatusAssigneeSectionProps> = ({
       <div className="dropdownSection">
         <label>담당자</label>
         <select
-          value={formData.assigneeUserId ?? ""} // null 처리
-          onChange={(e) =>
+          value={formData.assigneeUserId ?? ""}
+          onChange={(e) => {
+            console.log("🟢 선택된 userId 값:", e.target.value);
             setFormData({
               ...formData,
-              assigneeUserId: e.target.value ? Number(e.target.value) : null, // null 처리
-            })
-          }
+              assigneeUserId: e.target.value ? Number(e.target.value) : null,
+            });
+          }}
         >
           <option value="">선택 없음</option>
-          {assigneeList.map((assignee) => (
-            <option key={assignee.id} value={assignee.userId}>
-              {assignee.nickname}
-            </option>
-          ))}
+          {assigneeList.map((assignee) => {
+            console.log("🟢 select 내부 렌더링 중 → assignee:", assignee); // 추가
+            return (
+              <option key={assignee.id} value={assignee.userId}>
+                {assignee.nickname}
+              </option>
+            );
+          })}
         </select>
       </div>
     </div>

@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { getComments, deleteComment, updateComment } from "@/src/api/comments";
 import styled from "styled-components";
 
-
 interface TaskCommentsProps {
   cardId: number;
   comments: any[];
@@ -134,6 +133,8 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
                   <DropdownIcon
                     src="/icons/kebab.svg"
                     alt="메뉴"
+                    width={16}
+                    height={16}
                     onClick={() =>
                       setOpenDropdownId(
                         openDropdownId === comment.id ? null : comment.id
