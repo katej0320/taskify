@@ -25,7 +25,6 @@ interface TaskCardModalProps {
 const TaskCardModal: React.FC<TaskCardModalProps> = ({
   isOpen,
   onClose,
-  onOpenEditModal,
   cardId,
   columnTitle,
   columnId,
@@ -63,6 +62,16 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
     }
   };
 
+  const handleOpenEditModal = () => {
+    console.log("수정 모달 열기 시도!");
+    setIsEditModalOpen(true);
+  };
+
+  // ✅ cardData 변경될 때 컬럼 최신화 적용
+  useEffect(() => {
+    console.log("🔄 TaskCardModal에서 최신 cardData 반영됨:", cardData);
+  }, [cardData]);
+
   return (
     <>
       <CustomModal isOpen={isOpen} onClose={onClose}>
@@ -72,7 +81,7 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
         >
           <TaskDropdown
             cardId={cardId}
-            onOpenEditModal={() => setIsEditModalOpen(true)}
+            onOpenEditModal={handleOpenEditModal}
             onClose={onClose}
           />
 
@@ -112,7 +121,7 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
               cardId={cardId}
               comments={comments}
               setComments={setComments}
-              onOpenEditModal={onOpenEditModal}
+              handleOpenEditModal={handleOpenEditModal}
             />
           </div>
         </div>
@@ -124,6 +133,9 @@ const TaskCardModal: React.FC<TaskCardModalProps> = ({
           task={cardData}
           fetchCards={fetchComments}
           dashboardId={dashboardId}
+          updateTaskDetails={(updatedTask) => {
+            setCardData(updatedTask);
+          }}
         />
       )}
     </>

@@ -9,6 +9,9 @@ import InputField from "./InputField";
 import TaskImageUpload from "./TaskImageUpload";
 import CustomTaskEditModal from "./CustomTaskEditModal";
 import { getMembers } from "@/src/api/members";
+import styles from "./TaskEditModal.module.scss";
+import { uploadCardImage } from "@/src/api/files";
+import dayjs from "dayjs";
 
 // Task 타입 정의
 interface Task {
@@ -26,6 +29,7 @@ interface Assignee {
   id: number;
   userId: number;
   nickname: string;
+  profileImageUrl?: string;
 }
 
 interface Column {
@@ -39,6 +43,7 @@ interface TaskEditModalProps {
   task: Task;
   fetchCards: () => void;
   dashboardId: number;
+  updateTaskDetails: (updatedTask: Task) => void;
 }
 
 const TaskEditModal: React.FC<TaskEditModalProps> = ({
@@ -47,17 +52,27 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({
   task,
   fetchCards,
   dashboardId,
+  updateTaskDetails,
 }) => {
   const [formData, setFormData] = useState<Task>({
     ...task,
     assigneeUserId: task.assigneeUserId ?? null,
     imageUrl: task.imageUrl || null,
   });
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      columnId: task.columnId,
+    }));
+  }, [task.columnId]);
+
   const [columns, setColumns] = useState<Column[]>([]);
   const [assigneeList, setAssigneeList] = useState<Assignee[]>([]);
   const [tags, setTags] = useState<string[]>(task.tags || []);
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(task.imageUrl);
+  const [assigneeListState, setAssigneeListState] = useState<Assignee[]>([]); // ✅ useState에 저장할 변수
 
   useEffect(() => {
     if (!isOpen) return;
@@ -89,7 +104,7 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({
         console.log("🟢 getMembers 응답:", data);
 
         if (!Array.isArray(data.members)) {
-          console.warn("⚠ API 응답에 members 키가 없음. 빈 배열 사용.");
+          console.warn("API 응답에 members 키가 없음. 빈 배열 사용.");
           setAssigneeList([]); // ✅ members가 없을 경우 안전하게 빈 배열 설정
           return;
         }
@@ -98,10 +113,19 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({
           id: member.id,
           userId: Number(member.userId),
           nickname: member.nickname,
+          profileImageUrl: member.profileImageUrl || null,
         }));
 
         console.log("🟢 변환된 담당자 리스트:", mappedAssignees);
         setAssigneeList(mappedAssignees);
+
+        setFormData((prev) => ({
+          ...prev,
+          assigneeUserId:
+            prev.assigneeUserId ??
+            (mappedAssignees.length > 0 ? mappedAssignees[0].userId : null),
+          imageUrl: prev.imageUrl ?? null,
+        }));
       } catch (error) {
         console.error("❌ getMembers API 호출 실패:", error);
       }
@@ -113,92 +137,146 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({
     }
   }, [isOpen, dashboardId, task.columnId]);
 
+  useEffect(() => {
+    setTags(task.tags || []);
+  }, [task]);
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      let imageUrl = formData.imageUrl ?? null;
+
+      if (image) {
+        if (formData.columnId !== null) {
+          imageUrl = await uploadCardImage(formData.columnId, image);
+        }
+      }
+
+      const formattedDueDate = formData.dueDate
+        ? dayjs(formData.dueDate).format("YYYY-MM-DD HH:mm")
+        : null;
+
       const updatedData: Task = {
         ...formData,
-        assigneeUserId: formData.assigneeUserId ?? null,
-        columnId: formData.columnId ?? null,
-        imageUrl: image ? URL.createObjectURL(image) : formData.imageUrl,
-        dueDate: formData.dueDate || "",
+        dueDate: formattedDueDate,
+        tags: [...tags],
+        imageUrl: imageUrl ? imageUrl.trim() : null,
       };
 
+      console.log("📌 최종 업데이트 요청 데이터:", updatedData);
+
       await updateCard(task.id, updatedData);
-      fetchCards();
-      onClose();
+      await fetchCards();
+
+      updateTaskDetails(updatedData);
+
+      setTimeout(() => {
+        onClose();
+      }, 100);
     } catch (error) {
-      console.error("Error updating card:", error);
+      console.error("❌ 카드 업데이트 중 에러 발생:", error);
     }
   };
 
   const handleImageChange = (file: File | null) => {
     setImage(file);
-    setFormData({
-      ...formData,
-      imageUrl: file ? URL.createObjectURL(file) : null,
-    });
-    setPreviewUrl(file ? URL.createObjectURL(file) : null);
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      setFormData({ ...formData, imageUrl: objectUrl });
+      setPreviewUrl(objectUrl);
+    } else {
+      setFormData({ ...formData, imageUrl: null });
+      setPreviewUrl(null);
+    }
   };
 
   if (!isOpen || !task) return null;
+
+  useEffect(() => {
+    if (assigneeList.length > 0) {
+      setAssigneeListState(assigneeList);
+    }
+  }, [assigneeList]);
+
+  console.log("🔍 TaskEditModal에서 전달하는 assigneeList:", assigneeListState);
 
   return (
     <CustomTaskEditModal
       isOpen={isOpen}
       onClose={onClose}
-      width="584px"
+      width="auto"
       height="auto"
+      className={styles.customTaskEditModal}
     >
       <form onSubmit={handleSave}>
-        <StatusAssigneeSection
-          columns={columns}
-          formData={formData}
-          setFormData={setFormData}
-          assigneeList={assigneeList}
-        />
+        <div className={styles.taskEditTitle}>할 일 수정</div>
 
-        <InputField
-          label="제목 *"
-          name="title"
-          type="text"
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-        />
+        <div className={styles.formGroup}>
+          <StatusAssigneeSection
+            columns={columns}
+            formData={formData}
+            setFormData={setFormData}
+            assigneeList={assigneeListState}
+          />
+        </div>
 
-        <InputField
-          label="설명 *"
-          name="description"
-          type="textarea"
-          value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
-        />
+        <div className={styles.formGroup}>
+          <InputField
+            label="제목 *"
+            name="title"
+            type="text"
+            value={formData.title}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
+          />
+        </div>
 
-        <DateInputField
-          label="마감일 *"
-          selectedDate={formData.dueDate ? new Date(formData.dueDate) : null}
-          onDateChange={(date) =>
-            setFormData({
-              ...formData,
-              dueDate: date ? date.toISOString() : null,
-            })
-          }
-        />
+        <div className={styles.formGroup}>
+          <InputField
+            label="설명 *"
+            name="description"
+            type="textarea"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+          />
+        </div>
 
-        <TagInput tags={tags} setTags={setTags} />
+        <div className={styles.formGroup}>
+          <DateInputField
+            label="마감일 *"
+            selectedDate={formData.dueDate ? new Date(formData.dueDate) : null}
+            onDateChange={(date) =>
+              setFormData({
+                ...formData,
+                dueDate: date ? date.toISOString() : null,
+              })
+            }
+          />
+        </div>
 
-        <TaskImageUpload
-          imageUrl={previewUrl}
-          onImageChange={handleImageChange}
-        />
+        <div className={styles.formGroup}>
+          <TagInput tags={tags} setTags={setTags} />
+        </div>
+
+        <div className={styles.formGroup}>
+          <div className={styles.imageUploadWrapper}>
+            <TaskImageUpload
+              imageUrl={previewUrl}
+              onImageChange={handleImageChange}
+            />
+          </div>
+        </div>
 
         <div className="modalButtons">
-          <button type="button" onClick={onClose}>
+          <button onClick={onClose} className={styles.cancelButton}>
             취소
           </button>
-          <button type="submit">수정</button>
+          <button onClick={handleSave} className={styles.saveButton}>
+            수정
+          </button>
         </div>
       </form>
     </CustomTaskEditModal>

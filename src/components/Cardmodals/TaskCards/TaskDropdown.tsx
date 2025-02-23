@@ -19,7 +19,7 @@ const TaskDropdown: React.FC<TaskDropdownProps> = ({
     try {
       await axiosInstance.delete(`/cards/${cardId}`);
       alert("카드가 삭제되었습니다.");
-      window.location.reload(); // 삭제 후 새로고침
+      window.location.reload();
     } catch (error) {
       console.error("카드 삭제 실패:", error);
     }

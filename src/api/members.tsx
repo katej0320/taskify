@@ -10,12 +10,25 @@ export const getMembers = async (dashboardId: number) => {
 
     const response = await axiosInstance.get("/members", {
       params: {
-        dashboardId, // ✅ 필수 파라미터 추가
+        dashboardId,
       },
     });
 
     console.log("🟢 getMembers 응답 데이터:", response.data);
-    return response.data;
+    console.log("🟢 API에서 받은 멤버 데이터:", response.data.members);
+
+    const membersWithProfileImage = response.data.members.map(
+      (member: any) => ({
+        id: member.id,
+        userId: Number(member.userId),
+        nickname: member.nickname,
+        profileImageUrl: member.profileImageUrl ?? null,
+      })
+    );
+
+    console.log("🟢 변환된 assigneeList 최종 값:", membersWithProfileImage);
+
+    return { members: membersWithProfileImage };
   } catch (error: any) {
     console.error(
       "❌ getMembers API 호출 실패:",
