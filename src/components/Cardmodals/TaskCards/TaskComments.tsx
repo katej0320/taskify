@@ -2,19 +2,18 @@ import { useEffect, useState, useRef } from "react";
 import { getComments, deleteComment, updateComment } from "@/src/api/comments";
 import styled from "styled-components";
 
-
 interface TaskCommentsProps {
   cardId: number;
   comments: any[];
   setComments: React.Dispatch<React.SetStateAction<any[]>>;
-  onOpenEditModal?: () => void;
+  handleOpenEditModal?: () => void;
 }
 
 const TaskComments: React.FC<TaskCommentsProps> = ({
   cardId,
   comments,
   setComments,
-  onOpenEditModal,
+  handleOpenEditModal,
 }) => {
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
@@ -82,6 +81,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
   const handleEditClick = (comment: any) => {
     setEditingCommentId(comment.id);
     setEditContent(comment.content);
+    handleOpenEditModal?.();
   };
 
   const handleUpdateComment = async (commentId: number) => {
@@ -97,7 +97,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
       );
       setEditingCommentId(null);
     } catch (error) {
-      console.error("❌ 댓글 수정 실패:", error);
+      console.error("댓글 수정 실패:", error);
     }
   };
 
@@ -106,7 +106,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
       await deleteComment(commentId);
       setComments((prev) => prev.filter((comment) => comment.id !== commentId));
     } catch (error) {
-      console.error("❌ 댓글 삭제 실패:", error);
+      console.error("댓글 삭제 실패:", error);
     }
   };
 
@@ -134,6 +134,8 @@ const TaskComments: React.FC<TaskCommentsProps> = ({
                   <DropdownIcon
                     src="/icons/kebab.svg"
                     alt="메뉴"
+                    width={16}
+                    height={16}
                     onClick={() =>
                       setOpenDropdownId(
                         openDropdownId === comment.id ? null : comment.id
