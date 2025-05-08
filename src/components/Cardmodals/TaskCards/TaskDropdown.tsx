@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import axiosInstance from "@/src/api/axios";
 import Image from "next/image";
@@ -14,43 +14,25 @@ const TaskDropdown: React.FC<TaskDropdownProps> = ({
   onClose,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleDeleteCard = async () => {
     try {
       await axiosInstance.delete(`/cards/${cardId}`);
       alert("카드가 삭제되었습니다.");
-      window.location.reload(); // 삭제 후 새로고침
+      window.location.reload();
     } catch (error) {
-      console.error("❌ 카드 삭제 실패:", error);
+      console.error("카드 삭제 실패:", error);
     }
   };
 
-  // ✅ 바깥 클릭 감지해서 닫기 (mousedown + capture: true)
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside, true); // ✅ capture: true 추가
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside, true);
-    };
-  }, []);
-
   return (
-    <DropdownContainer ref={dropdownRef}>
+    <DropdownContainer>
       <ButtonGroup>
         <IconButton onClick={() => setDropdownOpen(!dropdownOpen)}>
-          <Image src="/icons/kebab.svg" alt="메뉴" />
+          <Image src="/icons/kebab.svg" alt="메뉴" width={28} height={28} />
         </IconButton>
         <IconButton onClick={onClose}>
-          <Image src="/icons/close.svg" alt="닫기" />
+          <Image src="/icons/close.svg" alt="닫기" width={28} height={28} />
         </IconButton>
       </ButtonGroup>
       {dropdownOpen && (
@@ -65,19 +47,15 @@ const TaskDropdown: React.FC<TaskDropdownProps> = ({
 
 export default TaskDropdown;
 
-// ✅ 스타일 유지
 const DropdownContainer = styled.div`
   position: relative;
-  z-index: 999;
-  right: 0;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: 24px;
-  position: absolute;
-  right: 0;
+  gap: 24px; /* 케밥 아이콘과 닫기 버튼 사이 간격 유지 */
+  justify-content: flex-end;
 `;
 
 const IconButton = styled.button`
@@ -89,7 +67,7 @@ const IconButton = styled.button`
   justify-content: center;
   width: 28px;
   height: 28px;
-  padding: 0;
+  padding: 0; /* 패딩 제거 */
 
   img {
     width: 28px;
@@ -117,8 +95,8 @@ const DropdownMenu = styled.ul`
 const DropdownItem = styled.li`
   padding: 10px 16px;
   cursor: pointer;
+  text-align: center;
   &:hover {
-    background: rgba(241, 239, 253, 1);
-    color: #5534da;
+    background: #f1f1f1;
   }
 `;

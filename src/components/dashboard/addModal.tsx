@@ -6,7 +6,7 @@ import { addCards, uploadImage } from "../../api/dashboardApi";
 import ImageUpload from "./addModal/ImageUpload";
 import { useRouter } from "next/router";
 import axiosInstance from "@/src/api/axios";
-import TaskTags from "../modals/cards/TaskTags";
+import TaskTags from "../Cardmodals/TaskCards/TaskTags";
 import Image from "next/image";
 import { styled } from "styled-components";
 
